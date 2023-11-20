@@ -1,5 +1,8 @@
 <script lang="ts">
-    export let data
+	import type { PageData } from "./$types";
+
+    export let data: PageData
+    console.log(CharacterData);
 </script>
 
 
