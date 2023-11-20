@@ -36,5 +36,10 @@
     "vitest": "^0.32.2",
     "wrangler": "^3.16.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20231025.0",
+    "@lucia-auth/adapter-sqlite": "^2.0.1",
+    "lucia": "^2.7.4"
+  }
 }
