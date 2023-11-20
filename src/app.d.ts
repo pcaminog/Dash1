@@ -5,6 +5,7 @@ declare global {
 		interface Locals {
 			auth: import('lucia').AuthRequest;
 			user: string | undefined
+      lucia: import('lucia')
 		}
 		interface Platform {
 			env: {

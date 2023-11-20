@@ -5,6 +5,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const auth = initializeLucia(event.platform?.env.DB);
 
 	event.locals.auth = auth.handleRequest(event);
+	event.locals.lucia = auth
 	if (event.locals?.auth) {
 		const Session = await event.locals.auth.validate();
 		event.locals.user = Session?.user.userId

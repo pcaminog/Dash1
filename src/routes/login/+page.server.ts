@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 		throw redirect(302, '/');
 	}
-	return {session};
+	return { session };
 };
 
 export const actions: Actions = {
@@ -34,8 +34,8 @@ export const actions: Actions = {
 			});
 		}
 		try {
-            console.log('creating user');
-            console.log(lucia);
+			console.log('creating user');
+			console.log(lucia);
 			const user = await lucia.createUser({
 				key: {
 					providerId: 'email', // auth method
@@ -49,7 +49,7 @@ export const actions: Actions = {
 					email_verified: Number(false)
 				}
 			});
-            console.log(user);
+			console.log(user);
 			const session = await lucia.createSession({
 				userId: user.userId,
 				attributes: {}
@@ -58,7 +58,7 @@ export const actions: Actions = {
 
 			const token = generateRandomString(63);
 			await platform?.env.tokenEmail.put(token, user.userId);
-			await sendEmailVerificationLink(token);
+			await sendEmailVerificationLink(email!.toString(), token);
 		} catch (e: any) {
 			// check for unique constraint error in user table
 			if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
