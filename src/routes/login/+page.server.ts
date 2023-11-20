@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 		throw redirect(302, '/');
 	}
-	return {};
+	return {session};
 };
 
 export const actions: Actions = {
@@ -34,6 +34,8 @@ export const actions: Actions = {
 			});
 		}
 		try {
+            console.log('creating user');
+            console.log(lucia);
 			const user = await lucia.createUser({
 				key: {
 					providerId: 'email', // auth method
@@ -47,6 +49,7 @@ export const actions: Actions = {
 					email_verified: Number(false)
 				}
 			});
+            console.log(user);
 			const session = await lucia.createSession({
 				userId: user.userId,
 				attributes: {}
