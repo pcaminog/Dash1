@@ -49,7 +49,7 @@ export const actions: Actions = {
 				attributes: {}
 			});
 			locals.auth.setSession(session);
-			const { results } = await platform?.env.DB.prepare('SELECT email from users WHERE email = ?')
+			const { results } = await platform?.env.DB.prepare('SELECT email from user WHERE email = ?')
 				.bind(email)
 				.all();
 			if (results) {
