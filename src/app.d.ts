@@ -7,6 +7,7 @@ declare global {
 		}
 		interface Platform {
 			env: {
+				tokenEmail: KVNamespace;
 				DB: D1Database;
 			};
 			context: {
@@ -22,7 +23,8 @@ declare global {
 	namespace Lucia {
 		type Auth = import('$lib/server/lucia').Auth;
 		type DatabaseUserAttributes = {
-			username: string;
+			email: string;
+			email_verified: number;
 		};
 		type DatabaseSessionAttributes = {};
 	}

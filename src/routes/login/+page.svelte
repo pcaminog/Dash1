@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 
-	export let data: PageData;
-	console.log(data);
+	import type { ActionData } from './$types';
+
+	export let form: ActionData;
 </script>
 
 <h1>Sign up</h1>
@@ -14,4 +14,7 @@
 	<input type="password" name="password" id="password" /><br />
 	<input type="submit" />
 </form>
+{#if form?.message}
+	<p class="error">{form.message}</p>
+{/if}
 <a href="/login">Sign in</a>
