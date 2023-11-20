@@ -2,7 +2,7 @@
 	import type { PageData } from "./$types";
 
     export let data: PageData
-    console.log(CharacterData);
+    console.log(data);
 </script>
 
 
