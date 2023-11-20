@@ -20,7 +20,7 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const email = formData.get('email');
-		const password = formData.get('password');
+		const password = 'MagicLink';
 
 		// basic check
 		if (!isValidEmail) {
@@ -28,14 +28,8 @@ export const actions: Actions = {
 				message: 'Not valid'
 			});
 		}
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: 'Invalid password'
-			});
-		}
+
 		try {
-			console.log('creating user');
-			console.log(lucia);
 			const user = await lucia.createUser({
 				key: {
 					providerId: 'email', // auth method
@@ -55,6 +49,14 @@ export const actions: Actions = {
 				attributes: {}
 			});
 			locals.auth.setSession(session);
+			const { results } = await platform?.env.DB.prepare('SELECT email from users WHERE email = ?')
+				.bind(email)
+				.all();
+			if (results) {
+				return fail(500, {
+					message: results
+				});
+			}
 
 			const token = generateRandomString(63);
 			await platform?.env.tokenEmail.put(token, user.userId);
