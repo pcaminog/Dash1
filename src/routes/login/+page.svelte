@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 
 	import type { ActionData } from './$types';
 
@@ -12,6 +13,14 @@
 	<input name="email" id="email" /><br />
 	<input type="submit" />
 </form>
+<button
+	type="button"
+	on:click={async () => {
+		goto('/login/github');
+	}}
+>
+	Github
+</button>
 {#if form?.message}
 	<p class="error">{form.message}</p>
 {/if}

@@ -8,7 +8,7 @@ import { generateRandomString } from 'lucia/utils';
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
 	if (session) {
-		if (!session.user.emailVerified) throw redirect(302, '/');
+		if (!session.user.isValidEmail) throw redirect(302, '/');
 		throw redirect(302, '/');
 	}
 	return { session };
@@ -16,7 +16,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	default: async ({ request, locals, platform }) => {
-		const lucia = initializeLucia(platform?.env.DB);
 
 		const formData = await request.formData();
 		const email = formData.get('email');
@@ -30,7 +29,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			const user = await lucia.createUser({
+			const user = await locals.lucia.createUser({
 				key: {
 					providerId: 'email', // auth method
 					//@ts-expect-error
@@ -44,7 +43,7 @@ export const actions: Actions = {
 				}
 			});
 			console.log(user);
-			const session = await lucia.createSession({
+			const session = await locals.lucia.createSession({
 				userId: user.userId,
 				attributes: {}
 			});
@@ -62,7 +61,7 @@ export const actions: Actions = {
 			await platform?.env.tokenEmail.put(token, user.userId);
 			await sendEmailVerificationLink(email!.toString(), token);
 		} catch (e: any) {
-			// check for unique constraint error in user table
+            console.log(JSON.stringify(e));
 			if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
 				return fail(400, {
 					message: 'Account already exists'

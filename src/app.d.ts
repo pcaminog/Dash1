@@ -4,8 +4,8 @@ declare global {
 	namespace App {
 		interface Locals {
 			auth: import('lucia').AuthRequest;
-			user: string | undefined
-      lucia: import('lucia')
+			user: string | undefined;
+			lucia: import('lucia');
 		}
 		interface Platform {
 			env: {
@@ -27,6 +27,9 @@ declare global {
 		type DatabaseUserAttributes = {
 			email: string;
 			email_verified: number;
+			username?: string;
+			avatar?: string;
+			name?: string;
 		};
 		type DatabaseSessionAttributes = {};
 	}
