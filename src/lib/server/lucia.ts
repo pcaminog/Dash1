@@ -1,6 +1,7 @@
 import { lucia } from 'lucia';
 import { d1 } from '@lucia-auth/adapter-sqlite';
 import type { D1Database } from '@cloudflare/workers-types';
+import { sveltekit } from 'lucia/middleware';
 
 export const initializeLucia = (db: D1Database) => {
 	const auth = lucia({
@@ -9,7 +10,8 @@ export const initializeLucia = (db: D1Database) => {
 			user: 'user',
 			key: 'user_key',
 			session: 'user_session'
-		})
+		}),
+		middleware: sveltekit()
 		// ...
 	});
 	return auth;

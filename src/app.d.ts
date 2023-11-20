@@ -2,16 +2,30 @@
 // for information about these interfaces
 declare global {
 	namespace App {
-        interface Platform {
-          env: {
-            DB: D1Database;
-          };
-          context: {
-            waitUntil(promise: Promise<any>): void;
-          };
-          caches: CacheStorage & { default: Cache }
-        }
-    }
+		interface Locals {
+			auth: import('lucia').AuthRequest;
+		}
+		interface Platform {
+			env: {
+				DB: D1Database;
+			};
+			context: {
+				waitUntil(promise: Promise<any>): void;
+			};
+			caches: CacheStorage & { default: Cache };
+		}
+	}
+}
+
+/// <reference types="lucia" />
+declare global {
+	namespace Lucia {
+		type Auth = import('$lib/server/lucia').Auth;
+		type DatabaseUserAttributes = {
+			username: string;
+		};
+		type DatabaseSessionAttributes = {};
+	}
 }
 
 export {};
