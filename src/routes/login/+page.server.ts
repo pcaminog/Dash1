@@ -8,7 +8,7 @@ import { generateRandomString } from 'lucia/utils';
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
 	if (session) {
-		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
+		if (!session.user.emailVerified) throw redirect(302, '/');
 		throw redirect(302, '/');
 	}
 	return { session };
