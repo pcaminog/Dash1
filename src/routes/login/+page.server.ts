@@ -57,7 +57,7 @@ export const actions: Actions = {
 			locals.auth.setSession(session);
 
 			const token = generateRandomString(63);
-			await platform?.env.tokenEmail.put(token, '');
+			await platform?.env.tokenEmail.put(token, user.userId);
 			await sendEmailVerificationLink(token);
 		} catch (e: any) {
 			// check for unique constraint error in user table
