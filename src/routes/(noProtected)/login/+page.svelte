@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 
-	import type { ActionData } from './$types';
-
-	export let form: ActionData;
 	import { Input } from '$lib/components//ui/input';
 	import { Label } from '$lib/components//ui/label';
 	import { cn } from '$lib/utils';
@@ -24,9 +21,8 @@
 	}
 </script>
 
-
 <div
-	class="container relative  h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
+	class="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0"
 >
 	<div class="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 		<div
