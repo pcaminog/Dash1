@@ -1,5 +1,4 @@
 <script>
-	import '../../../app.postcss';
 	import { page } from '$app/stores';
 	let isOpen = false;
 	import {
