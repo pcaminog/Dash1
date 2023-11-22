@@ -20,9 +20,9 @@ import { checkUrl } from '$lib/utils';
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
 	const monitorform = superValidate(monitorformSchema);
-
+	const user = locals.user
 	let monitors: any = [];
-	return { session, monitors, monitorform };
+	return { session, monitors, monitorform, };
 };
 
 export const actions = {

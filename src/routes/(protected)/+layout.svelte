@@ -232,7 +232,7 @@
 						<div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
 
 						{#if data.session}
-							<UserNav session={data.session} params={$page.params.orgid} />
+							<UserNav session={data.session} />
 						{:else}
 							<Loader2 class="h-6 w-6 animate-spin" />
 						{/if}
