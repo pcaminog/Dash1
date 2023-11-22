@@ -8,7 +8,7 @@
 	import { Toaster } from 'svelte-french-toast';
 
 	export let data;
-
+	console.log(data);
 	let isOpen = false;
 
 	function toggleMenu() {
