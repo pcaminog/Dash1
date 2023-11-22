@@ -27,6 +27,7 @@ export const actions: Actions = {
 			});
 		}
 		try {
+
 			const user = await locals.lucia.createUser({
 				key: {
 					providerId: 'email', // auth method
@@ -40,7 +41,6 @@ export const actions: Actions = {
 					email_verified: Number(false)
 				}
 			});
-			console.log(user);
 			const session = await locals.lucia.createSession({
 				userId: user.userId,
 				attributes: {}
