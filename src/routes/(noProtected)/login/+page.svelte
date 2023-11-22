@@ -43,7 +43,7 @@
 				<p class="text-sm text-muted-foreground">Enter your email below to create your account</p>
 			</div>
 			<div class={cn('grid gap-6', className)} {...$$restProps}>
-				<form method="POST" use:enhance>
+				<form method="POST" action="" use:enhance>
 					<div class="grid gap-2">
 						<div class="grid gap-1">
 							<Label class="sr-only" for="email">Email</Label>
