@@ -1,30 +1,10 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
-import { z } from 'zod';
-import { message, superValidate } from 'sveltekit-superforms/client';
+import { superValidate } from 'sveltekit-superforms/client';
 import { API_URL } from '$env/static/private';
-
-const monitorformSchema = z.object({
-	id: z.string().optional(),
-
-	name: z
-		.string()
-		.min(1, { message: 'Name is required' })
-		.max(50, { message: 'Name cannot have more than 50 characteres' }),
-	type: z.enum(['standard', 'codespecific'], {
-		errorMap: (issue, ctx) => ({ message: 'Please select a monitor type.' })
-	}),
-	ssl_verify: z.string().optional(),
-	url: z.string().min(1, { message: 'URL is required.' }),
-	method: z.string().min(1, { message: 'Method is required.' }),
-	interval: z.string().min(1, { message: 'Interval is required.' }),
-	follow_redir: z.string().optional(),
-	req_timeout: z.string().min(1, { message: 'Please select a timeout' }),
-	req_headers: z.array(z.string()).optional(),
-	authentication: z.array(z.string()).optional(),
-	status_code: z.number().min(100).max(599).optional()
-});
+import { monitorformSchema } from '$lib/types';
+import { checkUrl } from '$lib/utils';
 
 // id:string;
 // name
@@ -54,9 +34,31 @@ export const actions = {
 			// Again, return { form } and things will just work.
 			return fail(400, { form });
 		}
-		form.data.id = locals.user;
+		const transformArray = (arr: string[]) => arr.map((item) => ({ name: item, value: item }));
+		const request_headers = JSON.parse(form.data.req_headers || '[]');
+		const auth = JSON.parse(form.data.authentication || '{}');
+		console.log(auth);
+		console.log(request_headers);
+		const testurl = await checkUrl({
+			url: form.data.url,
+			method: form.data.method,
+			req_headers: request_headers,
+			authentication: auth,
+			req_timeout: form.data.req_timeout,
+			follow_redir: form.data.follow_redir ?? 'true',
+			ssl_verify: form.data.ssl_verify ?? 'true'
+		});
+
+		if (!testurl.success) {
+			throw error(401, String(testurl.message));
+		}
+		form.data.id = 'jtabfwcldfpm2d4';
 		const createMonitor = await fetch(`${API_URL}/monitor/http/add`, {
 			method: 'POST',
+			headers: {
+				Authorization:
+					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			},
 			body: JSON.stringify(form.data)
 		});
 

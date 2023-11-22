@@ -30,7 +30,7 @@
 			headers = [...headers, { name: '', value: '' }];
 		}
 	}
-	$: headersString = JSON.stringify(headers);
+	$: headersString = JSON.stringify(headers)
 	$: authString = JSON.stringify(auth);
 
 	let open = false;
@@ -242,10 +242,10 @@
 							<Select.Value placeholder="Select an interval" />
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value="day">24 Hours</Select.Item>
-							<Select.Item value="hour">60 min</Select.Item>
-							<Select.Item value="five">5 min</Select.Item>
-							<Select.Item value="minute">1 min</Select.Item>
+							<Select.Item value={24}>24 Hours</Select.Item>
+							<Select.Item value={60}>60 min</Select.Item>
+							<Select.Item value={5}>5 min</Select.Item>
+							<Select.Item value={1}>1 min</Select.Item>
 						</Select.Content>
 					</Select.Root>
 					<span
@@ -279,11 +279,11 @@
 						</Select.Trigger>
 
 						<Select.Content>
-							<Select.Item value="minute">1 Minutes</Select.Item>
-							<Select.Item value="thirty">30 Seconds</Select.Item>
-							<Select.Item value="fifteen">15 Seconds</Select.Item>
-							<Select.Item value="five">5 Seconds</Select.Item>
-							<Select.Item value="two">2 Seconds</Select.Item>
+							<Select.Item value={1}>1 Minutes</Select.Item>
+							<Select.Item value={30}>30 Seconds</Select.Item>
+							<Select.Item value={15}>15 Seconds</Select.Item>
+							<Select.Item value={5}>5 Seconds</Select.Item>
+							<Select.Item value={2}>2 Seconds</Select.Item>
 						</Select.Content>
 					</Select.Root>
 					<span
