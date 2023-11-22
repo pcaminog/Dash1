@@ -20,9 +20,18 @@ import { checkUrl } from '$lib/utils';
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
 	const monitorform = superValidate(monitorformSchema);
-	const user = locals.user
-	let monitors: any = [];
-	return { session, monitors, monitorform, };
+	//const user = locals.user
+	const user = 'jtabfwcldfpm2d4';
+
+	const monitorsReq = await fetch(`${API_URL}/monitor/http/get?user_id=${user}`, {
+		headers: {
+			Authorization:
+				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+		}
+	});
+	const { message: monitors } = await monitorsReq.json();
+
+	return { session, monitors, monitorform };
 };
 
 export const actions = {

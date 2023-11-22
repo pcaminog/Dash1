@@ -1,0 +1,17 @@
+name = "dash"
+compatibility_date = "2023-10-30"
+workers_dev = false
+
+kv_namespaces = [
+    { binding = "accounts", id = "38aaa6f3fc074c2a859b4337218fe1d7", preview_id = "38aaa6f3fc074c2a859b4337218fe1d7" },
+    { binding = "notificationsettings", id = "b12e8de6e7974c4fafcc5ab87bac5d4d", preview_id = "b12e8de6e7974c4fafcc5ab87bac5d4d" },
+    { binding = "accountEmail", id = "610f3ffabf88471d83c2073bb9beb7cd", preview_id = "610f3ffabf88471d83c2073bb9beb7cd" },
+    { binding = "tokens", id = "3a04baef59434db280ace46b37cc5cea", preview_id = "3a04baef59434db280ace46b37cc5cea" },
+    { binding = "tokens_refresh", id = "3a48e508bd2444d2a84b7666fb9152cc", preview_id = "3a48e508bd2444d2a84b7666fb9152cc" },
+    { binding = "email_token", id = "bcf789239b914478a4a03e6dd1274e5a", preview_id = "bcf789239b914478a4a03e6dd1274e5a" },
+]
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "hostnotifier"
+database_id = "8ef9f34f-6928-4df9-8617-d8b1ead86bdd"

@@ -15,19 +15,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals, platform }) => {
-
+	login: async ({ request, locals, platform }) => {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = 'MagicLink';
-
+		console.log(email);
 		// basic check
 		if (!isValidEmail) {
 			return fail(400, {
 				message: 'Not valid'
 			});
 		}
-
 		try {
 			const user = await locals.lucia.createUser({
 				key: {
@@ -61,7 +59,7 @@ export const actions: Actions = {
 			await platform?.env.tokenEmail.put(token, user.userId);
 			await sendEmailVerificationLink(email!.toString(), token);
 		} catch (e: any) {
-            console.log(JSON.stringify(e));
+			console.log(JSON.stringify(e));
 			if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
 				return fail(400, {
 					message: 'Account already exists'

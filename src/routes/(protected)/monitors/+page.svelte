@@ -1,12 +1,11 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
 	import type { PageData } from './$types';
-	import * as Sheet from '$lib/components/ui/sheet';
 	import MonitorSheetCreateMonitor from '$lib/components/Monitor-Sheet-CreateMonitor.svelte';
-
+	import * as Alert from '$lib/components/ui/alert';
+	import type { monitorType } from '$lib/types';
 	export let data: PageData;
 	console.log(data);
-	let mon = [];
+	let mon: monitorType[] = [];
 	$: mon = data.monitors;
 </script>
 
@@ -17,4 +16,20 @@
 		src="https://assets.hostnamenotifier.com/roommon.png"
 		alt="monitor imagge"
 	/>
+{:else}
+
+{#each mon as monitor}
+<Alert.Root class="m-5">
+	<Alert.Title class='text-xl'>{monitor.name}</Alert.Title>
+	<Alert.Title class='text-lg text-muted-foreground'>Standard</Alert.Title>
+
+	<Alert.Description
+		></Alert.Description
+	>
+</Alert.Root>
+
+{/each}
+
 {/if}
+
+
