@@ -13,7 +13,6 @@
 <AvatarPrimitive.Image
 	{src}
 	{alt}
-	style="border-radius: 99999px "
 	class={cn('aspect-square  h-full w-full', className)}
 	{...$$restProps}
 />
