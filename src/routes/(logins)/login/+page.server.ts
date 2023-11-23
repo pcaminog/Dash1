@@ -59,7 +59,6 @@ export const actions: Actions = {
 			await platform?.env.tokenEmail.put(token, user.userId);
 			await sendEmailVerificationLink(email!.toString(), token);
 		} catch (e: any) {
-			console.log(JSON.stringify(e));
 			if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
 				return fail(400, {
 					message: 'Account already exists'

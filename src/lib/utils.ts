@@ -89,7 +89,6 @@ export async function checkUrl(data: checkUrlType) {
 		let response = await fetch(data.url, options);
 		return { success: true, message: response.status };
 	} catch (err: any) {
-		console.log(err);
 		let customMessage = '';
 		if (err.message.includes('Cannot use relative URL')) {
 			customMessage = 'Invalid URL provided. Please provide a valid, absolute URL.';

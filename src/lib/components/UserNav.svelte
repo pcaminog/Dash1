@@ -3,16 +3,14 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let session: any;
-	
-
 </script>
 
 <DropdownMenu.Root positioning={{ placement: 'bottom-end' }}>
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button variant="ghost" builders={[builder]} class="relative h-8 w-8 rounded-full">
 			<Avatar.Root class="h-8 w-8">
-				<Avatar.Image src={session.user.user_metadata.avatar_url} alt="@shadcn" />
-				<Avatar.Fallback>{session.user.email?.slice(0, 2)}</Avatar.Fallback>
+				<Avatar.Image src={session.avatar} alt="@shadcn" />
+				<Avatar.Fallback>{session.username.slice(0, 2)}</Avatar.Fallback>
 			</Avatar.Root>
 		</Button>
 	</DropdownMenu.Trigger>
@@ -20,10 +18,12 @@
 		<DropdownMenu.Label class="font-normal">
 			<div class="flex flex-col space-y-1">
 				<p class="text-sm font-medium leading-none">
-					{session.user.user_metadata.full_name}
+					{session.account_name}
 				</p>
-				<p class="text-xs leading-none text-muted-foreground">{session.user.email}</p>
-				
+				<p class="text-sm font-medium leading-none">
+					{session.primary_email}
+				</p>
+				<p class="text-xs leading-none text-muted-foreground">{session.username}</p>
 			</div>
 		</DropdownMenu.Label>
 		<DropdownMenu.Separator />
@@ -39,4 +39,3 @@
 		</form>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
-

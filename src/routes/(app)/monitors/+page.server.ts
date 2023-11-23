@@ -38,7 +38,6 @@ export const actions = {
 	newmonitor: async ({ request, locals }) => {
 		const form = await superValidate(request, monitorformSchema);
 
-		console.log(form);
 		if (!form.valid) {
 			// Again, return { form } and things will just work.
 			return fail(400, { form });
@@ -46,8 +45,7 @@ export const actions = {
 		const transformArray = (arr: string[]) => arr.map((item) => ({ name: item, value: item }));
 		const request_headers = JSON.parse(form.data.req_headers || '[]');
 		const auth = JSON.parse(form.data.authentication || '{}');
-		console.log(auth);
-		console.log(request_headers);
+
 		const testurl = await checkUrl({
 			url: form.data.url,
 			method: form.data.method,
@@ -68,11 +66,22 @@ export const actions = {
 				Authorization:
 					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
 			},
-			body: JSON.stringify(form.data)
+			body: JSON.stringify({
+				id: form.data.id,
+				name: form.data.name,
+				url: form.data.url,
+				method: form.data.method,
+				req_headers: request_headers,
+				authentication: auth,
+				req_timeout: form.data.req_timeout,
+				follow_redir: form.data.follow_redir ?? 'true',
+				ssl_verify: form.data.ssl_verify ?? 'true',
+				type: form.data.type,
+				interval: form.data.interval
+			})
 		});
 
 		const acc = await createMonitor.json();
-		console.log(acc.message);
 		if (acc.message?.code === '23505') {
 			throw error(401, 'Duplicate Account: A account with the same name already exists');
 		}

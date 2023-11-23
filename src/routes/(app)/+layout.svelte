@@ -2,13 +2,12 @@
 	import { page } from '$app/stores';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import '../../app.postcss';
-	import { HomeIcon, Settings, Bell, Sliders, Loader2, Activity } from 'lucide-svelte';
+	import { HomeIcon, Settings, Bell, Sliders, Loader2, Activity, Receipt } from 'lucide-svelte';
 
 	import UserNav from '$lib/components/UserNav.svelte';
 	import { Toaster } from 'svelte-french-toast';
 
 	export let data;
-	console.log(data);
 	let isOpen = false;
 
 	function toggleMenu() {
@@ -109,6 +108,16 @@
 							</li>
 							<li class="mt-auto">
 								<a
+									href="/billing"
+									class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 text-"
+								>
+									<Receipt class=" h-4 my-auto " />
+
+									Billing
+								</a>
+							</li>
+							<li class="mt-auto">
+								<a
 									href="/account"
 									class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 text-"
 								>
@@ -179,6 +188,14 @@
 					</li>
 					<li class="mt-auto">
 						<a
+							href="/billing"
+							class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100"
+						>
+							<Receipt class=" h-4 my-auto " />
+
+							Billing
+						</a>
+						<a
 							href="/account"
 							class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100"
 						>
@@ -193,7 +210,7 @@
 	</div>
 
 	<div class="lg:pl-72">
-		<div class="sticky top-0 z-40 lg:mx-auto lg:max-w-7xl lg:px-8">
+		<div class="sticky bg-white top-0 z-40 lg:mx-auto lg:max-w-7xl lg:px-8">
 			<div
 				class="flex h-16 items-center gap-x-4 border-b border-gray-200 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none"
 			>
@@ -232,7 +249,7 @@
 						<div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
 
 						{#if data.session}
-							<UserNav session={data.session} />
+							<UserNav session={data.userInfo} />
 						{:else}
 							<Loader2 class="h-6 w-6 animate-spin" />
 						{/if}
