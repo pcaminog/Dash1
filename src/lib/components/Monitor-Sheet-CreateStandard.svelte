@@ -30,7 +30,7 @@
 			headers = [...headers, { name: '', value: '' }];
 		}
 	}
-	$: headersString = JSON.stringify(headers)
+	$: headersString = JSON.stringify(headers);
 	$: authString = JSON.stringify(auth);
 
 	let open = false;
@@ -59,51 +59,19 @@
 
 <Sheet.Root bind:open>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]}><PlusCircle class=" h-4 w-4 mr-2 my-auto" /> New monitor</Button>
+		<Button builders={[builder]}
+			><PlusCircle class=" h-4 w-4 mr-2 my-auto" /> Standard HTTP Monitor</Button
+		>
 	</Sheet.Trigger>
 	<Sheet.Content side="right" class="w-full">
 		<Sheet.Header class="mb-2">
 			<Sheet.Title>New Monitor</Sheet.Title>
-			<Sheet.Description class="">Monitor Type</Sheet.Description>
+			<Sheet.Description class=""
+				>Notifies when the response status code is not in the 2XX success range</Sheet.Description
+			>
 		</Sheet.Header>
 
 		<form action="?/newmonitor" method="POST" use:monenhance>
-			<RadioGroup.Root
-				value={monitorType}
-				onValueChange={(e) => (monitorType = e?.toString() || '')}
-			>
-				<div class="flex items-center space-x-2">
-					<RadioGroup.Item value="standard" id="Standard" />
-					<Label for="Standard">Standard</Label>
-				</div>
-				<div class="flex items-center space-x-2">
-					<RadioGroup.Item value="codespecific" id="codespecific" />
-					<Label for="r2">Code Specific</Label>
-				</div>
-				<RadioGroup.Input name="spacing" />
-			</RadioGroup.Root>
-
-			{#if monitorType === 'standard'}
-				<Alert.Root class="m-5 w-fit">
-					<Alert.Title>Standard</Alert.Title>
-					<Alert.Description
-						>Notifies when the response status code is not in the 2XX success range</Alert.Description
-					>
-				</Alert.Root>
-			{/if}
-			{#if monitorType === 'codespecific'}
-				<Alert.Root class="m-5 w-fit">
-					<Alert.Title>Code Specific</Alert.Title>
-					<Alert.Description
-						>Notifies when the response differs from a user-specified HTTP status code.</Alert.Description
-					>
-				</Alert.Root>
-			{/if}
-			<span id="type-error" aria-live="assertive" class=" text-destructive text-sm">
-				{#if $monerrors.type}
-					{$monerrors.type}
-				{/if}
-			</span>
 			<input hidden bind:value={monitorType} name="type" />
 			<div class="grid md:grid-cols-2 gap-4 my-4">
 				<div>
@@ -125,26 +93,48 @@
 						{/if}
 					</span>
 				</div>
-				<div>
-					<Label>URL</Label><Input
-						name="url"
-						autocomplete="off"
-						bind:value={$monform.url}
-						aria-describedby={$monerrors.url ? 'url-error url-desc' : 'url-desc'}
-						aria-invalid={$monerrors.url ? 'true' : undefined}
-					/>
-					<span id="url-description" aria-live="assertive" class=" text-muted-foreground text-sm">
-						{#if !$monerrors.url}
-							URL to monitor, add a query string to bypass the cache.
-						{/if}
-					</span>
-					<span id="url-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.url}
-							{$monerrors.url}
-						{/if}
-					</span>
-				</div>
-				{#if monitorType === 'codespecific'}
+				{#if monitorType === 'dns'}
+					<div>
+						<Label>Hostname</Label><Input
+							name="hostname"
+							autocomplete="off"
+							bind:value={$monform.url}
+							aria-describedby={$monerrors.url ? 'url-error url-desc' : 'url-desc'}
+							aria-invalid={$monerrors.url ? 'true' : undefined}
+						/>
+						<span id="url-description" aria-live="assertive" class=" text-muted-foreground text-sm">
+							{#if !$monerrors.url}
+								URL to monitor, add a query string to bypass the cache.
+							{/if}
+						</span>
+						<span id="url-error" aria-live="assertive" class=" text-destructive text-sm">
+							{#if $monerrors.url}
+								{$monerrors.url}
+							{/if}
+						</span>
+					</div>
+				{:else}
+					<div>
+						<Label>URL</Label><Input
+							name="url"
+							autocomplete="off"
+							bind:value={$monform.url}
+							aria-describedby={$monerrors.url ? 'url-error url-desc' : 'url-desc'}
+							aria-invalid={$monerrors.url ? 'true' : undefined}
+						/>
+						<span id="url-description" aria-live="assertive" class=" text-muted-foreground text-sm">
+							{#if !$monerrors.url}
+								URL to monitor, add a query string to bypass the cache.
+							{/if}
+						</span>
+						<span id="url-error" aria-live="assertive" class=" text-destructive text-sm">
+							{#if $monerrors.url}
+								{$monerrors.url}
+							{/if}
+						</span>
+					</div>
+				{/if}
+				{#if monitorType === 'code'}
 					<div>
 						<Label>Status Code</Label>
 						<Input

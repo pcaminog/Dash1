@@ -4,9 +4,6 @@
 	let isAnnual = false;
 	export let data;
 	let info: string;
-	// $: info = data.userInfo.plan;
-	info = 'pro';
-	$: console.log(info);
 </script>
 
 <div class="isolate overflow-hidden">
@@ -72,40 +69,17 @@
 					class="hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-primary lg:ring-1 lg:ring-white/10"
 					aria-hidden="true"
 				/>
-				<div
-					class={` ${
-						info === 'free'
-							? 'relative rounded-2xl z-10 bg-white shadow-xl ring-1 ring-gray-900/10'
-							: 'relative rounded-2xl bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0'
-					}`}
-				>
+				<div class="relative rounded-2xl z-10 bg-white shadow-xl ring-1 ring-gray-900/10">
 					<div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
-						<h3
-							id="tier-free"
-							class={`text-sm font-semibold leading-6 ${info === 'starter' ? '' : 'text-white'}`}
-						>
-							Free
-						</h3>
+						<h3 id="tier-free" class={`text-sm font-semibold leading-6 `}>Free</h3>
 						<div
 							class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between lg:flex-col lg:items-stretch"
 						>
 							<div class="mt-2 flex items-center gap-x-4">
 								{#if isAnnual}
-									<p
-										class={`text-4xl font-bold tracking-tight  ${
-											info === 'free' ? '' : 'text-white'
-										}`}
-									>
-										$150
-									</p>
+									<p class={`text-4xl font-bold tracking-tight`}>$150</p>
 								{:else}
-									<p
-										class={`text-4xl font-bold tracking-tight  ${
-											info === 'free' ? '' : 'text-white'
-										}`}
-									>
-										$15
-									</p>
+									<p class={`text-4xl font-bold tracking-tight `}>$15</p>
 								{/if}
 								<!-- Price, update based on frequency toggle state -->
 								<div class="text-sm leading-5">
@@ -118,26 +92,11 @@
 									{/if}
 								</div>
 							</div>
-							{#if info === 'free'}
-								<Button
-									disabled
-									class={`${
-										info === 'free'
-											? ''
-											: 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-									}`}
-									aria-describedby="tier-free">Your current plan!</Button
-								>
-							{:else}
-								<Button
-									class={`${
-										info === 'free'
-											? ''
-											: 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-									}`}
-									aria-describedby="tier-free">Buy this plan</Button
-								>
-							{/if}
+
+							<Button
+								class={'bg-secondary text-secondary-foreground hover:bg-secondary/80'}
+								aria-describedby="tier-free">Buy this plan</Button
+							>
 						</div>
 						<div class="mt-8 flow-root sm:mt-10">
 							<ul
@@ -196,16 +155,12 @@
 					</div>
 				</div>
 				<div
-					class={` ${
-						info === 'starter'
-							? 'relative rounded-2xl z-10 bg-white shadow-xl ring-1 ring-gray-900/10'
-							: 'relative rounded-2xl bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0'
-					}`}
+					class="hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-primary lg:ring-1 lg:ring-white/10"
 				>
 					<div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
 						<h3
 							id="tier-starter"
-							class={`text-sm font-semibold leading-6 ${info === 'starter' ? '' : 'text-white'}`}
+							class={`text-sm font-semibold leading-6 `}
 						>
 							Starter
 						</h3>
@@ -214,24 +169,12 @@
 						>
 							<div class="mt-2 flex items-center gap-x-4">
 								{#if isAnnual}
-									<p
-										class={`text-4xl font-bold tracking-tight  ${
-											info === 'starter' ? '' : 'text-white'
-										}`}
-									>
-										$150
-									</p>
+									<p class={`text-4xl font-bold tracking-tight  `}>$150</p>
 								{:else}
-									<p
-										class={`text-4xl font-bold tracking-tight  ${
-											info === 'starter' ? '' : 'text-white'
-										}`}
-									>
-										$15
-									</p>
+									<p class={`text-4xl font-bold tracking-tight  `}>$15</p>
 								{/if}
 								<div class="text-sm leading-5">
-									<p class={`${info === 'starter' ? '' : 'text-white'}`}>USD</p>
+									<p >USD</p>
 									{#if isAnnual}
 										<p class="text-gray-400">Billed annually</p>
 									{:else}
@@ -263,9 +206,7 @@
 						<div class="mt-8 flow-root sm:mt-10">
 							<ul
 								role="list"
-								class={`-my-2 divide-y border-t text-sm leading-6 lg:border-t-0 divide-white/5 border-white/5 ${
-									info === 'starter' ? '' : 'text-white'
-								}`}
+								class={`-my-2 divide-y border-t text-sm leading-6 lg:border-t-0 divide-white/5 border-white/5`}
 							>
 								<li class="flex gap-x-3 py-2">
 									<svg
@@ -362,16 +303,12 @@
 					</div>
 				</div>
 				<div
-					class={` ${
-						info === 'pro'
-							? 'relative rounded-2xl z-10 bg-white shadow-xl ring-1 ring-gray-900/10'
-							: 'relative rounded-2xl bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0'
-					}`}
+					class="hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-primary lg:ring-1 lg:ring-white/10"
 				>
 					<div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
 						<h3
 							id="tier-pro"
-							class={`text-sm font-semibold leading-6 ${info === 'pro' ? '' : 'text-white'}`}
+							class={`text-sm font-semibold leading-6 `}
 						>
 							Pro
 						</h3>
@@ -381,23 +318,19 @@
 							<div class="mt-2 flex items-center gap-x-4">
 								{#if isAnnual}
 									<p
-										class={`text-4xl font-bold tracking-tight ${
-											info === 'pro' ? '' : 'text-white'
-										}`}
+										class={`text-4xl font-bold tracking-tight `}
 									>
 										$150
 									</p>
 								{:else}
 									<p
-										class={`text-4xl font-bold tracking-tight ${
-											info === 'pro' ? '' : 'text-white'
-										}`}
+										class={`text-4xl font-bold tracking-tight `}
 									>
 										$15
 									</p>
 								{/if}
 								<div class="text-sm leading-5">
-									<p class={`${info === 'pro' ? '' : 'text-white'}`}>USD</p>
+									<p >USD</p>
 									{#if isAnnual}
 										<p class="text-gray-400">Billed annually</p>
 									{:else}
@@ -405,26 +338,12 @@
 									{/if}
 								</div>
 							</div>
-							{#if info === 'pro'}
+						
 								<Button
-									disabled
-									class={`${
-										info === 'pro'
-											? ''
-											: 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-									}`}
-									aria-describedby="tier-free">Your current plan!</Button
-								>
-							{:else}
-								<Button
-									class={`${
-										info === 'pro'
-											? ''
-											: 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-									}`}
+									class={'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+									}
 									aria-describedby="tier-free">Buy this plan</Button
 								>
-							{/if}
 						</div>
 						<div class="mt-8 flow-root sm:mt-10">
 							<ul

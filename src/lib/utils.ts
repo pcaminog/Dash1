@@ -3,7 +3,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
-import type { checkUrlType } from './types';
+import type { DNSResponse, checkUrlType } from './types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -101,3 +101,4 @@ export async function checkUrl(data: checkUrlType) {
 		return { success: false, message: customMessage };
 	}
 }
+
