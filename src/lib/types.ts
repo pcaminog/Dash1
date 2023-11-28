@@ -3,13 +3,12 @@ import { z } from 'zod';
 
 export const monitorStandardSchema = z.object({
 	id: z.string().optional(),
+    account_id:  z.string().optional(),
 
 	name: z
 		.string()
 		.min(1, { message: 'Name is required' })
 		.max(50, { message: 'Name cannot have more than 50 characteres' }),
-	checks_up: z.number(),
-	checks_down: z.number(),
 	ssl_verify: z.string().optional(),
 	url: z.string().url({ message: 'URL is required.' }),
 	method: z.string().min(1, { message: 'Method is required.' }),
@@ -17,13 +16,16 @@ export const monitorStandardSchema = z.object({
 	follow_redir: z.string().optional(),
 	req_timeout: z.string().min(1, { message: 'Please select a timeout' }),
 	req_headers: z.string().optional(),
-	authentication: z.string().optional()
+	authentication: z.string().optional(),
+	checks_up: z.number().min(1, { message: 'Please select a number of checks' }),
+	checks_down: z.number().min(1, { message: 'Please select a number of checks' })
 });
 
 export type monitorStandardType = z.infer<typeof monitorStandardSchema>;
 
 export const monitorCodeSchema = z.object({
 	id: z.string().optional(),
+    account_id:  z.string().optional(),
 
 	name: z
 		.string()
@@ -39,13 +41,18 @@ export const monitorCodeSchema = z.object({
 	req_timeout: z.string().min(1, { message: 'Please select a timeout' }),
 	req_headers: z.string().optional(),
 	authentication: z.string().optional(),
-	status_code: z.number().min(100).max(599).optional()
+	status_code: z
+		.number()
+		.min(100, { message: 'Status code must be greater than 100' })
+		.max(599, { message: 'Status code must be smaller than 600' })
+		.optional()
 });
 
 export type monitorCodeType = z.infer<typeof monitorCodeSchema>;
 
 export const monitorDNSschema = z.object({
 	id: z.string().optional(),
+    account_id:  z.string().optional(),
 	name: z
 		.string()
 		.min(1, { message: 'Name is required' })
@@ -112,9 +119,11 @@ export interface monitorHTTPCodeType {
 	mon_status: 'active' | 'paused' | 'deleted';
 }
 
-export interface monitorDNSsType {
+export interface monitorDNSDBType {
 	id: string;
 	account_id: string;
+    ips: string;
+    checks: any;
 	name: string;
 	hostname: string;
 	dns_error: string;

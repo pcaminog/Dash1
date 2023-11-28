@@ -3,17 +3,16 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import Button from './ui/button/button.svelte';
-	import { PlusCircle } from 'lucide-svelte';
+	import { ArrowDown, ArrowUp, PlusCircle } from 'lucide-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import toast from 'svelte-french-toast';
 	import { toast_error_style } from '$lib/utils';
-	import * as Alert from '$lib/components/ui/alert';
 	import * as Select from '$lib/components/ui/select';
-	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import Separator from './ui/separator/separator.svelte';
 	import Switch from './ui/switch/switch.svelte';
 	export let monitorForm;
-
+	let checksUpSelect = '';
+	let checksDownSelect = '';
 	let intervalSelect = '';
 	let tls_verify = false;
 	let follow_redir = true;
@@ -35,9 +34,9 @@
 
 	let open = false;
 	const {
-		form: monform,
-		errors: monerrors,
-		enhance: monenhance
+		form: standardform,
+		errors: standarderrors,
+		enhance: standardenhance
 	} = superForm(monitorForm, {
 		onError({ result }) {
 			toast.error(result.error.message, {
@@ -71,25 +70,25 @@
 			>
 		</Sheet.Header>
 
-		<form action="?/newmonitor" method="POST" use:monenhance>
+		<form action="?/newstandard" method="POST" use:standardenhance>
 			<input hidden bind:value={monitorType} name="type" />
 			<div class="grid md:grid-cols-2 gap-4 my-4">
 				<div>
 					<Label>Name</Label><Input
 						name="name"
 						autocomplete="off"
-						bind:value={$monform.name}
-						aria-describedby={$monerrors.name ? 'name-error name-desc' : 'name-desc'}
-						aria-invalid={$monerrors.name ? 'true' : undefined}
+						bind:value={$standardform.name}
+						aria-describedby={$standarderrors.name ? 'name-error name-desc' : 'name-desc'}
+						aria-invalid={$standarderrors.name ? 'true' : undefined}
 					/>
 					<span id="name-description" aria-live="assertive" class=" text-muted-foreground text-sm">
-						{#if !$monerrors.name}
+						{#if !$standarderrors.name}
 							Friendly monitor name.
 						{/if}
 					</span>
 					<span id="name-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.name}
-							{$monerrors.name}
+						{#if $standarderrors.name}
+							{$standarderrors.name}
 						{/if}
 					</span>
 				</div>
@@ -98,18 +97,18 @@
 						<Label>Hostname</Label><Input
 							name="hostname"
 							autocomplete="off"
-							bind:value={$monform.url}
-							aria-describedby={$monerrors.url ? 'url-error url-desc' : 'url-desc'}
-							aria-invalid={$monerrors.url ? 'true' : undefined}
+							bind:value={$standardform.url}
+							aria-describedby={$standarderrors.url ? 'url-error url-desc' : 'url-desc'}
+							aria-invalid={$standarderrors.url ? 'true' : undefined}
 						/>
 						<span id="url-description" aria-live="assertive" class=" text-muted-foreground text-sm">
-							{#if !$monerrors.url}
+							{#if !$standarderrors.url}
 								URL to monitor, add a query string to bypass the cache.
 							{/if}
 						</span>
 						<span id="url-error" aria-live="assertive" class=" text-destructive text-sm">
-							{#if $monerrors.url}
-								{$monerrors.url}
+							{#if $standarderrors.url}
+								{$standarderrors.url}
 							{/if}
 						</span>
 					</div>
@@ -118,46 +117,18 @@
 						<Label>URL</Label><Input
 							name="url"
 							autocomplete="off"
-							bind:value={$monform.url}
-							aria-describedby={$monerrors.url ? 'url-error url-desc' : 'url-desc'}
-							aria-invalid={$monerrors.url ? 'true' : undefined}
+							bind:value={$standardform.url}
+							aria-describedby={$standarderrors.url ? 'url-error url-desc' : 'url-desc'}
+							aria-invalid={$standarderrors.url ? 'true' : undefined}
 						/>
 						<span id="url-description" aria-live="assertive" class=" text-muted-foreground text-sm">
-							{#if !$monerrors.url}
+							{#if !$standarderrors.url}
 								URL to monitor, add a query string to bypass the cache.
 							{/if}
 						</span>
 						<span id="url-error" aria-live="assertive" class=" text-destructive text-sm">
-							{#if $monerrors.url}
-								{$monerrors.url}
-							{/if}
-						</span>
-					</div>
-				{/if}
-				{#if monitorType === 'code'}
-					<div>
-						<Label>Status Code</Label>
-						<Input
-							name="status_code"
-							autocomplete="off"
-							bind:value={$monform.status_code}
-							aria-describedby={$monerrors.status_code
-								? 'status_code-error status_code-desc'
-								: 'status_code-desc'}
-							aria-invalid={$monerrors.status_code ? 'true' : undefined}
-						/>
-						<span
-							id="status_code-description"
-							aria-live="assertive"
-							class=" text-muted-foreground text-sm"
-						>
-							{#if !$monerrors.status_code}
-								Status code expteced to receive from Server.
-							{/if}
-						</span>
-						<span id="status_code-error" aria-live="assertive" class=" text-destructive text-sm">
-							{#if $monerrors.status_code}
-								{$monerrors.status_code}
+							{#if $standarderrors.url}
+								{$standarderrors.url}
 							{/if}
 						</span>
 					</div>
@@ -181,13 +152,13 @@
 						aria-live="assertive"
 						class=" text-muted-foreground text-sm"
 					>
-						{#if !$monerrors.follow_redir}
+						{#if !$standarderrors.follow_redir}
 							Automatically moves to new locations specified by the server.
 						{/if}
 					</span>
 					<span id="follow_redir-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.follow_redir}
-							{$monerrors.follow_redir}
+						{#if $standarderrors.follow_redir}
+							{$standarderrors.follow_redir}
 						{/if}
 					</span>
 				</div>
@@ -207,13 +178,13 @@
 						aria-live="assertive"
 						class=" text-muted-foreground text-sm"
 					>
-						{#if !$monerrors.tls_verify}
+						{#if !$standarderrors.tls_verify}
 							Verified that SSL certificate is valid.
 						{/if}
 					</span>
 					<span id="tls_verify-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.tls_verify}
-							{$monerrors.tls_verify}
+						{#if $standarderrors.tls_verify}
+							{$standarderrors.tls_verify}
 						{/if}
 					</span>
 				</div>
@@ -232,10 +203,9 @@
 							<Select.Value placeholder="Select an interval" />
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value={24}>24 Hours</Select.Item>
-							<Select.Item value={60}>60 min</Select.Item>
-							<Select.Item value={5}>5 min</Select.Item>
-							<Select.Item value={1}>1 min</Select.Item>
+							<Select.Item value={30}>30 Seconds</Select.Item>
+							<Select.Item value={1}>1 Minute</Select.Item>
+							<Select.Item value={2}>2 Minutes</Select.Item>
 						</Select.Content>
 					</Select.Root>
 					<span
@@ -243,13 +213,13 @@
 						aria-live="assertive"
 						class=" text-muted-foreground text-sm"
 					>
-						{#if !$monerrors.interval}
-							How often the URL will be monitored.
+						{#if !$standarderrors.interval}
+							How often the hostname will be monitored.
 						{/if}
 					</span>
 					<span id="interval-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.interval}
-							{$monerrors.interval}
+						{#if $standarderrors.interval}
+							{$standarderrors.interval}
 						{/if}
 					</span>
 				</div>
@@ -281,14 +251,14 @@
 						aria-live="assertive"
 						class=" text-muted-foreground text-sm"
 					>
-						{#if !$monerrors.req_timeout}
+						{#if !$standarderrors.req_timeout}
 							Time to establish a connection and the time to receive a response.
 						{/if}
 					</span>
 
 					<span id="req_timeout-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.req_timeout}
-							{$monerrors.req_timeout}
+						{#if $standarderrors.req_timeout}
+							{$standarderrors.req_timeout}
 						{/if}
 					</span>
 				</div>
@@ -320,14 +290,96 @@
 						aria-live="assertive"
 						class=" text-muted-foreground text-sm"
 					>
-						{#if !$monerrors.method}
+						{#if !$standarderrors.method}
 							HTTP Method used to make the request
 						{/if}
 					</span>
 
 					<span id="method-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.method}
-							{$monerrors.method}
+						{#if $standarderrors.method}
+							{$standarderrors.method}
+						{/if}
+					</span>
+				</div>
+				<div>
+					<div>
+						<Label
+							><div class="flex">Declare Up <ArrowUp class=" text-green my-auto h-4" /></div></Label
+						>
+						<Select.Root
+							name="checks_up"
+							onSelectedChange={(value) => {
+								// @ts-expect-error
+								checksUpSelect = value?.value;
+							}}
+						>
+							<input hidden bind:value={checksUpSelect} name="checks_up" />
+
+							<Select.Trigger type="button" class="w-full">
+								<Select.Value placeholder="Number of successfull checks" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value={1}>1</Select.Item>
+								<Select.Item value={2}>2</Select.Item>
+								<Select.Item value={3}>3</Select.Item>
+								<Select.Item value={4}>4</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+					<span
+						id="checks_up-description"
+						aria-live="assertive"
+						class=" text-muted-foreground text-sm"
+					>
+						{#if !$standarderrors.checks_up}
+							How many successfull checks before automatically declare the monitor Up.
+						{/if}
+					</span>
+					<span id="checks_up-error" aria-live="assertive" class=" text-destructive text-sm">
+						{#if $standarderrors.checks_up}
+							{$standarderrors.checks_up}
+						{/if}
+					</span>
+				</div>
+				<div>
+					<div>
+						<Label
+							><div class="flex">
+								Declare Down <ArrowDown class=" text-destructive my-auto h-4" />
+							</div></Label
+						>
+						<Select.Root
+							name="checks_down"
+							onSelectedChange={(value) => {
+								// @ts-expect-error
+								checksDownSelect = value?.value;
+							}}
+						>
+							<input hidden bind:value={checksDownSelect} name="checks_down" />
+
+							<Select.Trigger type="button" class="w-full">
+								<Select.Value placeholder="Number of failed checks" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value={1}>1</Select.Item>
+								<Select.Item value={2}>2</Select.Item>
+								<Select.Item value={3}>3</Select.Item>
+								<Select.Item value={4}>4</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+					<span
+						id="checks_down-description"
+						aria-live="assertive"
+						class=" text-muted-foreground text-sm"
+					>
+						{#if !$standarderrors.checks_down}
+							How many failed checks before automatically declare the monitor Down.
+						{/if}
+					</span>
+					<span id="checks_down-error" aria-live="assertive" class=" text-destructive text-sm">
+						{#if $standarderrors.checks_down}
+							{$standarderrors.checks_down}
 						{/if}
 					</span>
 				</div>
@@ -349,13 +401,13 @@
 					<input hidden bind:value={authString} name="authentication" />
 
 					<span id="state-description" aria-live="assertive" class=" text-muted-foreground text-sm">
-						{#if !$monerrors.state}
+						{#if !$standarderrors.state}
 							Add any Authentication header to the request.
 						{/if}
 					</span>
 					<span id="web-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.web}
-							{$monerrors.web}
+						{#if $standarderrors.web}
+							{$standarderrors.web}
 						{/if}
 					</span>
 				</div>
@@ -380,13 +432,13 @@
 						aria-live="assertive"
 						class=" text-muted-foreground text-sm"
 					>
-						{#if !$monerrors.req_headers}
+						{#if !$standarderrors.req_headers}
 							Add any Header you many need to the request.
 						{/if}
 					</span>
 					<span id="req_headers-error" aria-live="assertive" class=" text-destructive text-sm">
-						{#if $monerrors.req_headers}
-							{$monerrors.req_headers}
+						{#if $standarderrors.req_headers}
+							{$standarderrors.req_headers}
 						{/if}
 					</span>
 				</div>

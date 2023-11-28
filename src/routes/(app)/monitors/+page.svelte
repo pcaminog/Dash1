@@ -1,15 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import * as Alert from '$lib/components/ui/alert';
-	import type { monitorDNSType, monitorHTTPCodeType, monitorHTTPStandardType } from '$lib/types';
-	export let data: PageData;
-	console.log(data);
-	let DNSMonitor: monitorDNSType[] = [];
-	$: DNSMonitor = data.dns;
-	let StandardHTTPMonitor: monitorHTTPStandardType[] = [];
-	$: StandardHTTPMonitor = data.standard;
-	let CodeHTTPMonitor: monitorHTTPCodeType[] = [];
-	$: CodeHTTPMonitor = data.code;
 	import {
 		Accordion,
 		AccordionContent,
@@ -20,6 +11,22 @@
 	import MonitorSheetCreateStandard from '$lib/components/Monitor-Sheet-CreateStandard.svelte';
 	import MonitorSheetCreateCode from '$lib/components/Monitor-Sheet-CreateCode.svelte';
 	import MonitorSheetCreateDns from '$lib/components/Monitor-Sheet-CreateDNS.svelte';
+	import type { monitorDNSDBType, monitorHTTPCodeType, monitorHTTPStandardType } from '$lib/types';
+	export let data: PageData;
+	console.log(data);
+	let DNSMonitor: monitorDNSDBType[] = [];
+	$: {
+		DNSMonitor = data.dns.map((monitor: monitorDNSDBType) => ({
+			...monitor,
+			ips: JSON.parse(monitor.ips)
+		}));
+	}
+
+	let StandardHTTPMonitor: monitorHTTPStandardType[] = [];
+	$: StandardHTTPMonitor = data.standard;
+	let CodeHTTPMonitor: monitorHTTPCodeType[] = [];
+	$: CodeHTTPMonitor = data.code;
+	$: console.log(DNSMonitor);
 </script>
 
 {#if DNSMonitor.length === 0 && CodeHTTPMonitor.length === 0 && StandardHTTPMonitor.length === 0}
@@ -92,15 +99,26 @@
 			<div class="flex flex-row justify-between">
 				<div>
 					<Alert.Title class="text-xl">{monitor.name}</Alert.Title>
-					<Alert.Title class="text-lg text-muted-foreground">Standard</Alert.Title>
+					{#each monitor.ips as ip}
+						<Alert.Title class="text-lg text-muted-foreground">{ip}</Alert.Title>
+					{/each}
 				</div>
 				<CircleDot class=" text-white fill-green-700 hover:animate-ping " />
 			</div>
-
 			<Accordion type="single" collapsible>
 				<AccordionItem value="item-1">
 					<AccordionTrigger />
-					<AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
+					<AccordionContent>
+						<h3 class=" text-base font-semibold">Last 3 Checks</h3>
+						{#each monitor.checks as check}
+							<div class="flex flex-row justify-between leading-3 my-2">
+								<p class=" text-sm text-muted-foreground">
+									{new Date(Math.floor(check.last_checked)).toLocaleString()}
+								</p>
+								<p class=" text-sm text-muted-foreground">{JSON.parse(check.ips)}</p>
+							</div>
+						{/each}
+					</AccordionContent>
 				</AccordionItem>
 			</Accordion>
 			<Alert.Description />
