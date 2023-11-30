@@ -58,8 +58,8 @@
 
 <Sheet.Root bind:open>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]}
-			><PlusCircle class=" h-4 w-4 mr-2 my-auto" /> Standard HTTP Monitor</Button
+		<Button  builders={[builder]}
+			><PlusCircle class=" h-4 w-4 mr-2 my-auto" /> Add Monitor</Button
 		>
 	</Sheet.Trigger>
 	<Sheet.Content side="right" class="w-full">

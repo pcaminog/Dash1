@@ -1,9 +1,14 @@
 import { message } from 'sveltekit-superforms/client';
 import { z } from 'zod';
 
+export const delMonitorSchema = z.object({
+	mon_id: z.string().optional()
+});
+export type delMonitorType = z.infer<typeof delMonitorSchema>;
+
 export const monitorStandardSchema = z.object({
 	id: z.string().optional(),
-    account_id:  z.string().optional(),
+	account_id: z.string().optional(),
 
 	name: z
 		.string()
@@ -25,7 +30,7 @@ export type monitorStandardType = z.infer<typeof monitorStandardSchema>;
 
 export const monitorCodeSchema = z.object({
 	id: z.string().optional(),
-    account_id:  z.string().optional(),
+	account_id: z.string().optional(),
 
 	name: z
 		.string()
@@ -45,14 +50,19 @@ export const monitorCodeSchema = z.object({
 		.number()
 		.min(100, { message: 'Status code must be greater than 100' })
 		.max(599, { message: 'Status code must be smaller than 600' })
-		.optional()
 });
 
 export type monitorCodeType = z.infer<typeof monitorCodeSchema>;
 
+export const settingsnotificationEmailSchema = z.object({
+	email: z.string().email()
+});
+
+export type settingsnotificationEmailSchemaType = z.infer<typeof settingsnotificationEmailSchema>;
+
 export const monitorDNSschema = z.object({
 	id: z.string().optional(),
-    account_id:  z.string().optional(),
+	account_id: z.string().optional(),
 	name: z
 		.string()
 		.min(1, { message: 'Name is required' })
@@ -119,15 +129,58 @@ export interface monitorHTTPCodeType {
 	mon_status: 'active' | 'paused' | 'deleted';
 }
 
+export interface monitorHTTPStandardDBType {
+	id: string;
+	account_id: string;
+	monitor_id: string;
+	name: string;
+	url: string;
+	ssl_verify: boolean;
+	follow_redir: boolean;
+	method: string;
+	req_timeout: number;
+	req_headers: reqHeaderType[];
+	authentication: reqHeaderType[];
+	interval: 30 | 2 | 1;
+	checks_down: number;
+	checks_up: number;
+	open_incident: boolean;
+	status_code: number;
+	checks: any;
+	mon_status: 'active' | 'paused' | 'deleted';
+}
+
+export interface monitorHTTPCodeDBType {
+	id: string;
+	account_id: string;
+	monitor_id: string;
+
+	name: string;
+	url: string;
+	ssl_verify: boolean;
+	follow_redir: boolean;
+	method: string;
+	req_timeout: number;
+	req_headers: reqHeaderType[];
+	authentication: reqHeaderType[];
+	interval: 30 | 2 | 1;
+	checks_down: number;
+	checks_up: number;
+	open_incident: boolean;
+	status_code: number;
+	checks: any;
+	mon_status: 'active' | 'paused' | 'deleted';
+}
 export interface monitorDNSDBType {
 	id: string;
 	account_id: string;
-    ips: string;
-    checks: any;
+	monitor_id: string;
+	ips: string;
+	checks: any;
 	name: string;
 	hostname: string;
 	dns_error: string;
-	interval: '30' | '2' | '1';
+	interval: 30 | 2 | 1;
 	isUpdated: boolean;
 	checks_down: number;
 	checks_up: number;

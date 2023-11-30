@@ -4,13 +4,19 @@ import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
 import { API_URL } from '$env/static/private';
 import { checkUrl } from '$lib/utils';
-import { monitorCodeSchema, monitorDNSschema, monitorStandardSchema } from '$lib/types';
+import {
+	delMonitorSchema,
+	monitorCodeSchema,
+	monitorDNSschema,
+	monitorStandardSchema
+} from '$lib/types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
 	const monitorStandardform = superValidate(monitorStandardSchema);
 	const monitorCodeform = superValidate(monitorCodeSchema);
 	const monitorDNSform = superValidate(monitorDNSschema);
+	const delMonitorForm = superValidate(delMonitorSchema);
 
 	//const user = locals.user
 	const user = 'jtabfwcldfpm2d4';
@@ -48,11 +54,85 @@ export const load: PageServerLoad = async ({ locals }) => {
 		dns: monDns,
 		monitorStandardform,
 		monitorCodeform,
-		monitorDNSform
+		monitorDNSform,
+		delMonitorForm
 	};
 };
 
 export const actions = {
+	delstandard: async ({ request, locals }) => {
+		const form = await superValidate(request, delMonitorSchema);
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+		const account = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
+		const deleteMonitor = await fetch(
+			`${API_URL}/monitor/http/standard/delete?id=${form.data.mon_id}&account_id=${account}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization:
+						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+				}
+			}
+		);
+		const { success } = await deleteMonitor.json();
+
+		if (!success) {
+			throw error(401, 'Error DB deleting the monitor, try again ');
+		}
+
+		return { form };
+	},
+	delcode: async ({ request, locals }) => {
+		const form = await superValidate(request, delMonitorSchema);
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+		const account = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
+		const deleteMonitor = await fetch(
+			`${API_URL}/monitor/http/code/delete?id=${form.data.mon_id}&account_id=${account}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization:
+						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+				}
+			}
+		);
+
+		const { success } = await deleteMonitor.json();
+
+		if (!success) {
+			throw error(401, 'Error DB deleting the monitor, try again ');
+		}
+
+		return { form };
+	},
+	deldns: async ({ request, locals }) => {
+		const form = await superValidate(request, delMonitorSchema);
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+		const account = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
+		const deleteMonitor = await fetch(
+			`${API_URL}/monitor/dns/delete?id=${form.data.mon_id}&account_id=${account}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization:
+						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+				}
+			}
+		);
+		const { success } = await deleteMonitor.json();
+
+		if (!success) {
+			throw error(401, 'Error DB deleting the monitor, try again ');
+		}
+
+		return { form };
+	},
 	newstandard: async ({ request, locals }) => {
 		const form = await superValidate(request, monitorStandardSchema);
 
@@ -79,7 +159,9 @@ export const actions = {
 			throw error(401, String(testurl.message));
 		}
 		form.data.id = 'jtabfwcldfpm2d4';
-		const createMonitor = await fetch(`${API_URL}/monitor/http/add`, {
+
+		form.data.account_id = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
+		const createMonitor = await fetch(`${API_URL}/monitor/http/standard/add`, {
 			method: 'POST',
 			headers: {
 				Authorization:
@@ -87,11 +169,14 @@ export const actions = {
 			},
 			body: JSON.stringify({
 				id: form.data.id,
+				account_id: form.data.account_id,
 				name: form.data.name,
 				url: form.data.url,
 				method: form.data.method,
 				req_headers: request_headers,
 				authentication: auth,
+				checks_down: form.data.checks_down,
+				checks_up: form.data.checks_up,
 				req_timeout: form.data.req_timeout,
 				follow_redir: form.data.follow_redir ?? 'true',
 				ssl_verify: form.data.ssl_verify ?? 'true',
@@ -164,7 +249,9 @@ export const actions = {
 			throw error(401, String(testurl.message));
 		}
 		form.data.id = 'jtabfwcldfpm2d4';
-		const createMonitor = await fetch(`${API_URL}/monitor/http/add`, {
+
+		form.data.account_id = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
+		const createMonitor = await fetch(`${API_URL}/monitor/http/code/add`, {
 			method: 'POST',
 			headers: {
 				Authorization:
@@ -172,15 +259,19 @@ export const actions = {
 			},
 			body: JSON.stringify({
 				id: form.data.id,
+				account_id: form.data.account_id,
 				name: form.data.name,
 				url: form.data.url,
 				method: form.data.method,
 				req_headers: request_headers,
 				authentication: auth,
+				checks_down: form.data.checks_down,
+				checks_up: form.data.checks_up,
 				req_timeout: form.data.req_timeout,
 				follow_redir: form.data.follow_redir ?? 'true',
 				ssl_verify: form.data.ssl_verify ?? 'true',
-				interval: form.data.interval
+				interval: form.data.interval,
+				status_code: form.data.status_code
 			})
 		});
 

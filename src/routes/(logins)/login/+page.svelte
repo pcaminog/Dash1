@@ -33,7 +33,7 @@
 		/>
 		<div class="relative z-20 flex items-center text-lg font-medium">
 			<!-- <Command class="mr-2 h-6 w-6" /> -->
-			HostnameNotifier
+			Mon1tor
 		</div>
 	</div>
 	<div class="p-8">
