@@ -34,7 +34,7 @@
 			<DropdownMenu.Item>Organizations</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<form method="POST" action="/logout">
+		<form method="GET" action="/logout">
 			<button type="submit"><DropdownMenu.Item>Log out</DropdownMenu.Item></button>
 		</form>
 	</DropdownMenu.Content>
