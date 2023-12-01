@@ -1,10 +1,9 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
 import { settingsnotificationEmailSchema } from '$lib/types';
 import { API_URL } from '$env/static/private';
-import { error } from 'console';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const email = superValidate(settingsnotificationEmailSchema);

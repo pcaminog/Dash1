@@ -18,6 +18,10 @@
 					You have successfully verified an email address. You can now start sending notifications
 					to this email address.
 				</p>
+
+				<p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
+					You can close this window.
+				</p>
 				<div class="mt-10 flex items-center justify-center gap-x-6">
 					<Button
 						on:click={() => {
@@ -43,7 +47,12 @@
 					Something didn't work...
 				</h2>
 				<p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-					Please try again, if that doesn't work, send a new validation email.
+					Email validation has failed, please try again.
+					If that doesn't work, send a new validation
+					email.
+				</p>
+				<p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
+					You can close this window.
 				</p>
 				<div class="mt-10 flex items-center justify-center gap-x-6">
 					<Button
