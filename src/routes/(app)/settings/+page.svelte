@@ -5,6 +5,7 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { Check, Cross, CrossIcon, X } from 'lucide-svelte';
 
 	export let data: PageData;
 	console.log(data);
@@ -32,12 +33,17 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				<Table.Row>
-					<Table.Cell class="font-medium">INV001</Table.Cell>
-					<Table.Cell>Paid</Table.Cell>
-					<Table.Cell>Credit Card</Table.Cell>
-					<Table.Cell class="text-right">$250.00</Table.Cell>
-				</Table.Row>
+				{#each data.members as member}
+					<Table.Row>
+						<Table.Cell class="font-medium">{member.email}</Table.Cell>
+						{#if member.verified}
+							<Table.Cell><Check class=" text-green-600 h-4" /></Table.Cell>
+						{:else}
+							<Table.Cell><X class=" text-destructive" /></Table.Cell>
+						{/if}
+						<Table.Cell class="text-right"><Button>Re-Send</Button></Table.Cell>
+					</Table.Row>
+				{/each}
 			</Table.Body>
 		</Table.Root>
 	</Card.Content>

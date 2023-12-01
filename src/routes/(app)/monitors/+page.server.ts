@@ -17,6 +17,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const monitorCodeform = superValidate(monitorCodeSchema);
 	const monitorDNSform = superValidate(monitorDNSschema);
 	const delMonitorForm = superValidate(delMonitorSchema);
+	// const updateDNSform = superValidate(monitorDNSschema);
 
 	//const user = locals.user
 	const user = 'jtabfwcldfpm2d4';
@@ -55,6 +56,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		monitorStandardform,
 		monitorCodeform,
 		monitorDNSform,
+		// updateDNSform,
 		delMonitorForm
 	};
 };
@@ -141,7 +143,6 @@ export const actions = {
 			return fail(400, { form });
 		}
 		console.log(form);
-		const transformArray = (arr: string[]) => arr.map((item) => ({ name: item, value: item }));
 		const request_headers = JSON.parse(form.data.req_headers || '[]');
 		const auth = JSON.parse(form.data.authentication || '{}');
 
@@ -223,6 +224,40 @@ export const actions = {
 		}
 		return { form };
 	},
+	// updatedns: async ({ request, locals }) => {
+	// 	const form = await superValidate(request, monitorDNSschema);
+
+	// 	if (!form.valid) {
+	// 		// Again, return { form } and things will just work.
+	// 		return fail(400, { form });
+	// 	}
+	// 	console.log(form);
+	// 	form.data.id = 'jtabfwcldfpm2d4';
+	// 	form.data.account_id = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
+	// 	const newarrr = form.data.IPs.split(',');
+	// 	const createMonitor = await fetch(`${API_URL}/monitor/dns/add`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			Authorization:
+	// 				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+	// 		},
+	// 		body: JSON.stringify({
+	// 			id: form.data.id,
+	// 			account_id: form.data.account_id,
+	// 			name: form.data.name,
+	// 			hostname: form.data.hostname,
+	// 			checks_down: form.data.checks_down,
+	// 			checks_up: form.data.checks_up,
+	// 			ips: newarrr,
+	// 			interval: form.data.interval
+	// 		})
+	// 	});
+	// 	const acc = await createMonitor.json();
+	// 	if (acc.message?.code === '23505') {
+	// 		throw error(401, 'Duplicate Account: A account with the same name already exists');
+	// 	}
+	// 	return { form };
+	// },
 	newcode: async ({ request, locals }) => {
 		const form = await superValidate(request, monitorCodeSchema);
 
@@ -231,7 +266,6 @@ export const actions = {
 			return fail(400, { form });
 		}
 		console.log(form);
-		const transformArray = (arr: string[]) => arr.map((item) => ({ name: item, value: item }));
 		const request_headers = JSON.parse(form.data.req_headers || '[]');
 		const auth = JSON.parse(form.data.authentication || '{}');
 

@@ -54,7 +54,7 @@
 							src="https://pub-0716db0a5bc24e53a5fda54c30e7e763.r2.dev/static/logo.svg"
 							alt="Your Company"
 						/>
-						<p class=" font-mono">Mon1tor</p>
+						<p class="">Mon1tor</p>
 					</div>
 					<nav class="flex flex-1 flex-col">
 						<ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -138,7 +138,7 @@
 		<!-- Sidebar component, swap this element with another sidebar if you like -->
 		<div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 px-6 pb-4">
 			<div class="flex h-16 shrink-0 items-center">
-				<p class=" font-mono">
+				<p class=" ">
 					<span>Mon1tor</span>
 				</p>
 			</div>

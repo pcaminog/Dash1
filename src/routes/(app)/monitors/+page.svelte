@@ -1,26 +1,18 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import * as Alert from '$lib/components/ui/alert';
-	import {
-		Accordion,
-		AccordionContent,
-		AccordionItem,
-		AccordionTrigger
-	} from '$lib/components/ui//accordion';
-	import { CircleDot, CloudFog, RefreshCcw, Trash2 } from 'lucide-svelte';
+	import * as Accordion from '$lib/components/ui/accordion';
+	import { CircleDot, RefreshCcw, Trash2 } from 'lucide-svelte';
 	import MonitorSheetCreateStandard from '$lib/components/Monitor-Sheet-CreateStandard.svelte';
 	import MonitorSheetCreateCode from '$lib/components/Monitor-Sheet-CreateCode.svelte';
 	import MonitorSheetCreateDns from '$lib/components/Monitor-Sheet-CreateDNS.svelte';
 	import type {
 		monitorDNSDBType,
 		monitorHTTPCodeDBType,
-		monitorHTTPCodeType,
-		monitorHTTPStandardDBType,
-		monitorHTTPStandardType
+		monitorHTTPStandardDBType
 	} from '$lib/types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import toast from 'svelte-french-toast';
@@ -38,11 +30,7 @@
 		}));
 	}
 
-	const {
-		form: delform,
-		errors: delerrors,
-		enhance: delenhance
-	} = superForm(data.delMonitorForm, {
+	const { enhance: delenhance } = superForm(data.delMonitorForm, {
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -74,7 +62,7 @@
 	<h2 class="text-xl font-semibold flex flex-row justify-between">
 		Standard Monitors <MonitorSheetCreateStandard monitorForm={data.monitorStandardform} />
 	</h2>
-	<h4 class="text-xs  text-muted-foreground">
+	<h4 class="text-xs text-muted-foreground">
 		Monitors will trigger if response is not on the range 200 - 299
 	</h4>
 
@@ -82,9 +70,11 @@
 		<Alert.Root class="m-5">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-xl"
+					<Alert.Title class="text-base text-blue"
 						>{monitor.name}
-						<Button variant="link" href={monitor.url}>{monitor.url}</Button></Alert.Title
+						<Button variant="link" href={monitor.url}>
+							<p class="font-light text-xs">{monitor.url}</p></Button
+						></Alert.Title
 					>
 
 					<Alert.Title class="text-lg text-muted-foreground">
@@ -108,11 +98,10 @@
 					{/if}
 				</div>
 			</div>
-			<Accordion type="single" collapsible>
-				<AccordionItem value="item-1">
-					<AccordionTrigger />
-					<AccordionContent>
-						<h3 class=" text-base font-semibold">Last 3 Checks</h3>
+			<Accordion.Root>
+				<Accordion.Item value="item-1">
+					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
+					<Accordion.Content>
 						{#each monitor.checks as check}
 							<div class="flex flex-row justify-between leading-3 my-2">
 								<p class=" text-sm text-muted-foreground">
@@ -149,9 +138,9 @@
 								</AlertDialog.Content>
 							</AlertDialog.Root>
 						</div>
-					</AccordionContent>
-				</AccordionItem>
-			</Accordion>
+					</Accordion.Content>
+				</Accordion.Item>
+			</Accordion.Root>
 			<Alert.Description />
 		</Alert.Root>
 	{/each}
@@ -161,7 +150,7 @@
 	<h2 class="text-xl font-semibold flex flex-row justify-between">
 		Specific Code Monitors <MonitorSheetCreateCode monitorForm={data.monitorCodeform} />
 	</h2>
-	<h4 class="text-xs  text-muted-foreground">
+	<h4 class="text-xs text-muted-foreground">
 		Monitors will trigger if response of the specified Status Code
 	</h4>
 
@@ -169,9 +158,11 @@
 		<Alert.Root class="m-5">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-xl"
+					<Alert.Title class="text-base text-blue"
 						>{monitor.name}
-						<Button variant="link" href={monitor.url}>{monitor.url}</Button></Alert.Title
+						<Button variant="link" href={monitor.url}
+							><p class="font-light text-xs">{monitor.url}</p></Button
+						></Alert.Title
 					>
 
 					<Alert.Title class="text-lg text-muted-foreground">
@@ -195,11 +186,10 @@
 					{/if}
 				</div>
 			</div>
-			<Accordion type="single" collapsible>
-				<AccordionItem value="item-1">
-					<AccordionTrigger />
-					<AccordionContent
-						><h3 class=" text-base font-semibold">Last 3 Checks</h3>
+			<Accordion.Root>
+				<Accordion.Item value="item-1">
+					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
+					<Accordion.Content>
 						{#each monitor.checks as check}
 							<div class="flex flex-row justify-between leading-3 my-2">
 								<p class=" text-sm text-muted-foreground">
@@ -236,9 +226,9 @@
 								</AlertDialog.Content>
 							</AlertDialog.Root>
 						</div>
-					</AccordionContent>
-				</AccordionItem>
-			</Accordion>
+					</Accordion.Content>
+				</Accordion.Item>
+			</Accordion.Root>
 			<Alert.Description />
 		</Alert.Root>
 	{/each}
@@ -254,7 +244,7 @@
 		<Alert.Root class="m-5">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-xl">{monitor.name}</Alert.Title>
+					<Alert.Title class="text-base text-blue">{monitor.name}</Alert.Title>
 					{#each monitor.ips as ip}
 						<Alert.Title
 							class={`text-sm ${monitor.open_incident ? ' text-destructive' : 'text-green-700'}`}
@@ -275,11 +265,10 @@
 					{/if}
 				</div>
 			</div>
-			<Accordion type="single" collapsible>
-				<AccordionItem value="item-1">
-					<AccordionTrigger />
-					<AccordionContent>
-						<h3 class=" text-base font-semibold">Last 3 Checks</h3>
+			<Accordion.Root>
+				<Accordion.Item value="item-1">
+					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
+					<Accordion.Content>
 						{#each monitor.checks as check}
 							<div class="flex flex-row justify-between leading-3 my-2">
 								<p class=" text-sm text-muted-foreground">
@@ -291,6 +280,7 @@
 						<Separator class="mb-4" />
 						<div class="flex flex-row gap-4">
 							<Button variant="ghost"><RefreshCcw class="h-5 hover:animate-spin" /> Refresh</Button>
+							<!-- <MonitorSheetUpdateDns monData={monitor} dnsForm={data.updateDNSform} /> -->
 
 							<AlertDialog.Root>
 								<AlertDialog.Trigger asChild let:builder>
@@ -316,9 +306,9 @@
 								</AlertDialog.Content>
 							</AlertDialog.Root>
 						</div>
-					</AccordionContent>
-				</AccordionItem>
-			</Accordion>
+					</Accordion.Content>
+				</Accordion.Item>
+			</Accordion.Root>
 			<Alert.Description />
 		</Alert.Root>
 	{/each}
