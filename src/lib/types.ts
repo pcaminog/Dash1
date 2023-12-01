@@ -92,6 +92,11 @@ export type checkUrlType = {
 	};
 };
 
+interface reqHeaderType {
+	name: string;
+	value: string;
+}
+
 export interface monitorHTTPStandardType {
 	id: string;
 	account_id: string;
