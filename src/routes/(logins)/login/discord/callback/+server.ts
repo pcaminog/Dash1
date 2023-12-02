@@ -41,7 +41,6 @@ export const GET = async ({ url, cookies, locals }) => {
 		};
 
 		const user = await getUser();
-
 		const session = await locals.lucia.createSession({
 			userId: user.userId,
 			attributes: {}

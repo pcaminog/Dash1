@@ -13,5 +13,5 @@ kv_namespaces = [
 
 [[d1_databases]]
 binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "hostnotifier"
-database_id = "8ef9f34f-6928-4df9-8617-d8b1ead86bdd"
+database_name = "mon1tor_pre"
+database_id = "f0f3bc51-41ca-4549-814c-a3e8bcf66c07"
