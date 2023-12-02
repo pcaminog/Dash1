@@ -25,7 +25,6 @@ export const GET = async ({ url, cookies, locals }) => {
 			status: 400
 		});
 	}
-	
 
 	try {
 		const { getExistingUser, azureADUser, createUser } = await microsoftAuth.validateCallback(
@@ -54,8 +53,13 @@ export const GET = async ({ url, cookies, locals }) => {
 			userId: user.userId,
 			attributes: {}
 		});
-		const createAccount = await fetch(`${API_URL}/account/create?user_id=${user.userId}`);
-
+		await fetch(`${API_URL}/account/create?user_id=${user.userId}`, {
+			method: 'POST',
+			headers: {
+				Authorization:
+					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			}
+		});
 		locals.auth.setSession(session);
 		return new Response(null, {
 			status: 302,
