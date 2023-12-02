@@ -3,6 +3,7 @@ import { azureAD } from '@lucia-auth/oauth/providers';
 import {
 	API_URL,
 	MICROSOFT_CLIENT_ID,
+	MICROSOFT_REDIRECT_URL,
 	MICROSOFT_SECRET_VALUE,
 	MICROSOFT_TENANT_ID
 } from '$env/static/private';
@@ -13,9 +14,10 @@ export const GET = async ({ url, cookies, locals }) => {
 		clientId: MICROSOFT_CLIENT_ID,
 		clientSecret: MICROSOFT_SECRET_VALUE,
 		tenant: MICROSOFT_TENANT_ID,
-		redirectUri: 'https://app.mon1tor.com/login/microsoft/callback'
+		redirectUri: MICROSOFT_REDIRECT_URL
 	});
-	const storedState = cookies.get('microsoft_oauth_state');
+	const storedState = cookies.get('ad_oauth_state');
+	const codeVerifier = cookies.get('ad_oauth_code_verifier');
 	const state = url.searchParams.get('state');
 	const code = url.searchParams.get('code');
 
@@ -24,11 +26,12 @@ export const GET = async ({ url, cookies, locals }) => {
 			status: 400
 		});
 	}
+	
 
 	try {
 		const { getExistingUser, azureADUser, createUser } = await microsoftAuth.validateCallback(
 			code,
-			storedState
+			codeVerifier!
 		);
 		console.log(azureADUser);
 
