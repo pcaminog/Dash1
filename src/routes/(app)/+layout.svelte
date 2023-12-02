@@ -32,7 +32,7 @@
 			>
 				<div class="absolute left-full top-0 flex w-16 justify-center pt-5">
 					<button type="button" class="-m-2.5 p-2.5" on:click={toggleMenu}>
-						<span class="sr-only">Close sidebar</span>
+						<span class="sr-only">Close sidebar </span>
 						<svg
 							class="h-6 w-6 text-white"
 							fill="none"
