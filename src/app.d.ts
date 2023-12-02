@@ -9,7 +9,6 @@ declare global {
 		}
 		interface Platform {
 			env: {
-				tokenEmail: KVNamespace;
 				DB: D1Database;
 			};
 			context: {
