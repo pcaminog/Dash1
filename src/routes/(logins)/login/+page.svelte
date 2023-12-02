@@ -43,37 +43,6 @@
 				<p class="text-sm text-muted-foreground">Enter your email below to create your account</p>
 			</div>
 			<div class={cn('grid gap-6', className)} {...$$restProps}>
-				<form method="POST" action="?/login" use:enhance>
-					<div class="grid gap-2">
-						<div class="grid gap-1">
-							<Label class="sr-only" for="email">Email</Label>
-							<Input
-								id="email"
-								name=email
-								placeholder="name@example.com"
-								type="email"
-								autocapitalize="none"
-								autocomplete="email"
-								autocorrect="off"
-								disabled={isLoading}
-							/>
-						</div>
-						<Button type='submit' disabled={isLoading}>
-							{#if isLoading}
-								<Loader2 class="mr-2 h-4 w-4 animate-spin" />
-							{/if}
-							Sign In with Email
-						</Button>
-					</div>
-				</form>
-				<div class="relative">
-					<div class="absolute inset-0 flex items-center">
-						<span class="w-full border-t" />
-					</div>
-					<div class="relative flex justify-center text-xs uppercase">
-						<span class="bg-background px-2 text-muted-foreground"> Or continue with </span>
-					</div>
-				</div>
 				<Button
 					variant="outline"
 					on:click={() => {
@@ -89,6 +58,28 @@
 					{/if}
 					{' '}
 					Github
+				</Button>
+
+				<Button
+					variant="outline"
+					on:click={() => {
+						goto('/login/microsoft');
+					}}
+					type="button"
+					disabled={isLoading}
+				>
+					{#if isLoading}
+						<Loader2 class="mr-2 h-4 w-4 animate-spin" />
+					{:else}
+						<svg class="h-4 w-4 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+							<rect width="24" height="24" fill="none" />
+							<path
+								d="M3,12V6.75L9,5.43v6.48L3,12M20,3v8.75L10,11.9V5.21L20,3M3,13l6,.09V19.9L3,18.75V13m17,.25V22L10,20.09v-7Z"
+							/>
+						</svg>
+					{/if}
+					{' '}
+					Microsoft
 				</Button>
 			</div>
 			<p class="px-8 text-center text-sm text-muted-foreground">
