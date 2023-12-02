@@ -1,22 +1,19 @@
 import { OAuthRequestError } from '@lucia-auth/oauth';
-import { azureAD } from '@lucia-auth/oauth/providers';
+import { discord } from '@lucia-auth/oauth/providers';
 import {
 	API_URL,
-	MICROSOFT_CLIENT_ID,
-	MICROSOFT_REDIRECT_URL,
-	MICROSOFT_SECRET_VALUE,
-	MICROSOFT_TENANT_ID
+	DISCORD_CLIENT_ID,
+	DISCORD_CLIENT_SECRET,
+	DISCORD_REDIRECT
 } from '$env/static/private';
 
 export const GET = async ({ url, cookies, locals }) => {
-	const microsoftAuth = azureAD(locals.lucia, {
-		clientId: MICROSOFT_CLIENT_ID,
-		clientSecret: MICROSOFT_SECRET_VALUE,
-		tenant: MICROSOFT_TENANT_ID,
-		redirectUri: MICROSOFT_REDIRECT_URL
+	const discordAuth = discord(locals.lucia, {
+		clientId: DISCORD_CLIENT_ID,
+		clientSecret: DISCORD_CLIENT_SECRET,
+		redirectUri: DISCORD_REDIRECT
 	});
-	const storedState = cookies.get('ad_oauth_state');
-	const codeVerifier = cookies.get('ad_oauth_code_verifier');
+	const storedState = cookies.get('discord_oauth_state');
 	const state = url.searchParams.get('state');
 	const code = url.searchParams.get('code');
 
@@ -25,22 +22,18 @@ export const GET = async ({ url, cookies, locals }) => {
 			status: 400
 		});
 	}
-	
 
 	try {
-		const { getExistingUser, azureADUser, createUser } = await microsoftAuth.validateCallback(
-			code,
-			codeVerifier!
-		);
+		const { getExistingUser, discordUser, createUser } = await discordAuth.validateCallback(code);
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
 			const user = await createUser({
 				attributes: {
-					username: azureADUser.name,
-					avatar: azureADUser.picture,
-					name: azureADUser.given_name,
-					email: azureADUser.email
+					username: discordUser.username,
+					avatar: discordUser.avatar,
+					name: discordUser.global_name,
+					email: discordUser.email
 				}
 			});
 			return user;
@@ -52,7 +45,7 @@ export const GET = async ({ url, cookies, locals }) => {
 			userId: user.userId,
 			attributes: {}
 		});
-		const createAccount = await fetch(`${API_URL}/create/account?user_id=${user.userId}`);
+		await fetch(`${API_URL}/create/account?user_id=${user.userId}`);
 
 		locals.auth.setSession(session);
 		return new Response(null, {
@@ -63,12 +56,12 @@ export const GET = async ({ url, cookies, locals }) => {
 		});
 	} catch (e) {
 		if (e instanceof OAuthRequestError) {
-			return new Response(JSON.stringify(e), {
+			// invalid code
+			return new Response(null, {
 				status: 400
 			});
 		}
-		console.log(e);
-		return new Response(JSON.stringify(e), {
+		return new Response(null, {
 			status: 500
 		});
 	}
