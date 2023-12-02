@@ -54,7 +54,7 @@ export const GET = async ({ url, cookies, locals }) => {
 			userId: user.userId,
 			attributes: {}
 		});
-		const createAccount = await fetch(`${API_URL}/create/account?user_id=${user.userId}`);
+		const createAccount = await fetch(`${API_URL}/account/create?user_id=${user.userId}`);
 
 		locals.auth.setSession(session);
 		return new Response(null, {
