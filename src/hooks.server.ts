@@ -22,6 +22,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// 	});
 		// }
 		event.locals.user = session?.user.userId;
+		event.locals.session = session;
+
 	}
 	return await resolve(event);
 };
@@ -29,7 +31,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 export const handleError: HandleServerError = ({ error, event }) => {
 	// example integration with https://sentry.io/
 	const stringError = JSON.stringify(error);
-	
+
 	return {
 		message: `Whoops!, ${stringError}`,
 		code: error ?? 'UNKNOWN'

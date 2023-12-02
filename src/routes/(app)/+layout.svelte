@@ -249,7 +249,9 @@
 						<div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
 
 						{#if data.session}
-							<UserNav session={data.userInfo} />
+							{#if data.userInfo}
+								<UserNav session={data.userInfo} />
+							{/if}
 						{:else}
 							<Loader2 class="h-6 w-6 animate-spin" />
 						{/if}

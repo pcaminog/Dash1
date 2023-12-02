@@ -6,6 +6,7 @@ declare global {
 			auth: import('lucia').AuthRequest;
 			user: string | undefined;
 			lucia: import('lucia');
+			session: any
 		}
 		interface Platform {
 			env: {
