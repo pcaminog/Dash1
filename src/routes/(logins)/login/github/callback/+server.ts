@@ -11,7 +11,6 @@ export const GET = async ({ url, cookies, locals }) => {
 	const state = url.searchParams.get('state');
 	const code = url.searchParams.get('code');
 
-
 	if (!storedState || !state || storedState !== state || !code) {
 		return new Response(null, {
 			status: 400
@@ -32,6 +31,13 @@ export const GET = async ({ url, cookies, locals }) => {
 					email: githubUser.email
 				}
 			});
+			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
+				method: 'POST',
+				headers: {
+					Authorization:
+						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+				}
+			});
 			return user;
 		};
 
@@ -41,13 +47,7 @@ export const GET = async ({ url, cookies, locals }) => {
 			userId: user.userId,
 			attributes: {}
 		});
-		await fetch(`${API_URL}/account/create?user_id=${user.userId}`, {
-			method: 'POST',
-			headers: {
-				Authorization:
-					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-			}
-		});
+
 		locals.auth.setSession(session);
 		return new Response(null, {
 			status: 302,
