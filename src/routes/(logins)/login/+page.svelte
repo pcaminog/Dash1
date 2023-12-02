@@ -7,6 +7,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { GithubIcon, Loader2 } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
+	import { DiscordLogo } from 'radix-icons-svelte';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -80,6 +81,22 @@
 					{/if}
 					{' '}
 					Microsoft
+				</Button>
+				<Button
+					variant="outline"
+					on:click={() => {
+						goto('/login/discord');
+					}}
+					type="button"
+					disabled={isLoading}
+				>
+					{#if isLoading}
+						<Loader2 class="mr-2 h-4 w-4 animate-spin" />
+					{:else}
+						<DiscordLogo class="mr-2 h-4 w-4" />
+					{/if}
+					{' '}
+					Discord
 				</Button>
 			</div>
 			<p class="px-8 text-center text-sm text-muted-foreground">
