@@ -32,6 +32,8 @@ export const GET = async ({ url, cookies, locals }) => {
 			code,
 			codeVerifier!
 		);
+		console.log(JSON.stringify(azureADUser));
+
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;

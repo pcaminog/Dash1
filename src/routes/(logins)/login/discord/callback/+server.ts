@@ -25,6 +25,7 @@ export const GET = async ({ url, cookies, locals }) => {
 
 	try {
 		const { getExistingUser, discordUser, createUser } = await discordAuth.validateCallback(code);
+		console.log(JSON.stringify(discordUser));
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
