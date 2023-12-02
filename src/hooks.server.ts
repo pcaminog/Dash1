@@ -1,6 +1,6 @@
 import { building } from '$app/environment';
 import { initializeLucia } from '$lib/server/lucia';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleServerError } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (building) {
@@ -24,4 +24,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.user = session?.user.userId;
 	}
 	return await resolve(event);
+};
+
+export const handleError: HandleServerError = ({ error, event }) => {
+	// example integration with https://sentry.io/
+	const stringError = JSON.stringify(error);
+	
+	return {
+		message: `Whoops!, ${stringError}`,
+		code: error ?? 'UNKNOWN'
+	};
 };

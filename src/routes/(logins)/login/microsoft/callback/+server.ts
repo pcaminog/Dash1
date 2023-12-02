@@ -33,8 +33,6 @@ export const GET = async ({ url, cookies, locals }) => {
 			code,
 			codeVerifier!
 		);
-		console.log(azureADUser);
-
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
@@ -65,14 +63,12 @@ export const GET = async ({ url, cookies, locals }) => {
 			}
 		});
 	} catch (e) {
-		console.log(e);
 		if (e instanceof OAuthRequestError) {
-			console.log(e);
-			return new Response(null, {
+			return new Response(JSON.stringify(e), {
 				status: 400
 			});
 		}
-		return new Response(null, {
+		return new Response(JSON.stringify(e), {
 			status: 500
 		});
 	}
