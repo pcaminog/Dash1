@@ -76,7 +76,7 @@
 									</li>
 									<li>
 										<a
-											href={`/monitors?limit=50&offset=0`}
+											href={`/monitors`}
 											class={`${
 												$page.url.pathname === `/monitors`
 													? 'bg-gray-50 text-slate-600'
@@ -159,7 +159,7 @@
 							</li>
 							<li>
 								<a
-									href={`/monitors?limit=50&offset=0`}
+									href={`/monitors`}
 									class={`${
 										$page.url.pathname === `/monitors` ? ' bg-gray-100 dark:bg-gray-700 ' : ''
 									} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 `}
