@@ -18,11 +18,12 @@ export const GET = async ({ url, cookies, locals }) => {
 	}
 
 	try {
-		const { getExistingUser, githubUser, createUser } = await githubAuth.validateCallback(code);
+		const { getExistingUser, githubUser, githubTokens, createUser } = await githubAuth.validateCallback(code);
 		console.log(JSON.stringify(githubUser));
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
+		
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
