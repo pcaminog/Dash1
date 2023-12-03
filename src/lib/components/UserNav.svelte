@@ -9,7 +9,7 @@
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button variant="ghost" builders={[builder]} class="relative h-8 w-8 rounded-full">
 			<Avatar.Root class="h-8 w-8">
-				<Avatar.Image src={session.avatar} alt="@shadcn" />
+				<Avatar.Image src={session.avatar} alt="avatarimage" />
 				<Avatar.Fallback>{session.username.slice(0, 2)}</Avatar.Fallback>
 			</Avatar.Root>
 		</Button>
