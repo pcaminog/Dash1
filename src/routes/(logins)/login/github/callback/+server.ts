@@ -2,6 +2,12 @@ import { OAuthRequestError } from '@lucia-auth/oauth';
 import { github } from '@lucia-auth/oauth/providers';
 import { API_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
 
+interface emailsGithub {
+	email: string;
+	primary: boolean;
+	verified: boolean;
+	visibility: string | null;
+}
 export const GET = async ({ url, cookies, locals }) => {
 	const githubAuth = github(locals.lucia, {
 		clientId: GITHUB_CLIENT_ID,
@@ -18,18 +24,35 @@ export const GET = async ({ url, cookies, locals }) => {
 	}
 
 	try {
-		const { getExistingUser, githubUser, githubTokens, createUser } = await githubAuth.validateCallback(code);
-		console.log(JSON.stringify(githubUser));
+		const { getExistingUser, githubUser, githubTokens, createUser } =
+			await githubAuth.validateCallback(code);
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
-		
+			let validEmail;
+			if (githubUser.email === null) {
+				const emailGithub = await fetch('https://api.github.com/user/emails', {
+					headers: {
+						Authorization: `Bearer ${githubTokens.accessToken}`
+					}
+				});
+
+				const JSONResp = await emailGithub.json();
+				const validEmailObj = JSONResp.find(
+					(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
+				);
+
+				if (validEmailObj) {
+					validEmail = validEmailObj.email;
+				}
+			}
+			validEmail = githubUser.email;
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: githubUser.email
+					email: validEmail
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
