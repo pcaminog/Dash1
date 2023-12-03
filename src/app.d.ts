@@ -1,4 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import type { KVNamespace } from '@cloudflare/workers-types';
+
 // for information about these interfaces
 declare global {
 	namespace App {
@@ -11,6 +14,7 @@ declare global {
 		interface Platform {
 			env: {
 				DB: D1Database;
+				tokenEmail: KVNamespace
 			};
 			context: {
 				waitUntil(promise: Promise<any>): void;

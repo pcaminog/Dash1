@@ -8,7 +8,7 @@ interface emailsGithub {
 	verified: boolean;
 	visibility: string | null;
 }
-export const GET = async ({ url, cookies, locals }) => {
+export const GET = async ({ url, cookies, locals, platform }) => {
 	const githubAuth = github(locals.lucia, {
 		clientId: GITHUB_CLIENT_ID,
 		clientSecret: GITHUB_CLIENT_SECRET
@@ -33,7 +33,6 @@ export const GET = async ({ url, cookies, locals }) => {
 				Authorization: `Bearer ${githubTokens.accessToken}`
 			}
 		});
-
 		const JSONResp = await emailGithub.json();
 		const validEmailObj = JSONResp.find(
 			(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
@@ -80,11 +79,12 @@ export const GET = async ({ url, cookies, locals }) => {
 		});
 	} catch (e) {
 		if (e instanceof OAuthRequestError) {
-			// invalid code
+			await platform?.env.tokenEmail.put('error400', JSON.stringify(e));
 			return new Response(null, {
 				status: 400
 			});
 		}
+		await platform?.env.tokenEmail.put('error500', JSON.stringify(e));
 		return new Response(null, {
 			status: 500
 		});
