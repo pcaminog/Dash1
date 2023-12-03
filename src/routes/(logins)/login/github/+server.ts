@@ -6,7 +6,7 @@ export const GET = async ({ cookies, locals }) => {
 	const githubAuth = github(locals.lucia, {
 		clientId: GITHUB_CLIENT_ID,
 		clientSecret: GITHUB_CLIENT_SECRET,
-		scope: ['user']
+		scope: ['user:email']
 	});
 
 	const [url, state] = await githubAuth.getAuthorizationUrl();
