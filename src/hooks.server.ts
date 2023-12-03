@@ -15,15 +15,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	if (event.locals?.auth) {
 		const session = await event.locals.auth.validate();
-		// if (!session) {
-		// 	return new Response(null, {
-		// 		status: 307,
-		// 		headers: { location: '/login?hooks_no_session' }
-		// 	});
-		// }
+		if (!session) {
+			return new Response(null, {
+				status: 307,
+				headers: { location: '/login?hooks_no_session' }
+			});
+		}
 		event.locals.user = session?.user.userId;
 		event.locals.session = session;
-
 	}
 	return await resolve(event);
 };

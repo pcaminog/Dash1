@@ -14,7 +14,6 @@ export const load = async ({ locals }) => {
 			return { session };
 		}
 		const { message: userInfo } = await getUserInfo.json();
-		console.log(userInfo);
 		return { userInfo, session };
 	}
 	return;
