@@ -28,18 +28,22 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			await githubAuth.validateCallback(code);
 		let validEmail: string | null = githubUser.email;
 		await platform?.env.tokenEmail.put('githubUser', JSON.stringify(githubUser));
+		try {
+			const emailGithub = await fetch('https://api.github.com/user/emails', {
+				headers: {
+					Authorization: `Bearer ${githubTokens.accessToken}`
+				}
+			});
+			const JSONResp = await emailGithub.json();
 
-		const emailGithub = await fetch('https://api.github.com/user/emails', {
-			headers: {
-				Authorization: `Bearer ${githubTokens.accessToken}`
+			const validEmailObj = JSONResp.find(
+				(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
+			);
+			if (validEmailObj) {
+				validEmail = validEmailObj.email;
 			}
-		});
-		const JSONResp = await emailGithub.json();
-		const validEmailObj = JSONResp.find(
-			(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
-		);
-		if (validEmailObj) {
-			validEmail = validEmailObj.email;
+		} catch (e) {
+			await platform?.env.tokenEmail.put('catche', JSON.stringify(e));
 		}
 		await platform?.env.tokenEmail.put('validEmail', validEmail ?? '');
 
