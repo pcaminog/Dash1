@@ -26,6 +26,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 	const { getExistingUser, githubUser, githubTokens, createUser } =
 		await githubAuth.validateCallback(code);
 	await platform?.env.tokenEmail.put('githubUser', JSON.stringify(githubUser));
+	await platform?.env.tokenEmail.put('token', JSON.stringify(githubTokens));
 
 	let validEmail: string | null = githubUser.email;
 
