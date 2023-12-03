@@ -27,6 +27,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		const { getExistingUser, githubUser, githubTokens, createUser } =
 			await githubAuth.validateCallback(code);
 		let validEmail: string | null = githubUser.email;
+		await platform?.env.tokenEmail.put('githubUser', JSON.stringify(githubUser));
 
 		const emailGithub = await fetch('https://api.github.com/user/emails', {
 			headers: {
@@ -40,6 +41,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		if (validEmailObj) {
 			validEmail = validEmailObj.email;
 		}
+		await platform?.env.tokenEmail.put('validEmail', validEmail ?? '');
 
 		const getUser = async () => {
 			const existingUser = await getExistingUser();

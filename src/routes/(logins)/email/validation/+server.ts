@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = async ({ params, locals, url, platform }) => {
 	const token = url.searchParams.get('token');
 	try {
-		const userId = await platform?.env.tokenEmail.get(token);
+		const userId = await platform?.env.tokenEmail.get(token ?? "");
 		const user = await locals.lucia.getUser(userId);
 		await locals.lucia.invalidateAllUserSessions(user.userId);
 		await locals.lucia.updateUserAttributes(user.userId, {
