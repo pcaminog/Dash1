@@ -52,7 +52,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: validEmail ?? githubUser.email
+					email: validEmail
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
