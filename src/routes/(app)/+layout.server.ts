@@ -2,19 +2,7 @@ import { API_URL } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
-	// const session = await locals.auth.validate();
-
-	const session = {
-		user: {
-			userId: 'a3ajyquetwkm5z7'
-		},
-		sessionId: 'dwy4p8imkhg8dn0ppdgv6hbxlzizgcxnqmvc7h9v',
-		activePeriodExpiresAt: '2023-12-04T01:29:59.195Z',
-		idlePeriodExpiresAt: '2023-12-18T01:29:59.195Z',
-		state: 'active',
-		fresh: false
-	};
-
+	const session = await locals.auth.validate();
 	if (session) {
 		const getUserInfo = await fetch(`${API_URL}/user/info?user_id=${session.user.userId}`, {
 			headers: {
