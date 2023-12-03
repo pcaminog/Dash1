@@ -26,33 +26,32 @@ export const GET = async ({ url, cookies, locals }) => {
 	try {
 		const { getExistingUser, githubUser, githubTokens, createUser } =
 			await githubAuth.validateCallback(code);
+		let validEmail: string | null = githubUser.email;
+
+		const emailGithub = await fetch('https://api.github.com/user/emails', {
+			headers: {
+				Authorization: `Bearer ${githubTokens.accessToken}`
+			}
+		});
+
+		const JSONResp = await emailGithub.json();
+		const validEmailObj = JSONResp.find(
+			(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
+		);
+		if (validEmailObj) {
+			validEmail = validEmailObj.email;
+		}
+
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
-			let validEmail;
-			if (githubUser.email === null) {
-				const emailGithub = await fetch('https://api.github.com/user/emails', {
-					headers: {
-						Authorization: `Bearer ${githubTokens.accessToken}`
-					}
-				});
 
-				const JSONResp = await emailGithub.json();
-				const validEmailObj = JSONResp.find(
-					(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
-				);
-
-				if (validEmailObj) {
-					validEmail = validEmailObj.email;
-				}
-			}
-			validEmail = githubUser.email;
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: validEmail
+					email: validEmail ?? githubUser.email
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
