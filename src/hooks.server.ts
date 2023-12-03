@@ -15,7 +15,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	if (event.locals?.auth) {
 		const session = await event.locals.auth.validate();
-		if (!session) {
+		if (!session && event.url.pathname !== 'login') {
 			return new Response(null, {
 				status: 307,
 				headers: { location: '/login?hooks_no_session' }
