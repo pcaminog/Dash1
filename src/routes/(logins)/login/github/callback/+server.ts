@@ -23,53 +23,43 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		});
 	}
 
+	const { getExistingUser, githubUser, githubTokens, createUser } =
+		await githubAuth.validateCallback(code);
+	await platform?.env.tokenEmail.put('githubUser', JSON.stringify(githubUser));
+
+	let validEmail: string | null = githubUser.email;
+
 	try {
-		const { getExistingUser, githubUser, githubTokens, createUser } =
-			await githubAuth.validateCallback(code);
-		await platform?.env.tokenEmail.put('githubUser', JSON.stringify(githubUser));
-
-		const getUserEmail = async () => {
-			let validEmail: string | null = githubUser.email;
-
-			try {
-				const emailGithub = await fetch('https://api.github.com/user/emails', {
-					headers: {
-						Authorization: `Bearer ${githubTokens.accessToken}`
-					}
-				});
-
-				await platform?.env.tokenEmail.put('emailGithub', emailGithub.status.toString());
-
-				const JSONResp = await emailGithub.json();
-				await platform?.env.tokenEmail.put('JSONResp', JSON.stringify(JSONResp));
-
-				const validEmailObj = JSONResp.find(
-					(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
-				);
-				await platform?.env.tokenEmail.put('validEmailObj', JSON.stringify(validEmailObj));
-
-				if (validEmailObj) {
-					validEmail = validEmailObj.email;
-				}
-
-				return validEmail;
-			} catch (e) {
-				await platform?.env.tokenEmail.put('catche', JSON.stringify(e));
-				return '';
+		const emailGithub = await fetch('https://api.github.com/user/emails', {
+			headers: {
+				Authorization: `Bearer ${githubTokens.accessToken}`
 			}
-		};
+		});
+		console.log(emailGithub.status);
+		await platform?.env.tokenEmail.put('emailGithub', emailGithub.status.toString());
+
+		const JSONResp = await emailGithub.json();
+		console.log(JSONResp);
+		const validEmailObj = JSONResp.find(
+			(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
+		);
+		await platform?.env.tokenEmail.put('validEmailObj', JSON.stringify(validEmailObj));
+
+		if (validEmailObj) {
+			validEmail = validEmailObj.email;
+		}
+
+		console.log(validEmail);
 
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
-			const email = await getUserEmail();
-
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: email
+					email: validEmail
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
