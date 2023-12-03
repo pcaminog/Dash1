@@ -31,7 +31,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		const getUserEmail = async () => {
 			let validEmail: string | null = githubUser.email;
 
-			// try {
+			try {
 			const emailGithub = await fetch('https://api.github.com/user/emails', {
 				headers: {
 					Authorization: `Bearer ${githubTokens.accessToken}`
@@ -53,10 +53,10 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			}
 
 			return validEmail;
-			// } catch (e) {
-			// 	await platform?.env.tokenEmail.put('catche', JSON.stringify(e));
-			// 	return '';
-			// }
+			} catch (e) {
+				await platform?.env.tokenEmail.put('catche', JSON.stringify(e));
+				return '';
+			}
 		};
 
 		const getUser = async () => {
@@ -68,7 +68,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: await getUserEmail()
+					email: githubUser.email
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
