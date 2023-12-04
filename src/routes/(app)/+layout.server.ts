@@ -1,11 +1,7 @@
 import { API_URL } from '$env/static/private';
-import { fakeSession } from '$lib/utils.js';
-import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
-	// const session = await locals.auth.validate();
-	const session = { ...fakeSession };
-	console.log('locals from layout', locals);
+	const session = await locals.auth.validate();
 	if (session) {
 		const getUserInfo = await fetch(`${API_URL}/user/info?user_id=${locals.session.user.userId}`, {
 			headers: {
