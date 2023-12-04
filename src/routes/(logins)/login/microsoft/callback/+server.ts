@@ -69,15 +69,6 @@ export const GET = async ({ url, cookies, locals }) => {
 	try {
 		const { getExistingUser, azureADUser, azureADTokens, createUser } =
 			await microsoftAuth.validateCallback(code, codeVerifier!);
-		const { email, avatarUrl } = await getUserEmailAndAvatar(azureADTokens.accessToken);
-
-		console.log({
-			username: azureADUser.given_name,
-			avatar: avatarUrl,
-			name: azureADUser.given_name,
-			email: email
-		});
-
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
@@ -86,7 +77,7 @@ export const GET = async ({ url, cookies, locals }) => {
 				attributes: {
 					username: azureADUser.given_name,
 					avatar: avatarUrl,
-					name: azureADUser.given_name,
+					name: azureADUser.name,
 					email: email
 				}
 			});
