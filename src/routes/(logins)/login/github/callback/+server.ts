@@ -45,19 +45,30 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			status: 400
 		});
 	}
-	const { getExistingUser, githubUser, githubTokens, createUser } =
+	const { getExistingUser, githubUser, githubTokens, createUser, createKey } =
 		await githubAuth.validateCallback(code);
 
 	try {
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
+			const email = await getUserEmail(githubTokens.accessToken);
+			// const { results } = await platform?.env.DB.prepare(`SELECT * FROM user WHERE email = ?1`)
+			// 	.bind(email)
+			// 	.all();
+			// console.log(results);
+			// if (results) {
+			// 	const user = locals.lucia.transformDatabaseUser(results[0]);
+			// 	await createKey(results[0].userId);
+			// 	console.log(user);
+			// 	return user;
+			// }
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: await getUserEmail(githubTokens.accessToken)
+					email: email
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
