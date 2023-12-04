@@ -12,7 +12,8 @@ export const GET = async ({ cookies, locals }) => {
 		clientId: MICROSOFT_CLIENT_ID,
 		clientSecret: MICROSOFT_SECRET_VALUE,
 		tenant: MICROSOFT_TENANT_ID,
-		redirectUri: MICROSOFT_REDIRECT_URL
+		redirectUri: MICROSOFT_REDIRECT_URL,
+		scope: ['user.read.all']
 	});
 
 	const [url, codeVerifier, state] = await microsoftAuth.getAuthorizationUrl();

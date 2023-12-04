@@ -7,6 +7,46 @@ import {
 	MICROSOFT_SECRET_VALUE,
 	MICROSOFT_TENANT_ID
 } from '$env/static/private';
+import { userAgent } from '$lib/utils.js';
+
+const getUserEmailAndAvatar = async (token: string) => {
+	try {
+		const response = await fetch('https://graph.microsoft.com/v1.0/me', {
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'User-Agent': userAgent
+			}
+		});
+		const JSONResp = await response.json();
+
+		// Use the 'mail' field if it's not null, otherwise use 'userPrincipalName'
+		let email = JSONResp.mail || JSONResp.userPrincipalName;
+
+		// If 'userPrincipalName' was used and it's not in the correct email format, transform it
+		if (!JSONResp.mail && email.includes('#EXT#')) {
+			const parts = email.split('#EXT#');
+			email = parts[0].replace('_', '@');
+		}
+
+		// Fetch the avatar
+		// const avatarResponse = await fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
+		// 	headers: {
+		// 		Authorization: `Bearer ${token}`,
+		// 		'User-Agent': userAgent
+		// 	}
+		// });
+
+		let avatarUrl = null;
+		// if (avatarResponse.ok) {
+		// 	const blob = await avatarResponse.blob();
+		// 	avatarUrl = URL.createObjectURL(blob);
+		// }
+
+		return { email, avatarUrl };
+	} catch (e) {
+		return { email: '', avatarUrl: '' };
+	}
+};
 
 export const GET = async ({ url, cookies, locals }) => {
 	const microsoftAuth = azureAD(locals.lucia, {
@@ -27,20 +67,27 @@ export const GET = async ({ url, cookies, locals }) => {
 	}
 
 	try {
-		const { getExistingUser, azureADUser, createUser } = await microsoftAuth.validateCallback(
-			code,
-			codeVerifier!
-		);
-			console.log(azureADUser);
+		const { getExistingUser, azureADUser, azureADTokens, createUser } =
+			await microsoftAuth.validateCallback(code, codeVerifier!);
+		const { email, avatarUrl } = await getUserEmailAndAvatar(azureADTokens.accessToken);
+
+		console.log({
+			username: azureADUser.given_name,
+			avatar: avatarUrl,
+			name: azureADUser.given_name,
+			email: email
+		});
+
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
+			const { email, avatarUrl } = await getUserEmailAndAvatar(azureADTokens.accessToken);
 			const user = await createUser({
 				attributes: {
-					username: azureADUser.name,
-					avatar: azureADUser.picture,
+					username: azureADUser.given_name,
+					avatar: avatarUrl,
 					name: azureADUser.given_name,
-					email: azureADUser.email
+					email: email
 				}
 			});
 			return user;
