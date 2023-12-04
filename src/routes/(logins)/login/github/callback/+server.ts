@@ -70,7 +70,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		const user = await getUser();
 
 		const authorizationAPI = await fetch(
-			`${API_URL}/account/authorization?user_id=${user.userId}&email=${githubUser.email}`,
+			`${API_URL}/account/authorization?user_id=${user.userId}&email=${email}`,
 			{
 				method: 'POST',
 				headers: {
@@ -87,12 +87,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 
 		const session = await locals.lucia.createSession({
 			userId: updatedUser.userId,
-			attributes: {
-				username: githubUser.login,
-				avatar: githubUser.avatar_url,
-				name: githubUser.name,
-				email: email
-			}
+			attributes: {}
 		});
 
 		locals.auth.setSession(session);
