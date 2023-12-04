@@ -71,7 +71,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
 					email: email,
-					accounts: JSON.stringify(message)
+					accounts: message
 				}
 			});
 			return user;
