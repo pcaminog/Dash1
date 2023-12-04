@@ -9,6 +9,28 @@ interface emailsGithub {
 	verified: boolean;
 	visibility: string | null;
 }
+let validEmail: string | null;
+const getUserEmail = async (token: string) => {
+	try {
+		const emailGithub = await fetch('https://api.github.com/user/emails', {
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'User-Agent': userAgent
+			}
+		});
+		const JSONResp = await emailGithub.json();
+		const validEmailObj = JSONResp.find(
+			(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
+		);
+		if (validEmailObj) {
+			validEmail = validEmailObj.email;
+		}
+
+		return validEmail;
+	} catch (e) {
+		console.log(e);
+	}
+};
 export const GET = async ({ url, cookies, locals, platform }) => {
 	const githubAuth = github(locals.lucia, {
 		clientId: GITHUB_CLIENT_ID,
@@ -23,37 +45,10 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			status: 400
 		});
 	}
-
 	const { getExistingUser, githubUser, githubTokens, createUser } =
 		await githubAuth.validateCallback(code);
-	await platform?.env.tokenEmail.put('githubUser', JSON.stringify(githubUser));
-	await platform?.env.tokenEmail.put('token', JSON.stringify(githubTokens));
-
-	let validEmail: string | null = githubUser.email;
 
 	try {
-		const emailGithub = await fetch('https://api.github.com/user/emails', {
-			headers: {
-				Authorization: `Bearer ${githubTokens.accessToken}`,
-				'User-Agent': userAgent
-			}
-		});
-		console.log(emailGithub.status);
-		await platform?.env.tokenEmail.put('emailGithub', emailGithub.status.toString());
-
-		const JSONResp = await emailGithub.json();
-		console.log(JSONResp);
-		const validEmailObj = JSONResp.find(
-			(emailObj: emailsGithub) => emailObj.verified && emailObj.primary
-		);
-		await platform?.env.tokenEmail.put('validEmailObj', JSON.stringify(validEmailObj));
-
-		if (validEmailObj) {
-			validEmail = validEmailObj.email;
-		}
-
-		console.log(validEmail);
-
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
@@ -62,7 +57,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: validEmail
+					email: await getUserEmail(githubTokens.accessToken)
 				}
 			});
 			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
