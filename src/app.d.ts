@@ -9,12 +9,24 @@ declare global {
 			auth: import('lucia').AuthRequest;
 			user: string | undefined;
 			lucia: import('lucia');
-			session: any
+			session: any;
+			userInfo: {
+				id: string;
+				email: string;
+				username: string;
+				avatar: string;
+				user_name: string;
+				created_at: string;
+				account_id: string;
+				plan: string;
+				primary_email: string;
+				account_name: string;
+			};
 		}
 		interface Platform {
 			env: {
 				DB: D1Database;
-				tokenEmail: KVNamespace
+				tokenEmail: KVNamespace;
 			};
 			context: {
 				waitUntil(promise: Promise<any>): void;

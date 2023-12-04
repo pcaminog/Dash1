@@ -21,7 +21,7 @@
 					{session.account_name}
 				</p>
 				<p class="text-sm font-medium leading-none">
-					{session.primary_email}
+					{session.email}
 				</p>
 				<p class="text-xs leading-none text-muted-foreground">{session.username}</p>
 			</div>

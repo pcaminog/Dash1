@@ -19,12 +19,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const delMonitorForm = superValidate(delMonitorSchema);
 	// const updateDNSform = superValidate(monitorDNSschema);
 
-	//const user = locals.user
-	const user = 'jtabfwcldfpm2d4';
-	const account_id = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
 
 	const monStandardReq = await fetch(
-		`${API_URL}/monitor/http/standard/get?account_id=${account_id}`,
+		`${API_URL}/monitor/http/standard/get?account_id=${locals.userInfo.account_id}`,
 		{
 			headers: {
 				Authorization:
@@ -33,19 +30,25 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	);
 	const { message: monStandard } = await monStandardReq.json();
-	const monCodeReq = await fetch(`${API_URL}/monitor/http/code/get?account_id=${account_id}`, {
-		headers: {
-			Authorization:
-				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+	const monCodeReq = await fetch(
+		`${API_URL}/monitor/http/code/get?account_id=${locals.userInfo.account_id}`,
+		{
+			headers: {
+				Authorization:
+					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			}
 		}
-	});
+	);
 	const { message: monCode } = await monCodeReq.json();
-	const monDNSReq = await fetch(`${API_URL}/monitor/dns/get?account_id=${account_id}`, {
-		headers: {
-			Authorization:
-				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+	const monDNSReq = await fetch(
+		`${API_URL}/monitor/dns/get?account_id=${locals.userInfo.account_id}`,
+		{
+			headers: {
+				Authorization:
+					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			}
 		}
-	});
+	);
 	const { message: monDns } = await monDNSReq.json();
 
 	return {
@@ -69,7 +72,7 @@ export const actions = {
 		}
 		const account = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
 		const deleteMonitor = await fetch(
-			`${API_URL}/monitor/http/standard/delete?id=${form.data.mon_id}&account_id=${account}`,
+			`${API_URL}/monitor/http/standard/delete?id=${form.data.mon_id}&account_id=${locals.userInfo.account_id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -93,7 +96,7 @@ export const actions = {
 		}
 		const account = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
 		const deleteMonitor = await fetch(
-			`${API_URL}/monitor/http/code/delete?id=${form.data.mon_id}&account_id=${account}`,
+			`${API_URL}/monitor/http/code/delete?id=${form.data.mon_id}&account_id=${locals.userInfo.account_id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -118,7 +121,7 @@ export const actions = {
 		}
 		const account = 'be4e35b4-7cff-40c9-af0b-da0052f1cf8d';
 		const deleteMonitor = await fetch(
-			`${API_URL}/monitor/dns/delete?id=${form.data.mon_id}&account_id=${account}`,
+			`${API_URL}/monitor/dns/delete?id=${form.data.mon_id}&account_id=${locals.userInfo.account_id}`,
 			{
 				method: 'DELETE',
 				headers: {

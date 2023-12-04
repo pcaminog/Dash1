@@ -58,6 +58,12 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+export const fakeSession = {
+	fresh: false,
+	sessionId: 'qntr9m6veji7tkit27tkgyp8r5jmp1bwjkeatff1',
+	state: 'active',
+	user: { userId: 'qkxrkeqq6deukmb' }
+};
 
 export const userAgent =
 	'Mon1tor Notifier Bot Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36';
@@ -103,4 +109,3 @@ export async function checkUrl(data: checkUrlType) {
 		return { success: false, message: customMessage };
 	}
 }
-

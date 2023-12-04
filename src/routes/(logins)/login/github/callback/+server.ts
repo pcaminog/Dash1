@@ -47,12 +47,12 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 	}
 	const { getExistingUser, githubUser, githubTokens, createUser, createKey } =
 		await githubAuth.validateCallback(code);
-
+	const email = await getUserEmail(githubTokens.accessToken);
+	let account_id: string = '';
 	try {
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
-			const email = await getUserEmail(githubTokens.accessToken);
 			// const { results } = await platform?.env.DB.prepare(`SELECT * FROM user WHERE email = ?1`)
 			// 	.bind(email)
 			// 	.all();
@@ -71,13 +71,18 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					email: email
 				}
 			});
-			await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`, {
-				method: 'POST',
-				headers: {
-					Authorization:
-						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			const API = await fetch(
+				`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization:
+							'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+					}
 				}
-			});
+			);
+			const { message } = await API.json();
+			account_id = message;
 			return user;
 		};
 
@@ -85,7 +90,13 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 
 		const session = await locals.lucia.createSession({
 			userId: user.userId,
-			attributes: {}
+			attributes: {
+				username: githubUser.login,
+				avatar: githubUser.avatar_url,
+				name: githubUser.name,
+				email: email,
+				account_id: account_id
+			}
 		});
 
 		locals.auth.setSession(session);
