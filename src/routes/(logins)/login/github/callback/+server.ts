@@ -82,7 +82,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		const { message } = await authorizationAPI.json();
 
 		const updatedUser = await locals.lucia.updateUserAttributes(user.userId, {
-			accounts: message
+			accounts: JSON.stringify(message)
 		});
 
 		const session = await locals.lucia.createSession({
