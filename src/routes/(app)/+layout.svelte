@@ -13,6 +13,8 @@
 	function toggleMenu() {
 		isOpen = !isOpen;
 	}
+
+	const acc_id = data.session?.user.accounts.account_id;
 </script>
 
 <Toaster />
@@ -63,9 +65,9 @@
 									<li>
 										<!-- Current: "bg-gray-50 text-slate-600", Default: "text-gray-700 hover:text-slate-600 hover:bg-gray-50" -->
 										<a
-											href="/home"
+											href={`${acc_id}/home`}
 											class={`${
-												$page.url.pathname === `/home`
+												$page.url.pathname === `${acc_id}/home`
 													? 'bg-gray-200 text-slate-600'
 													: 'text-gray-700 hover:text-slate-600'
 											} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold`}
@@ -76,9 +78,9 @@
 									</li>
 									<li>
 										<a
-											href={`/monitors`}
+											href={`${acc_id}/monitors`}
 											class={`${
-												$page.url.pathname === `/monitors`
+												$page.url.pathname === `${acc_id}/monitors`
 													? 'bg-gray-50 text-slate-600'
 													: 'text-gray-700 hover:text-slate-600'
 											} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold`}
@@ -90,9 +92,9 @@
 
 									<li>
 										<a
-											href="/settings"
+											href={`${acc_id}/settings`}
 											class={`${
-												$page.url.pathname === '/settings'
+												$page.url.pathname === `${acc_id}/settings`
 													? 'bg-gray-50 text-slate-600'
 													: 'text-gray-700 hover:text-slate-600'
 											} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold`}
@@ -148,9 +150,9 @@
 						<ul role="list" class="-mx-2 space-y-1">
 							<li>
 								<a
-									href={`/home`}
+									href={`${acc_id}/home`}
 									class={`${
-										$page.url.pathname === `/home` ? ' bg-gray-100 dark:bg-gray-700 ' : ''
+										$page.url.pathname === `${acc_id}/home` ? ' bg-gray-100 dark:bg-gray-700 ' : ''
 									}  group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 `}
 								>
 									<HomeIcon class=" h-4 my-auto " />
@@ -159,9 +161,11 @@
 							</li>
 							<li>
 								<a
-									href={`/monitors`}
+									href={`${acc_id}/monitors`}
 									class={`${
-										$page.url.pathname === `/monitors` ? ' bg-gray-100 dark:bg-gray-700 ' : ''
+										$page.url.pathname === `${acc_id}/monitors`
+											? ' bg-gray-100 dark:bg-gray-700 '
+											: ''
 									} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 `}
 								>
 									<Activity class=" h-4 my-auto " />
@@ -171,9 +175,11 @@
 
 							<li>
 								<a
-									href={`/settings`}
+									href={`${acc_id}/settings`}
 									class={`${
-										$page.url.pathname === `/settings` ? ' bg-gray-100 dark:bg-gray-700 ' : ''
+										$page.url.pathname === `${acc_id}/settings`
+											? ' bg-gray-100 dark:bg-gray-700 '
+											: ''
 									} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100`}
 								>
 									<Settings class=" h-4 my-auto  text-primary" />
