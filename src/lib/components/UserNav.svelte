@@ -4,6 +4,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let session: any;
 	const accounts = JSON.parse(session.user.accounts);
+	console.log(accounts);
 </script>
 
 <DropdownMenu.Root positioning={{ placement: 'bottom-end' }}>
