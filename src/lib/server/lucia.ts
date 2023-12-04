@@ -10,7 +10,16 @@ export const initializeLucia = (db: D1Database) => {
 			key: 'user_key',
 			session: 'user_session'
 		}),
-		middleware: sveltekit()
+		middleware: sveltekit(),
+		getUserAttributes: (databaseUser) => {
+			return {
+				email: databaseUser.email,
+				username: databaseUser.username,
+				avatar: databaseUser.avatar,
+				name: databaseUser.name,
+				accounts: databaseUser.accounts
+			};
+		}
 
 		// ...
 	});
