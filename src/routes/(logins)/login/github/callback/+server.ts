@@ -1,6 +1,7 @@
 import { OAuthRequestError } from '@lucia-auth/oauth';
 import { github } from '@lucia-auth/oauth/providers';
 import { API_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
+import { userAgent } from '$lib/utils.js';
 
 interface emailsGithub {
 	email: string;
@@ -33,7 +34,8 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 	try {
 		const emailGithub = await fetch('https://api.github.com/user/emails', {
 			headers: {
-				Authorization: `Bearer ${githubTokens.accessToken}`
+				Authorization: `Bearer ${githubTokens.accessToken}`,
+				'User-Agent': userAgent
 			}
 		});
 		console.log(emailGithub.status);
