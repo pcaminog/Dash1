@@ -2,8 +2,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	let isAnnual = false;
-	export let data;
-	let info: string;
+ 	let info: string;
 </script>
 
 <div class="isolate overflow-hidden">
