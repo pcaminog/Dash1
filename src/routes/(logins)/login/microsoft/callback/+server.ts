@@ -65,7 +65,6 @@ export const GET = async ({ url, cookies, locals }) => {
 			status: 400
 		});
 	}
-
 	try {
 		const { getExistingUser, azureADUser, azureADTokens, createUser } =
 			await microsoftAuth.validateCallback(code, codeVerifier!);
