@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let session: any;
-	const accounts = JSON.parse(session.accounts);
+	const accounts = JSON.parse(session.user.accounts);
 </script>
 
 <DropdownMenu.Root positioning={{ placement: 'bottom-end' }}>
