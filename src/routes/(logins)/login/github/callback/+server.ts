@@ -49,44 +49,37 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 	const { getExistingUser, githubUser, githubTokens, createUser, createKey } =
 		await githubAuth.validateCallback(code);
 	const email = await getUserEmail(githubTokens.accessToken);
-	let account_id: string = '';
 	try {
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
+			const authorizationAPI = await fetch(
+				`${API_URL}/account/authorization?user_id=null&email=${email}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization:
+							'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+					}
+				}
+			);
+			const { message } = await authorizationAPI.json();
 
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
 					avatar: githubUser.avatar_url,
 					name: githubUser.name,
-					email: email
+					email: email,
+					accounts: JSON.stringify(message)
 				}
 			});
-
 			return user;
 		};
 
 		const user = await getUser();
-
-		const authorizationAPI = await fetch(
-			`${API_URL}/account/authorization?user_id=${user.userId}&email=${email}`,
-			{
-				method: 'POST',
-				headers: {
-					Authorization:
-						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-				}
-			}
-		);
-		const { message } = await authorizationAPI.json();
-
-		const updatedUser = await locals.lucia.updateUserAttributes(user.userId, {
-			accounts: JSON.stringify(message)
-		});
-
 		const session = await locals.lucia.createSession({
-			userId: updatedUser.userId,
+			userId: user.userId,
 			attributes: {}
 		});
 
