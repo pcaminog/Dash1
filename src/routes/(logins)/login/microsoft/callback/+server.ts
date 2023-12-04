@@ -89,7 +89,7 @@ export const GET = async ({ url, cookies, locals }) => {
 			userId: user.userId,
 			attributes: {}
 		});
-		await fetch(`${API_URL}/account/create?user_id=${user.userId}&email=${azureADUser.email}`, {
+		await fetch(`${API_URL}/account/authorization?user_id=${user.userId}&email=${azureADUser.email}`, {
 			method: 'POST',
 			headers: {
 				Authorization:

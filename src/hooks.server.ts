@@ -1,6 +1,5 @@
 import { building } from '$app/environment';
 import { initializeLucia } from '$lib/server/lucia';
-import { fakeSession } from '$lib/utils';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {

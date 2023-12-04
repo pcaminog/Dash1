@@ -2,6 +2,7 @@ import { OAuthRequestError } from '@lucia-auth/oauth';
 import { github } from '@lucia-auth/oauth/providers';
 import { API_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
 import { userAgent } from '$lib/utils.js';
+import { LuciaError } from 'lucia';
 
 interface emailsGithub {
 	email: string;
@@ -53,16 +54,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
-			// const { results } = await platform?.env.DB.prepare(`SELECT * FROM user WHERE email = ?1`)
-			// 	.bind(email)
-			// 	.all();
-			// console.log(results);
-			// if (results) {
-			// 	const user = locals.lucia.transformDatabaseUser(results[0]);
-			// 	await createKey(results[0].userId);
-			// 	console.log(user);
-			// 	return user;
-			// }
+
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
@@ -71,31 +63,35 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					email: email
 				}
 			});
-			const API = await fetch(
-				`${API_URL}/account/create?user_id=${user.userId}&email=${githubUser.email}`,
-				{
-					method: 'POST',
-					headers: {
-						Authorization:
-							'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-					}
-				}
-			);
-			const { message } = await API.json();
-			account_id = message;
+
 			return user;
 		};
 
 		const user = await getUser();
 
+		const authorizationAPI = await fetch(
+			`${API_URL}/account/authorization?user_id=${user.userId}&email=${githubUser.email}`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization:
+						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+				}
+			}
+		);
+		const { message } = await authorizationAPI.json();
+
+		const updatedUser = await locals.lucia.updateUserAttributes(user.userId, {
+			accounts: message
+		});
+
 		const session = await locals.lucia.createSession({
-			userId: user.userId,
+			userId: updatedUser.userId,
 			attributes: {
 				username: githubUser.login,
 				avatar: githubUser.avatar_url,
 				name: githubUser.name,
-				email: email,
-				account_id: account_id
+				email: email
 			}
 		});
 
@@ -107,6 +103,8 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			}
 		});
 	} catch (e) {
+		if (e instanceof LuciaError && e.message === `AUTH_INVALID_USER_ID`) {
+		}
 		if (e instanceof OAuthRequestError) {
 			await platform?.env.tokenEmail.put('error400', JSON.stringify(e));
 			return new Response(null, {
