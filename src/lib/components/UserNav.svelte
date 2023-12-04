@@ -3,8 +3,6 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let session: any;
-	const accounts = JSON.parse(session.user.accounts);
-	console.log(accounts);
 </script>
 
 <DropdownMenu.Root positioning={{ placement: 'bottom-end' }}>
@@ -19,11 +17,6 @@
 	<DropdownMenu.Content class="w-56">
 		<DropdownMenu.Label class="font-normal">
 			<div class="flex flex-col space-y-1">
-				{#each accounts as acc}
-					<p class="text-sm font-medium leading-none">
-						{acc.account_name}
-					</p>
-				{/each}
 				<p class="text-sm font-medium leading-none">
 					{session.user.email}
 				</p>
