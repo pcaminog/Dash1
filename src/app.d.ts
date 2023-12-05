@@ -10,7 +10,9 @@ declare global {
 			user: string | undefined;
 			lucia: import('lucia');
 			session: any;
-			account_id: string
+			account_id: string;
+			account_name: string;
+			plan: string;
 		}
 		interface Platform {
 			env: {
@@ -34,11 +36,9 @@ declare global {
 			username?: string;
 			avatar?: string;
 			name?: string;
-			accounts: {
-				account_id: string;
-				account_name: string;
-				plan: string;
-			};
+			account_id: string;
+			account_name: string;
+			plan: string;
 		};
 		type DatabaseSessionAttributes = {};
 	}

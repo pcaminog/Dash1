@@ -14,7 +14,7 @@
 		isOpen = !isOpen;
 	}
 
-	const acc_id = data.account.account_id;
+	const acc_id = data.;
 </script>
 
 <Toaster />

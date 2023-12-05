@@ -17,7 +17,9 @@ export const initializeLucia = (db: D1Database) => {
 				username: databaseUser.username,
 				avatar: databaseUser.avatar,
 				name: databaseUser.name,
-				accounts: databaseUser.accounts
+				account_id: databaseUser.account_id,
+				account_name: databaseUser.account_name,
+				account_plan: databaseUser.plan
 			};
 		}
 
