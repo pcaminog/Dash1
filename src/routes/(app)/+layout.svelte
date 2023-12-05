@@ -9,7 +9,8 @@
 
 	export let data;
 	let isOpen = false;
-
+	console.log(data);
+	console.log(data.session?.user.account_id);
 	function toggleMenu() {
 		isOpen = !isOpen;
 	}
