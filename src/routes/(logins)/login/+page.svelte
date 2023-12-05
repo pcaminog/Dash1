@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 
-	import { Input } from '$lib/components//ui/input';
-	import { Label } from '$lib/components//ui/label';
 	import { cn } from '$lib/utils';
 	import { Button } from '$lib/components/ui/button';
 	import { GithubIcon, Loader2 } from 'lucide-svelte';

@@ -10,9 +10,10 @@
 	import toast from 'svelte-french-toast';
 	import { toast_error_style } from '$lib/utils';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import Badge from '$lib/components/ui/badge/badge.svelte';
 
 	export let data: PageData;
-console.log(data);
+	console.log(data);
 	const { enhance: inviteemailenhance } = superForm(data.invitationemail, {
 		onError({ result }) {
 			toast.error(result.error.message, {
@@ -123,13 +124,17 @@ console.log(data);
 				{#each data.members as email}
 					<Table.Row>
 						<Table.Cell class="font-medium">{email.email}</Table.Cell>
-						{#if Math.floor(email.verified) === 1}
-							<Table.Cell><Check class=" text-green-600 h-4" /></Table.Cell>
+						{#if Math.floor(email.verified) === 1 || email.username}
+							<Table.Cell
+								><Badge variant="outline"><Check class=" text-green-600 h-4" /></Badge></Table.Cell
+							>
 						{:else}
-							<Table.Cell><X class=" text-destructive" /></Table.Cell>
+							<Table.Cell
+								><Badge variant="outline"><X class=" text-destructive h-4" /></Badge></Table.Cell
+							>
 						{/if}
 
-						{#if Math.floor(email.verified) === 1}
+						{#if Math.floor(email.verified) === 1 || email.username}
 							<Table.Cell />
 
 							<Table.Cell class="text-right">
