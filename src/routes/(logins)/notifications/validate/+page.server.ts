@@ -4,12 +4,18 @@ export const load = async ({ url }) => {
 	const token = url.searchParams.get('token');
 
 	if (!token) {
-        return { status: 'error' };
-
+		return { status: 'error' };
 	}
-
 	try {
-		const createAccount = await fetch(`${API_URL}/account/settings/emails/validate?token=${token}`);
+		const createAccount = await fetch(
+			`${API_URL}/account/settings/emails/validate?token=${token}`,
+			{
+				headers: {
+					Authorization:
+						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+				}
+			}
+		);
 		const { message } = await createAccount.json();
 
 		if (message) {

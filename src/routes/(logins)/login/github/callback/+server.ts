@@ -87,7 +87,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: `${message.account_id}/home`
+				Location: '/'
 			}
 		});
 	} catch (e) {

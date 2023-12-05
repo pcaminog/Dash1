@@ -10,6 +10,7 @@ declare global {
 			user: string | undefined;
 			lucia: import('lucia');
 			session: any;
+			account_id: string
 		}
 		interface Platform {
 			env: {

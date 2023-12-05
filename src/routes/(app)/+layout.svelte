@@ -14,7 +14,7 @@
 		isOpen = !isOpen;
 	}
 
-	const acc_id = data.session?.user.accounts.account_id;
+	const acc_id = data.account.account_id;
 </script>
 
 <Toaster />
@@ -65,7 +65,7 @@
 									<li>
 										<!-- Current: "bg-gray-50 text-slate-600", Default: "text-gray-700 hover:text-slate-600 hover:bg-gray-50" -->
 										<a
-											href={`${acc_id}/home`}
+											href={`/${acc_id}/home`}
 											class={`${
 												$page.url.pathname === `${acc_id}/home`
 													? 'bg-gray-200 text-slate-600'
@@ -78,7 +78,7 @@
 									</li>
 									<li>
 										<a
-											href={`${acc_id}/monitors`}
+											href={`/${acc_id}/monitors`}
 											class={`${
 												$page.url.pathname === `${acc_id}/monitors`
 													? 'bg-gray-50 text-slate-600'
@@ -92,7 +92,7 @@
 
 									<li>
 										<a
-											href={`${acc_id}/settings`}
+											href={`/${acc_id}/settings`}
 											class={`${
 												$page.url.pathname === `${acc_id}/settings`
 													? 'bg-gray-50 text-slate-600'
@@ -150,7 +150,7 @@
 						<ul role="list" class="-mx-2 space-y-1">
 							<li>
 								<a
-									href={`${acc_id}/home`}
+									href={`/${acc_id}/home`}
 									class={`${
 										$page.url.pathname === `${acc_id}/home` ? ' bg-gray-100 dark:bg-gray-700 ' : ''
 									}  group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 `}
@@ -161,7 +161,7 @@
 							</li>
 							<li>
 								<a
-									href={`${acc_id}/monitors`}
+									href={`/${acc_id}/monitors`}
 									class={`${
 										$page.url.pathname === `${acc_id}/monitors`
 											? ' bg-gray-100 dark:bg-gray-700 '
@@ -175,7 +175,7 @@
 
 							<li>
 								<a
-									href={`${acc_id}/settings`}
+									href={`/${acc_id}/settings`}
 									class={`${
 										$page.url.pathname === `${acc_id}/settings`
 											? ' bg-gray-100 dark:bg-gray-700 '

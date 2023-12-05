@@ -103,7 +103,6 @@ export async function checkUrl(data: checkUrlType) {
 		} else if (err.message.includes('use `event.fetch` instead')) {
 			customMessage = 'Please use `event.fetch` instead of global fetch.';
 		} else {
-			console.log(err.message);
 			customMessage = 'An error occurred. Please try again.';
 		}
 		return { success: false, message: customMessage };

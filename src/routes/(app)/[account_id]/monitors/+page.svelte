@@ -2,10 +2,11 @@
 	import type { PageData } from './$types';
 	import * as Alert from '$lib/components/ui/alert';
 	import * as Accordion from '$lib/components/ui/accordion';
-	import { CircleDot, RefreshCcw, Trash2 } from 'lucide-svelte';
+	import { CircleDot, PlusCircle, RefreshCcw, Trash2 } from 'lucide-svelte';
 	import MonitorSheetCreateStandard from '$lib/components/Monitor-Sheet-CreateStandard.svelte';
 	import MonitorSheetCreateCode from '$lib/components/Monitor-Sheet-CreateCode.svelte';
 	import MonitorSheetCreateDns from '$lib/components/Monitor-Sheet-CreateDNS.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import type {
 		monitorDNSDBType,
 		monitorHTTPCodeDBType,
@@ -17,6 +18,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import toast from 'svelte-french-toast';
 	import { toast_error_style } from '$lib/utils';
+	import { buttonVariants } from '$lib/components/ui/button';
 	export let data: PageData;
 	let CodeMonitor: monitorHTTPCodeDBType[] = [];
 	$: CodeMonitor = data.code;
@@ -49,14 +51,33 @@
 </script>
 
 {#if DNSMonitor.length === 0 && CodeMonitor.length === 0 && StandardHTTPMonitor.length === 0}
-	<MonitorSheetCreateStandard monitorForm={data.monitorStandardform} />
-	<MonitorSheetCreateCode monitorForm={data.monitorCodeform} />
-	<MonitorSheetCreateDns dnsForm={data.monitorDNSform} />
+	<Dialog.Root>
+		<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}
+			><PlusCircle class=" h-4 w-4 mr-2 my-auto" /> Add Monitor</Dialog.Trigger
+		>
+		<Dialog.Content class="sm:max-w-[425px]">
+			<Dialog.Header>
+				<Dialog.Title>What monitor do you want to create?</Dialog.Title>
+				<Dialog.Description>
+					Make changes to your profile here. Click save when you're done.
+				</Dialog.Description>
+			</Dialog.Header>
+			<h2 class="text-lg font-semibold text-muted-foreground">HTTP Standard</h2>
+			<MonitorSheetCreateStandard monitorForm={data.monitorStandardform} />
+			<h2 class="text-lg font-semibold text-muted-foreground">HTTP Code Specific</h2>
+			<MonitorSheetCreateCode monitorForm={data.monitorCodeform} />
+			<h2 class="text-lg font-semibold text-muted-foreground">DNS</h2>
+			<MonitorSheetCreateDns dnsForm={data.monitorDNSform} />
+			<Dialog.Footer>
+				<Button type="submit">Save changes</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 
 	<img
 		class=" h-1/2 w-1/2 mx-auto mt-auto"
 		src="https://assets.hostnamenotifier.com/roommon.png"
-		alt="monitor imagge"
+		alt="monitor_image"
 	/>
 {:else}
 	<h2 class="text-xl font-semibold flex flex-row justify-between">

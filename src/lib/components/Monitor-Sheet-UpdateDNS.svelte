@@ -15,7 +15,6 @@
 	export let dnsForm;
 
 	export let monData: monitorDNSDBType;
-	console.log(monData);
 	let checksUpSelect = '';
 	let checksDownSelect = '';
 	let intervalSelect = '';

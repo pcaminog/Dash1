@@ -5,7 +5,6 @@
 	let info: string;
 	// $: info = data.userInfo.plan;
 	info = 'pro';
-	$: console.log(info);
 </script>
 
 <div class="isolate overflow-hidden">
