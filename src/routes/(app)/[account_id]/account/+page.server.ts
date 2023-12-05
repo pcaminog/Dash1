@@ -6,14 +6,14 @@ import { accountnameSchema, settingsnotificationEmailSchema } from '$lib/types';
 import { API_URL } from '$env/static/private';
 import { LuciaError } from 'lucia';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ params }) => {
 	const email = superValidate(settingsnotificationEmailSchema);
 	const emailres = superValidate(settingsnotificationEmailSchema);
 	const emaildel = superValidate(settingsnotificationEmailSchema);
 	const accountname = superValidate(accountnameSchema);
 
 	const getMemberReq = await fetch(
-		`${API_URL}/account/members/get?&account_id=${locals.account_id}`,
+		`${API_URL}/account/members/get?&account_id=${params.account_id}`,
 		{
 			headers: {
 				Authorization:
