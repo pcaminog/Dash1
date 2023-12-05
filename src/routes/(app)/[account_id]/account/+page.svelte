@@ -12,7 +12,7 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	export let data: PageData;
-
+console.log(data);
 	const { enhance: emailenhance } = superForm(data.email, {
 		id: 'send-email',
 		onError({ result }) {
