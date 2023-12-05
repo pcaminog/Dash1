@@ -69,7 +69,7 @@ export const actions = {
 		}
 
 		const addEmail = await fetch(
-			`${API_URL}/account/settings/emails/validate?email=${form.data.email}&account_id=${params.account_id}`,
+			`${API_URL}/account/members/invite?email=${form.data.email}&account_id=${params.account_id}`,
 			{
 				method: 'POST',
 				headers: {
