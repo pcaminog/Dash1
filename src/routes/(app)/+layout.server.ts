@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals, url }) => {
 	const session = await locals.auth.validate();
@@ -20,6 +21,9 @@ export const load = async ({ locals, url }) => {
 	// };
 
 	if (session) {
+		if (url.pathname.match('/')) {
+			redirect(303, `/${session.user.account_id}/home`);
+		}
 		return { session };
 	}
 	return;

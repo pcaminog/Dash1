@@ -53,8 +53,22 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
+
+			const account_id = crypto.randomUUID();
+			const user = await createUser({
+				attributes: {
+					username: githubUser.login,
+					avatar: githubUser.avatar_url,
+					name: githubUser.name,
+					email: email,
+					account_id: account_id,
+					account_name: 'My Organization',
+					plan: 'free'
+				}
+			});
+
 			const authorizationAPI = await fetch(
-				`${API_URL}/account/authorization?user_id=null&email=${email}`,
+				`${API_URL}/account/new/authorization?user_id=${user.userId}&email=${email}&account_id=${account_id}`,
 				{
 					method: 'POST',
 					headers: {
@@ -63,19 +77,11 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					}
 				}
 			);
-			const { message } = await authorizationAPI.json();
-
-			const user = await createUser({
-				attributes: {
-					username: githubUser.login,
-					avatar: githubUser.avatar_url,
-					name: githubUser.name,
-					email: email,
-					account_id: message.account_id,
-					account_name: message.account_name,
-					plan: message.plan
-				}
-			});
+			if (!authorizationAPI.ok) {
+				return new Response('API Error', {
+					status: 401
+				});
+			}
 			return user;
 		};
 
