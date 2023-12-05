@@ -21,6 +21,7 @@
 					{session.user.email}
 				</p>
 				<p class="text-xs leading-none text-muted-foreground">{session.user.username}</p>
+				<p class="text-sm leading-none text-muted-foreground">{session.user.account_name}</p>
 			</div>
 		</DropdownMenu.Label>
 		<DropdownMenu.Separator />
