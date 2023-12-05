@@ -121,7 +121,7 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each data.Notiemails as email}
+				{#each data.members as email}
 					<Table.Row>
 						<Table.Cell class="font-medium">{email.email}</Table.Cell>
 						{#if Math.floor(email.verified) === 1}

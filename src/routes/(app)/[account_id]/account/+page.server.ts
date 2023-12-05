@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const accountname = superValidate(accountnameSchema);
 
 	const getMemberReq = await fetch(
-		`${API_URL}/account/settings/emails/notifications?&account_id=${locals.account_id}`,
+		`${API_URL}/account/members/get?&account_id=${locals.account_id}`,
 		{
 			headers: {
 				Authorization:
@@ -21,9 +21,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 			}
 		}
 	);
-	const { message: Notiemails } = await getMemberReq.json();
+	const { message: members } = await getMemberReq.json();
 
-	return { email, Notiemails, emailres, emaildel, accountname };
+	return { email, members, emailres, emaildel, accountname };
 };
 
 export const actions = {
