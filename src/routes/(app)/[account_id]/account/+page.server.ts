@@ -7,9 +7,9 @@ import { API_URL } from '$env/static/private';
 import { LuciaError } from 'lucia';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const email = superValidate(settingsnotificationEmailSchema);
-	const emailres = superValidate(settingsnotificationEmailSchema);
-	const emaildel = superValidate(settingsnotificationEmailSchema);
+	const invitationemail = superValidate(settingsnotificationEmailSchema);
+	const delmember = superValidate(settingsnotificationEmailSchema);
+	const memberres = superValidate(settingsnotificationEmailSchema);
 	const accountname = superValidate(accountnameSchema);
 
 	const getMemberReq = await fetch(
@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	);
 	const { message: members } = await getMemberReq.json();
 
-	return { email, members, emailres, emaildel, accountname };
+	return { invitationemail, members, delmember, memberres, accountname };
 };
 
 export const actions = {

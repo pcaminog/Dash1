@@ -13,8 +13,7 @@
 
 	export let data: PageData;
 console.log(data);
-	const { enhance: emailenhance } = superForm(data.email, {
-		id: 'send-email',
+	const { enhance: inviteemailenhance } = superForm(data.invitationemail, {
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -31,7 +30,7 @@ console.log(data);
 		}
 	});
 
-	const { enhance: notimainenhance } = superForm(data.emaildel, {
+	const { enhance: delmemberenhance } = superForm(data.delmember, {
 		id: 'delete-email',
 		onError({ result }) {
 			toast.error(result.error.message, {
@@ -49,7 +48,7 @@ console.log(data);
 		}
 	});
 
-	const { enhance: resendenhance } = superForm(data.emailres, {
+	const { enhance: resendmemberenhance } = superForm(data.memberres, {
 		id: 'resend-email',
 		onError({ result }) {
 			toast.error(result.error.message, {
@@ -103,7 +102,7 @@ console.log(data);
 <h4 class="text-xs text-muted-foreground">Invite new members to collaborate</h4>
 <Card.Root class="my-2">
 	<Card.Content>
-		<form method="POST" action="?/invitationemail" use:emailenhance class="my-2">
+		<form method="POST" action="?/invitationemail" use:inviteemailenhance class="my-2">
 			<Label>Email</Label>
 			<div class="flex flex-row gap-4">
 				<Input name="email" class="w-fit" />
@@ -134,7 +133,7 @@ console.log(data);
 							<Table.Cell />
 
 							<Table.Cell class="text-right">
-								<form action="?/deleteemail" method="POST" use:notimainenhance>
+								<form action="?/delmember" method="POST" use:delmemberenhance>
 									<input hidden name="email" value={email.email} />
 									<Button type="submit" variant="outline"
 										><Trash2 class="h-4 text-destructive" /></Button
@@ -143,13 +142,13 @@ console.log(data);
 							</Table.Cell>
 						{:else}
 							<Table.Cell class="text-right">
-								<form action="?/resendEmail" method="POST" use:resendenhance>
+								<form action="?/memberres" method="POST" use:resendmemberenhance>
 									<input hidden name="email" value={email.email} />
 									<Button type="submit">Re-Send</Button>
 								</form>
 							</Table.Cell>
 							<Table.Cell class="text-right">
-								<form action="?/deleteemail" method="POST" use:notimainenhance>
+								<form action="?/delmember" method="POST" use:delmemberenhance>
 									<input hidden name="email" value={email.email} />
 									<Button type="submit" variant="outline">
 										<Trash2 class="h-4 text-destructive" /></Button
