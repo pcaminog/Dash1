@@ -8,7 +8,6 @@
 	let isLoading = false;
 	export let data: PageData;
 	let className: string | undefined | null = undefined;
-
 </script>
 
 {#if data.status === 'ok'}
@@ -17,7 +16,8 @@
 			<div class="mx-auto max-w-2xl text-center">
 				<h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Welcome</h2>
 				<p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-					Please join the organization using any of the following login methods.
+					Please join the organization using any of the following login methods. Please use the
+					login method link to the invitaion email address
 				</p>
 
 				<div class="p-8">
@@ -27,7 +27,7 @@
 							<Button
 								variant="outline"
 								on:click={() => {
-									goto('/login/github');
+									goto(`/login/github?token=${data.message}`);
 								}}
 								type="button"
 								disabled={isLoading}
@@ -44,7 +44,7 @@
 							<Button
 								variant="outline"
 								on:click={() => {
-									goto('/login/microsoft');
+									goto(`/login/microsoft?token=${data.message}`);
 								}}
 								type="button"
 								disabled={isLoading}
@@ -65,7 +65,7 @@
 							<Button
 								variant="outline"
 								on:click={() => {
-									goto('/login/discord');
+									goto(`/login/discord?token=${data.message}`);
 								}}
 								type="button"
 								disabled={isLoading}

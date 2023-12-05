@@ -1,12 +1,15 @@
 import { dev } from '$app/environment';
-import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_REDIRECT } from '$env/static/private';
 import { github } from '@lucia-auth/oauth/providers';
 
-export const GET = async ({ cookies, locals }) => {
+export const GET = async ({ cookies, locals, url: query }) => {
+	const token = query.searchParams.get('token');
+
 	const githubAuth = github(locals.lucia, {
 		clientId: GITHUB_CLIENT_ID,
 		clientSecret: GITHUB_CLIENT_SECRET,
-		scope: ['user:email']
+		scope: ['user:email'],
+		redirectUri: GITHUB_REDIRECT + '?token=' + token
 	});
 
 	const [url, state] = await githubAuth.getAuthorizationUrl();

@@ -23,7 +23,7 @@
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
-				toast.success('Verification Email sent', {
+				toast.success('Invitation email sent', {
 					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
 					position: 'bottom-right'
 				});

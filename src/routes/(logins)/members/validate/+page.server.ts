@@ -16,7 +16,7 @@ export const load = async ({ url, locals }) => {
 		const { success } = await createAccount.json();
 
 		if (success) {
-			return { status: 'ok' };
+			return { status: 'ok', message: token };
 		}
 		return { status: 'error' };
 	} catch (err) {
