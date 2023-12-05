@@ -46,6 +46,8 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			status: 400
 		});
 	}
+	const account_id = crypto.randomUUID();
+
 	const { getExistingUser, githubUser, githubTokens, createUser, createKey } =
 		await githubAuth.validateCallback(code);
 	const email = await getUserEmail(githubTokens.accessToken);
@@ -54,7 +56,6 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
 
-			const account_id = crypto.randomUUID();
 			const user = await createUser({
 				attributes: {
 					username: githubUser.login,
@@ -95,7 +96,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/'
+				Location: `/${account_id}/home`
 			}
 		});
 	} catch (e) {
