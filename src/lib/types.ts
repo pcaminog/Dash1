@@ -58,6 +58,10 @@ export const settingsnotificationEmailSchema = z.object({
 	email: z.string().email()
 });
 
+export const accountnameSchema = z.object({
+	account_name: z.string()
+});
+
 export type settingsnotificationEmailSchemaType = z.infer<typeof settingsnotificationEmailSchema>;
 
 export const monitorDNSschema = z.object({
