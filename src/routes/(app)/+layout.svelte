@@ -15,8 +15,7 @@
 		isOpen = !isOpen;
 	}
 
-	const acc_id = data.session?.user.account_id
-
+	const acc_id = data.session?.user.account_id;
 </script>
 
 <Toaster />
@@ -112,7 +111,7 @@
 							</li>
 							<li class="mt-auto">
 								<a
-									href="/billing"
+									href={`/${acc_id}/billing`}
 									class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 text-"
 								>
 									<Receipt class=" h-4 my-auto " />
@@ -122,7 +121,7 @@
 							</li>
 							<li class="mt-auto">
 								<a
-									href="/account"
+									href={`/${acc_id}/account`}
 									class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100 text-"
 								>
 									<Sliders class=" h-4 my-auto " />
@@ -196,18 +195,18 @@
 					</li>
 					<li class="mt-auto">
 						<a
-							href="/billing"
+							href={`/${acc_id}/billing`}
 							class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100"
 						>
-							<Receipt class=" h-4 my-auto " />
+							<Receipt class="h-4 my-auto" />
 
 							Billing
 						</a>
 						<a
-							href="/account"
+							href={`/${acc_id}/account`}
 							class=" group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100"
 						>
-							<Sliders class=" h-4 my-auto " />
+							<Sliders class="h-4 my-auto" />
 
 							Account
 						</a>
