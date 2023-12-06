@@ -85,7 +85,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					const authorizationAPI = await fetch(
 						`${API_URL}/account/invite/authorization?user_id=${user.userId}&email=${email}&account_id=${account_id}`,
 						{
-							method: 'POST',
+							method: 'PUT',
 							headers: {
 								Authorization:
 									'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
