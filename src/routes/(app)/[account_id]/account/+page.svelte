@@ -32,7 +32,6 @@
 	});
 
 	const { enhance: delmemberenhance } = superForm(data.delmember, {
-		id: 'delete-email',
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -50,7 +49,6 @@
 	});
 
 	const { enhance: resendmemberenhance } = superForm(data.memberres, {
-		id: 'resend-email',
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -134,11 +132,16 @@
 							>
 						{/if}
 
+						{#if email.email === data.session?.user.email}
+							<Table.Cell />
+							<Table.Cell />
+						{/if}
+
 						{#if Math.floor(email.verified) === 1 || email.username}
 							<Table.Cell />
 
 							<Table.Cell class="text-right">
-								<form action="?/delmember" method="POST" use:delmemberenhance>
+								<form action="?/deletemember" method="POST" use:delmemberenhance>
 									<input hidden name="email" value={email.email} />
 									<Button type="submit" variant="outline"
 										><Trash2 class="h-4 text-destructive" /></Button
@@ -153,7 +156,7 @@
 								</form>
 							</Table.Cell>
 							<Table.Cell class="text-right">
-								<form action="?/delmember" method="POST" use:delmemberenhance>
+								<form action="?/deletemember" method="POST" use:delmemberenhance>
 									<input hidden name="email" value={email.email} />
 									<Button type="submit" variant="outline">
 										<Trash2 class="h-4 text-destructive" /></Button

@@ -86,51 +86,58 @@ export const actions = {
 
 		return { form };
 	},
-	resendEmail: async ({ request, params }) => {
+	resendEmail: async ({ request, params, locals }) => {
 		const form = await superValidate(request, settingsnotificationEmailSchema);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
-		const addEmail = await fetch(
-			`${API_URL}/account/settings/emails/resend?email=${form.data.email}&account_id=${params.account_id}`,
-			{
-				method: 'PUT',
-				headers: {
-					Authorization:
-						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-				}
-			}
-		);
-		const { success } = await addEmail.json();
+		// const addEmail = await fetch(
+		// 	`${API_URL}/account/settings/emails/resend?email=${form.data.email}&account_id=${params.account_id}`,
+		// 	{
+		// 		method: 'PUT',
+		// 		headers: {
+		// 			Authorization:
+		// 				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+		// 		}
+		// 	}
+		// );
+		// const { success } = await addEmail.json();
 
-		if (!success) {
-			throw error(401, 'Error DB deleting the monitor, try again ');
-		}
+		// if (!success) {
+		// 	throw error(401, 'Error DB deleting the monitor, try again ');
+		// }
 
 		return { form };
 	},
-	deleteemail: async ({ request, params }) => {
+	deletemember: async ({ request, locals }) => {
 		const form = await superValidate(request, settingsnotificationEmailSchema);
-
+		console.log(form);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		const addEmail = await fetch(
-			`${API_URL}/account/settings/emails/delete?email=${form.data.email}&account_id=${params.account_id}`,
-			{
-				method: 'DELETE',
-				headers: {
-					Authorization:
-						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-				}
-			}
-		);
-		const { success } = await addEmail.json();
 
-		if (!success) {
-			throw error(401, 'Error DB deleting the monitor, try again ');
+		if (form.data.email === locals.session.user.email) {
+			throw error(
+				401,
+				'You cannot delete yourself as a active member. Pleae ask another member to remove your access.'
+			);
 		}
+		// const addEmail = await fetch(
+		// 	`${API_URL}/account/settings/emails/delete?email=${form.data.email}&account_id=${params.account_id}`,
+		// 	{
+		// 		method: 'DELETE',
+		// 		headers: {
+		// 			Authorization:
+		// 				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+		// 		}
+		// 	}
+		// );
+		// const { success } = await addEmail.json();
+
+		// if (!success) {
+		// 	throw error(401, 'Error DB deleting the monitor, try again ');
+		// }
 
 		return { form };
 	}
