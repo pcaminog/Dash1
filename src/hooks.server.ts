@@ -42,8 +42,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			console.log(session);
 			if (!session) {
 				if (
-					!event.url.pathname.startsWith('/login') ||
-					!event.url.pathname.startsWith('/members/validate') ||
+					!event.url.pathname.startsWith('/login') &&
+					!event.url.pathname.startsWith('/members/validate') &&
 					!event.url.pathname.startsWith('/notifications/validate')
 				) {
 					return new Response(null, {
