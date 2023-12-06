@@ -41,7 +41,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const session = await event.locals.auth.validate();
 			console.log(session);
 			if (!session) {
-				if (!event.url.pathname.startsWith('/login')) {
+				if (
+					!event.url.pathname.startsWith('/login') ||
+					!event.url.pathname.startsWith('/members/validate') ||
+					!event.url.pathname.startsWith('/notifications/validate')
+				) {
 					return new Response(null, {
 						status: 307,
 						headers: { location: '/login?hooks_no_session' }
