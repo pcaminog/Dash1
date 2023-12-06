@@ -40,6 +40,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 	const storedState = cookies.get('github_oauth_state');
 	const state = url.searchParams.get('state');
 	const code = url.searchParams.get('code');
+	const invitationToken = url.searchParams.get('token');
 
 	if (!storedState || !state || storedState !== state || !code) {
 		return new Response(null, {
@@ -48,38 +49,56 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 	}
 	const account_id = crypto.randomUUID();
 
-	const { getExistingUser, githubUser, githubTokens, createUser, createKey } =
+	const { getExistingUser, githubUser, githubTokens, createUser } =
 		await githubAuth.validateCallback(code);
 	const email = await getUserEmail(githubTokens.accessToken);
 	try {
 		const getUser = async () => {
 			const existingUser = await getExistingUser();
 			if (existingUser) return existingUser;
-
-			const isInvited = await fetch(`${API_URL}/account/invite/authorization?email=${email}`, {
-				method: 'POST',
-				headers: {
-					Authorization:
-						'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			console.log(invitationToken);
+			const isInvited = await fetch(
+				`${API_URL}/account/invite/authorization?token=${invitationToken}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization:
+							'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+					}
 				}
-			});
+			);
 
 			if (isInvited.ok) {
-
-				const {message} = await isInvited.json()
+				const { message } = await isInvited.json();
 				const user = await createUser({
 					attributes: {
 						username: githubUser.login,
 						avatar: githubUser.avatar_url,
 						name: githubUser.name,
 						email: email,
-						account_id: message.account_id ,
-						account_name: 'My Organization',
-						plan: 'free'
+						account_id: message[0].id,
+						account_name: message[0].name,
+						plan: message[0].plan
 					}
 				});
-			}
 
+				const authorizationAPI = await fetch(
+					`${API_URL}/account/invite/authorization?user_id=${user.userId}&email=${email}&account_id=${account_id}`,
+					{
+						method: 'POST',
+						headers: {
+							Authorization:
+								'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+						}
+					}
+				);
+				if (!authorizationAPI.ok) {
+					return new Response('API Error', {
+						status: 401
+					});
+				}
+				return user;
+			}
 
 			const user = await createUser({
 				attributes: {
