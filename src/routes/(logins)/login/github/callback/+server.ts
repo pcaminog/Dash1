@@ -83,7 +83,7 @@ export const GET = async ({ url, cookies, locals, platform }) => {
 					});
 
 					const authorizationAPI = await fetch(
-						`${API_URL}/account/invite/authorization?user_id=${user.userId}&email=${email}&account_id=${account_id}`,
+						`${API_URL}/account/invite/authorization?user_id=${user.userId}&email=${email}&account_id=${message[0].id}`,
 						{
 							method: 'PUT',
 							headers: {
