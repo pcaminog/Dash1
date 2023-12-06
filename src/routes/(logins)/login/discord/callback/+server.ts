@@ -22,6 +22,7 @@ export const GET = async ({ url, cookies, locals }) => {
 			status: 400
 		});
 	}
+	const account_id = crypto.randomUUID();
 
 	try {
 		const { getExistingUser, discordUser, createUser } = await discordAuth.validateCallback(code);
@@ -56,7 +57,7 @@ export const GET = async ({ url, cookies, locals }) => {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/home'
+				Location: `/${account_id}/home`
 			}
 		});
 	} catch (e) {

@@ -65,6 +65,8 @@ export const GET = async ({ url, cookies, locals }) => {
 			status: 400
 		});
 	}
+	const account_id = crypto.randomUUID();
+
 	try {
 		const { getExistingUser, azureADUser, azureADTokens, createUser } =
 			await microsoftAuth.validateCallback(code, codeVerifier!);
@@ -100,7 +102,7 @@ export const GET = async ({ url, cookies, locals }) => {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/home'
+				Location: `/${account_id}/home`
 			}
 		});
 	} catch (e) {
