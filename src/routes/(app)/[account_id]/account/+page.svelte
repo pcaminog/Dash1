@@ -42,7 +42,7 @@
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
-				toast.success('Email deleted succesully', {
+				toast.success('Member deleted succesully', {
 					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
 					position: 'bottom-right'
 				});
@@ -152,8 +152,8 @@
 										<AlertDialog.Header>
 											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 											<AlertDialog.Description>
-												Removing this member will revoke their access to all organization resources
-												and information.
+												Removing <span class="underline font-semibold text-black">{email.email}</span> as member will revoke their access to all organization
+												resources and information.
 											</AlertDialog.Description>
 										</AlertDialog.Header>
 										<AlertDialog.Footer>
@@ -186,8 +186,8 @@
 										<AlertDialog.Header>
 											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 											<AlertDialog.Description>
-												Removing this member will revoke their access to all organization resources
-												and information.
+												Removing <span class="underline font-bold">{email.email}</span> as member will
+												revoke their access to all organization resources and information.
 											</AlertDialog.Description>
 										</AlertDialog.Header>
 										<AlertDialog.Footer>

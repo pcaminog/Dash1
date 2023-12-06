@@ -5,14 +5,14 @@ import { superValidate, message } from 'sveltekit-superforms/client';
 import { settingsnotificationEmailSchema } from '$lib/types';
 import { API_URL } from '$env/static/private';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
 	const email = superValidate(settingsnotificationEmailSchema);
 	const emailres = superValidate(settingsnotificationEmailSchema);
 	const emaildel = superValidate(settingsnotificationEmailSchema);
 
 	const session = await locals.auth.validate();
 	const getMemberReq = await fetch(
-		`${API_URL}/account/settings/emails/notifications?&account_id=${locals.account_id}`,
+		`${API_URL}/account/settings/emails/notifications?&account_id=${params.account_id}`,
 		{
 			headers: {
 				Authorization:

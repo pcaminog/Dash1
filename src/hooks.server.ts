@@ -31,6 +31,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 			fresh: false
 		};
 
+		if (!event.url.pathname.includes(session.user.account_id)) {
+			return new Response(null, {
+				status: 307,
+				headers: { location: `/${session.user.account_id}/home` }
+			});
+		}
 		event.locals.user = session?.user.userId;
 		event.locals.session = session;
 		return await resolve(event);
@@ -54,6 +60,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 			event.locals.user = session?.user.userId;
 			event.locals.session = session;
+
+			if (session) {
+				if (!event.url.pathname.includes(session?.user.account_id)) {
+					return new Response(null, {
+						status: 307,
+						headers: { location: `/${session?.user.account_id}/home` }
+					});
+				}
+			}
 		}
 		return await resolve(event);
 	}

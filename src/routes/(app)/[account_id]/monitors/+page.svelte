@@ -51,29 +51,23 @@
 </script>
 
 {#if DNSMonitor.length === 0 && CodeMonitor.length === 0 && StandardHTTPMonitor.length === 0}
-	<Dialog.Root>
-		<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}
-			><PlusCircle class=" h-4 w-4 mr-2 my-auto" /> Add Monitor</Dialog.Trigger
-		>
-		<Dialog.Content class="sm:max-w-[425px]">
-			<Dialog.Header>
-				<Dialog.Title>What monitor do you want to create?</Dialog.Title>
-				<Dialog.Description>
-					Make changes to your profile here. Click save when you're done.
-				</Dialog.Description>
-			</Dialog.Header>
-			<h2 class="text-lg font-semibold text-muted-foreground">HTTP Standard</h2>
-			<MonitorSheetCreateStandard monitorForm={data.monitorStandardform} />
-			<h2 class="text-lg font-semibold text-muted-foreground">HTTP Code Specific</h2>
-			<MonitorSheetCreateCode monitorForm={data.monitorCodeform} />
-			<h2 class="text-lg font-semibold text-muted-foreground">DNS</h2>
-			<MonitorSheetCreateDns dnsForm={data.monitorDNSform} />
-			<Dialog.Footer>
-				<Button type="submit">Save changes</Button>
-			</Dialog.Footer>
-		</Dialog.Content>
-	</Dialog.Root>
-
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-3xl flex flex-col">
+			<h1 class="text-lg font-semibold mb-7 mx-auto">Create your first monitor</h1>
+			<div class="grid grid-cols-2 gap-4 justify-center">
+				<h2 class="text-lg font-semibold text-muted-foreground  text-end">HTTP Standard</h2>
+				<MonitorSheetCreateStandard monitorForm={data.monitorStandardform} />
+			</div>
+			<div class="grid grid-cols-2 gap-4 justify-center">
+				<h2 class="text-lg font-semibold text-muted-foreground text-end">HTTP Code Specific</h2>
+				<MonitorSheetCreateCode monitorForm={data.monitorCodeform} />
+			</div>
+			<div class="grid grid-cols-2 gap-4 justify-center">
+				<h2 class="text-lg font-semibold text-muted-foreground text-end">DNS</h2>
+				<MonitorSheetCreateDns dnsForm={data.monitorDNSform} />
+			</div>
+		</div>
+	</div>
 	<img
 		class=" h-1/2 w-1/2 mx-auto mt-auto"
 		src="https://assets.hostnamenotifier.com/roommon.png"

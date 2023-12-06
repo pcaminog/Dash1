@@ -131,21 +131,6 @@ export const actions = {
 		}
 
 		await locals.lucia.deleteUser(form.data.user_id);
-		// // const deleteMember = await fetch(
-		// // 	`${API_URL}/account/members/delete?user_id=${form.data.user_id}&account_id=${params.account_id}`,
-		// // 	{
-		// // 		method: 'DELETE',
-		// // 		headers: {
-		// // 			Authorization:
-		// // 				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-		// // 		}
-		// // 	}
-		// // );
-		// const { success } = await deleteMember.json();
-
-		// if (!success) {
-		// 	throw error(401, 'Error DB deleting the monitor, try again ');
-		// }
 
 		return { form };
 	}
