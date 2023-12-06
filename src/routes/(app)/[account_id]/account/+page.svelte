@@ -11,6 +11,7 @@
 	import { toast_error_style } from '$lib/utils';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
 	export let data: PageData;
 	console.log(data);
@@ -32,6 +33,7 @@
 	});
 
 	const { enhance: delmemberenhance } = superForm(data.delmember, {
+		id: 'delelteMember',
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -49,6 +51,7 @@
 	});
 
 	const { enhance: resendmemberenhance } = superForm(data.memberres, {
+		id: 'resendMember',
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -135,18 +138,35 @@
 						{#if email.email === data.session?.user.email}
 							<Table.Cell />
 							<Table.Cell />
-						{/if}
-
-						{#if Math.floor(email.verified) === 1 || email.username}
+						{:else if email.isMember}
 							<Table.Cell />
 
 							<Table.Cell class="text-right">
-								<form action="?/deletemember" method="POST" use:delmemberenhance>
-									<input hidden name="email" value={email.email} />
-									<Button type="submit" variant="outline"
-										><Trash2 class="h-4 text-destructive" /></Button
-									>
-								</form>
+								<AlertDialog.Root>
+									<AlertDialog.Trigger asChild let:builder>
+										<Button builders={[builder]} variant="outline">
+											<Trash2 class="h-4 text-destructive" /></Button
+										>
+									</AlertDialog.Trigger>
+									<AlertDialog.Content>
+										<AlertDialog.Header>
+											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+											<AlertDialog.Description>
+												Removing this member will revoke their access to all organization resources
+												and information.
+											</AlertDialog.Description>
+										</AlertDialog.Header>
+										<AlertDialog.Footer>
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+											<form action="?/deletemember" method="POST" use:delmemberenhance>
+												<input hidden name="user_id" value={email.id} />
+												<input hidden name="email" value={email.email} />
+
+												<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+											</form>
+										</AlertDialog.Footer>
+									</AlertDialog.Content>
+								</AlertDialog.Root>
 							</Table.Cell>
 						{:else}
 							<Table.Cell class="text-right">
@@ -156,12 +176,30 @@
 								</form>
 							</Table.Cell>
 							<Table.Cell class="text-right">
-								<form action="?/deletemember" method="POST" use:delmemberenhance>
-									<input hidden name="email" value={email.email} />
-									<Button type="submit" variant="outline">
-										<Trash2 class="h-4 text-destructive" /></Button
-									>
-								</form>
+								<AlertDialog.Root>
+									<AlertDialog.Trigger asChild let:builder>
+										<Button builders={[builder]} variant="outline">
+											<Trash2 class="h-4 text-destructive" /></Button
+										>
+									</AlertDialog.Trigger>
+									<AlertDialog.Content>
+										<AlertDialog.Header>
+											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+											<AlertDialog.Description>
+												Removing this member will revoke their access to all organization resources
+												and information.
+											</AlertDialog.Description>
+										</AlertDialog.Header>
+										<AlertDialog.Footer>
+											<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+											<form action="?/deletemember" method="POST" use:delmemberenhance>
+												<input hidden name="user_id" value={email.id} />
+												<input hidden name="email" value={email.email} />
+												<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+											</form>
+										</AlertDialog.Footer>
+									</AlertDialog.Content>
+								</AlertDialog.Root>
 							</Table.Cell>
 						{/if}
 					</Table.Row>

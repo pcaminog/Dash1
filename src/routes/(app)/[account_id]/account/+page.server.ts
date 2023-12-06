@@ -2,14 +2,20 @@ import { error, fail } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
-import { accountnameSchema, settingsnotificationEmailSchema } from '$lib/types';
+import {
+	accountnameSchema,
+	deleteMemberEmailSchema,
+	inviteMemberEmailSchema,
+	resendMemberEmailSchema,
+	settingsnotificationEmailSchema
+} from '$lib/types';
 import { API_URL } from '$env/static/private';
 import { LuciaError } from 'lucia';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const invitationemail = superValidate(settingsnotificationEmailSchema);
-	const delmember = superValidate(settingsnotificationEmailSchema);
-	const memberres = superValidate(settingsnotificationEmailSchema);
+	const invitationemail = superValidate(inviteMemberEmailSchema);
+	const delmember = superValidate(deleteMemberEmailSchema);
+	const memberres = superValidate(resendMemberEmailSchema);
 	const accountname = superValidate(accountnameSchema);
 
 	const getMemberReq = await fetch(
@@ -63,7 +69,7 @@ export const actions = {
 		return { form };
 	},
 	invitationemail: async ({ request, params }) => {
-		const form = await superValidate(request, settingsnotificationEmailSchema);
+		const form = await superValidate(request, inviteMemberEmailSchema);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -87,7 +93,7 @@ export const actions = {
 		return { form };
 	},
 	resendEmail: async ({ request, params, locals }) => {
-		const form = await superValidate(request, settingsnotificationEmailSchema);
+		const form = await superValidate(request, resendMemberEmailSchema);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -110,8 +116,8 @@ export const actions = {
 
 		return { form };
 	},
-	deletemember: async ({ request, locals }) => {
-		const form = await superValidate(request, settingsnotificationEmailSchema);
+	deletemember: async ({ request, locals, params }) => {
+		const form = await superValidate(request, deleteMemberEmailSchema);
 		console.log(form);
 		if (!form.valid) {
 			return fail(400, { form });
@@ -123,17 +129,19 @@ export const actions = {
 				'You cannot delete yourself as a active member. Pleae ask another member to remove your access.'
 			);
 		}
-		// const addEmail = await fetch(
-		// 	`${API_URL}/account/settings/emails/delete?email=${form.data.email}&account_id=${params.account_id}`,
-		// 	{
-		// 		method: 'DELETE',
-		// 		headers: {
-		// 			Authorization:
-		// 				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
-		// 		}
-		// 	}
-		// );
-		// const { success } = await addEmail.json();
+
+		await locals.lucia.deleteUser(form.data.user_id);
+		// // const deleteMember = await fetch(
+		// // 	`${API_URL}/account/members/delete?user_id=${form.data.user_id}&account_id=${params.account_id}`,
+		// // 	{
+		// // 		method: 'DELETE',
+		// // 		headers: {
+		// // 			Authorization:
+		// // 				'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+		// // 		}
+		// // 	}
+		// // );
+		// const { success } = await deleteMember.json();
 
 		// if (!success) {
 		// 	throw error(401, 'Error DB deleting the monitor, try again ');

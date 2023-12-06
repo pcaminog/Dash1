@@ -58,6 +58,21 @@ export const settingsnotificationEmailSchema = z.object({
 	email: z.string().email()
 });
 
+export const deleteMemberEmailSchema = z.object({
+	user_id: z.string(),
+	email: z.string().email()
+});
+export const resendMemberEmailSchema = z.object({
+	email: z.string().email()
+});
+
+export const inviteMemberEmailSchema = z.object({
+	email: z.string().email()
+});
+
+
+
+
 export const accountnameSchema = z.object({
 	account_name: z.string()
 });
