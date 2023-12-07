@@ -2,11 +2,10 @@
 	import type { PageData } from './$types';
 	import * as Alert from '$lib/components/ui/alert';
 	import * as Accordion from '$lib/components/ui/accordion';
-	import { CircleDot, PlusCircle, RefreshCcw, Trash2 } from 'lucide-svelte';
+	import { CircleDot, RefreshCcw, Trash2 } from 'lucide-svelte';
 	import MonitorSheetCreateStandard from '$lib/components/Monitor-Sheet-CreateStandard.svelte';
 	import MonitorSheetCreateCode from '$lib/components/Monitor-Sheet-CreateCode.svelte';
 	import MonitorSheetCreateDns from '$lib/components/Monitor-Sheet-CreateDNS.svelte';
-	import * as Dialog from '$lib/components/ui/dialog';
 	import type {
 		monitorDNSDBType,
 		monitorHTTPCodeDBType,
@@ -18,7 +17,8 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import toast from 'svelte-french-toast';
 	import { toast_error_style } from '$lib/utils';
-	import { buttonVariants } from '$lib/components/ui/button';
+	import Statusbar from '$lib/components/statusbar.svelte';
+	import Badge from '$lib/components/ui/badge/badge.svelte';
 	export let data: PageData;
 	let CodeMonitor: monitorHTTPCodeDBType[] = [];
 	$: CodeMonitor = data.code;
@@ -31,6 +31,10 @@
 			ips: JSON.parse(monitor.ips)
 		}));
 	}
+
+	let timeRemaining = 0;
+
+	console.log(data);
 
 	const { enhance: delenhance } = superForm(data.delMonitorForm, {
 		onError({ result }) {
@@ -55,7 +59,7 @@
 		<div class="mx-auto max-w-3xl flex flex-col">
 			<h1 class="text-lg font-semibold mb-7 mx-auto">Create your first monitor</h1>
 			<div class="grid grid-cols-2 gap-4 justify-center">
-				<h2 class="text-lg font-semibold text-muted-foreground  text-end">HTTP Standard</h2>
+				<h2 class="text-lg font-semibold text-muted-foreground text-end">HTTP Standard</h2>
 				<MonitorSheetCreateStandard monitorForm={data.monitorStandardform} />
 			</div>
 			<div class="grid grid-cols-2 gap-4 justify-center">
@@ -85,7 +89,7 @@
 		<Alert.Root class="m-5">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-base text-blue"
+					<Alert.Title class="text-base "
 						>{monitor.name}
 						<Button variant="link" href={monitor.url}>
 							<p class="font-light text-xs">{monitor.url}</p></Button
@@ -259,13 +263,18 @@
 		<Alert.Root class="m-5">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-base text-blue">{monitor.name}</Alert.Title>
+					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
 					{#each monitor.ips as ip}
 						<Alert.Title
 							class={`text-sm ${monitor.open_incident ? ' text-destructive' : 'text-green-700'}`}
 							>{ip}</Alert.Title
 						>
 					{/each}
+					{#if monitor.interval === 1 || monitor.interval === 2}
+					<p class="text-muted-foreground text-sm">{monitor.interval} minutes intervals</p>
+				{:else}
+					<p class="text-muted-foreground text-sm">{monitor.interval} seconds intervals</p>
+				{/if}
 				</div>
 				<div class=" flex flex-col gap-4">
 					<CircleDot
@@ -273,13 +282,22 @@
 							monitor.open_incident ? ' fill-destructive' : 'fill-green-700'
 						} hover:animate-ping`}
 					/>
-					{#if monitor.interval === 1 || monitor.interval === 2}
-						<p class="text-muted-foreground text-sm">{monitor.interval} minutes</p>
+
+					<p class="text-muted-foreground text-sm">
+					
+						Next check in {timeRemaining} seconds
+					</p>
+				
+
+					{#if monitor.checks[0].ok}
+						<Badge class=" mx-auto h-6 bg-green-600 hover:bg-green-800 ml-4">Healthy</Badge>
 					{:else}
-						<p class="text-muted-foreground text-sm">{monitor.interval} seconds</p>
+						<Badge class="mx-auto h-6 bg-destructive ml-4">Critical</Badge>
 					{/if}
 				</div>
 			</div>
+			<Statusbar monitorData={monitor.checks} />
+
 			<Accordion.Root>
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
@@ -324,7 +342,7 @@
 					</Accordion.Content>
 				</Accordion.Item>
 			</Accordion.Root>
-			<Alert.Description />
+			<Alert.Description class="my-4" />
 		</Alert.Root>
 	{/each}
 {/if}
