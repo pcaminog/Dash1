@@ -268,7 +268,6 @@
 						<Alert.Title class={`text-sm text-blue`}>{ip}</Alert.Title>
 					{/each}
 
-					<p class="text-muted-foreground text-sm">{monitor.interval} minute intervals</p>
 				</div>
 				<div class=" flex flex-col gap-4">
 					<CircleDot
@@ -278,7 +277,7 @@
 					/>
 
 					<p class="text-muted-foreground text-sm">
-						Next check in {timeRemaining} seconds
+						Checks every {monitor.interval} minutes
 					</p>
 
 					{#if monitor.checks[0].ok}
