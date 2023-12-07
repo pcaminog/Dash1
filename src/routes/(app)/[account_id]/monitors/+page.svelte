@@ -265,10 +265,7 @@
 				<div>
 					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
 					{#each monitor.ips as ip}
-						<Alert.Title
-							class={`text-sm ${monitor.open_incident ? ' text-destructive' : 'text-green-700'}`}
-							>{ip}</Alert.Title
-						>
+						<Alert.Title class={`text-sm text-blue`}>{ip}</Alert.Title>
 					{/each}
 
 					<p class="text-muted-foreground text-sm">{monitor.interval} minute intervals</p>
