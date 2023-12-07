@@ -270,11 +270,8 @@
 							>{ip}</Alert.Title
 						>
 					{/each}
-					{#if monitor.interval === 1 || monitor.interval === 2}
-					<p class="text-muted-foreground text-sm">{monitor.interval} minutes intervals</p>
-				{:else}
-					<p class="text-muted-foreground text-sm">{monitor.interval} seconds intervals</p>
-				{/if}
+
+					<p class="text-muted-foreground text-sm">{monitor.interval} minute intervals</p>
 				</div>
 				<div class=" flex flex-col gap-4">
 					<CircleDot
@@ -284,10 +281,8 @@
 					/>
 
 					<p class="text-muted-foreground text-sm">
-					
 						Next check in {timeRemaining} seconds
 					</p>
-				
 
 					{#if monitor.checks[0].ok}
 						<Badge class=" mx-auto h-6 bg-green-600 hover:bg-green-800 ml-4">Healthy</Badge>
@@ -300,7 +295,7 @@
 
 			<Accordion.Root>
 				<Accordion.Item value="item-1">
-					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
+					<Accordion.Trigger>Last checks...</Accordion.Trigger>
 					<Accordion.Content>
 						{#each monitor.checks as check}
 							<div class="flex flex-row justify-between leading-3 my-2">
