@@ -19,10 +19,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 				username: 'pcaminog',
 				avatar: 'https://avatars.githubusercontent.com/u/26197615?v=4',
 				name: 'Pablo Camino',
-				account_id: '1383b8f1-e494-42f4-b220-b41eba7b63c1',
+				account_id: '967d725e-53a3-4083-b515-6956f4ff75db',
 				account_name: 'My Organization',
 				account_plan: 'free',
-				userId: 'r4v64lrlde9frkz'
+				userId: 'plv6xplur2cmhtp'
 			},
 			sessionId: 'te9l8yt56xvnmjvgsxahky4odb3ngl9wutuecmes',
 			activePeriodExpiresAt: '2023-12-06T14:49:12.752Z',

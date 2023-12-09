@@ -70,9 +70,6 @@ export const inviteMemberEmailSchema = z.object({
 	email: z.string().email()
 });
 
-
-
-
 export const accountnameSchema = z.object({
 	account_name: z.string()
 });
@@ -209,7 +206,7 @@ export interface monitorDNSDBType {
 	checks_down: number;
 	checks_up: number;
 	open_incident: boolean;
-	status: 'active' | 'paused' | 'deleted';
+	mon_status: 'active' | 'paused' | 'deleted';
 }
 
 export interface DNSResponse {
@@ -221,4 +218,19 @@ export interface DNSResponse {
 	}[];
 	Status: number;
 	// Include other properties if needed
+}
+
+export interface alertType {
+	account_id: string;
+	alert_id: string;
+	closed_at: null | string;
+	created_at: string;
+	error_detail: {
+		addedIPs: string[];
+		removedIPs: string[];
+		isEqual: boolean;
+	};
+	isActive: boolean;
+	monitor_id: string;
+	state: string;
 }

@@ -6,8 +6,9 @@
 
 	import UserNav from '$lib/components/UserNav.svelte';
 	import { Toaster } from 'svelte-french-toast';
-
 	export let data;
+	$: alertCount = data.alert_count;
+	$: console.log(alertCount);
 	let isOpen = false;
 	console.log(data);
 	console.log(data.session?.user.account_id);
@@ -247,9 +248,16 @@
 						<label for="search-field" class="sr-only">Search</label>
 					</form>
 					<div class="flex items-center gap-x-4 lg:gap-x-6">
-						<button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+						<button type="button" class="relative -m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
 							<span class="sr-only">View notifications</span>
 							<Bell class=" h-5 my-auto text-muted-foreground" />
+							{#if alertCount !== 0}
+								<div
+									class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900"
+								>
+									{alertCount}
+								</div>
+							{/if}
 						</button>
 
 						<!-- Separator -->

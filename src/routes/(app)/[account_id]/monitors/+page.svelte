@@ -19,6 +19,8 @@
 	import { toast_error_style } from '$lib/utils';
 	import Statusbar from '$lib/components/statusbar.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	export let data: PageData;
 	let CodeMonitor: monitorHTTPCodeDBType[] = [];
 	$: CodeMonitor = data.code;
@@ -31,7 +33,7 @@
 			ips: JSON.parse(monitor.ips)
 		}));
 	}
-
+	console.log($page);
 	let timeRemaining = 0;
 
 	console.log(data);
@@ -265,31 +267,32 @@
 				<div>
 					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
 					{#each monitor.ips as ip}
-						<Alert.Title class={`text-sm text-blue`}>{ip}</Alert.Title>
+						<Alert.Title class={`text-sm text-muted-foreground`}>{ip}</Alert.Title>
 					{/each}
-
 				</div>
 				<div class=" flex flex-col gap-4">
-					<CircleDot
-						class={`mx-auto text-white ${
-							monitor.open_incident ? ' fill-destructive' : 'fill-green-700'
-						} hover:animate-ping`}
-					/>
+					{#if monitor.mon_status === 'active'}
+						<Badge class="w-fit mx-auto bg-blue">Active</Badge>
+					{:else if monitor.mon_status === 'paused'}
+						<Badge class="w-fit mx-auto">Paused</Badge>
+					{/if}
 
 					<p class="text-muted-foreground text-sm">
 						Checks every {monitor.interval} minutes
 					</p>
 
-					{#if monitor.checks[0].ok}
-						<Badge class=" mx-auto h-6 bg-green-600 hover:bg-green-800 ml-4">Healthy</Badge>
+					{#if monitor.checks[0]?.ok}
+						<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
+					{:else if !monitor.checks[0]?.ok}
+						<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
 					{:else}
-						<Badge class="mx-auto h-6 bg-destructive ml-4">Critical</Badge>
+						<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
 					{/if}
 				</div>
 			</div>
 			<Statusbar monitorData={monitor.checks} />
 
-			<Accordion.Root>
+			<!-- <Accordion.Root>
 				<Accordion.Item value="item-1">
 					<Accordion.Trigger>Last checks...</Accordion.Trigger>
 					<Accordion.Content>
@@ -304,9 +307,9 @@
 						<Separator class="mb-4" />
 						<div class="flex flex-row gap-4">
 							<Button variant="ghost"><RefreshCcw class="h-5 hover:animate-spin" /> Refresh</Button>
-							<!-- <MonitorSheetUpdateDns monData={monitor} dnsForm={data.updateDNSform} /> -->
+							<MonitorSheetUpdateDns monData={monitor} dnsForm={data.updateDNSform} /> -->
 
-							<AlertDialog.Root>
+			<!-- <AlertDialog.Root>
 								<AlertDialog.Trigger asChild let:builder>
 									<Button builders={[builder]} variant="destructive">
 										<Trash2 class="h-4" /> Delete</Button
@@ -331,9 +334,16 @@
 							</AlertDialog.Root>
 						</div>
 					</Accordion.Content>
-				</Accordion.Item>
-			</Accordion.Root>
-			<Alert.Description class="my-4" />
+				</Accordion.Item> -->
+			<!-- </Accordion.Root> -->
+			<Alert.Description class="my-4"
+				><Button
+				variant='link'
+					on:click={() => {
+						goto(`/${$page.params.account_id}/monitors/view/${monitor.monitor_id}`);
+					}}>Details</Button
+				></Alert.Description
+			>
 		</Alert.Root>
 	{/each}
 {/if}

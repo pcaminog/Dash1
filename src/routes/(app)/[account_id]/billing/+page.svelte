@@ -4,7 +4,7 @@
 	let isAnnual = false;
 	let info: string;
 	// $: info = data.userInfo.plan;
-	info = 'pro';
+	info = 'free';
 </script>
 
 <div class="isolate overflow-hidden">
@@ -80,7 +80,7 @@
 					<div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
 						<h3
 							id="tier-free"
-							class={`text-sm font-semibold leading-6 ${info === 'starter' ? '' : 'text-white'}`}
+							class={`text-2xl font-semibold leading-6 ${info === 'free' ? '' : 'text-white'}`}
 						>
 							Free
 						</h3>
@@ -94,7 +94,7 @@
 											info === 'free' ? '' : 'text-white'
 										}`}
 									>
-										$150
+										0
 									</p>
 								{:else}
 									<p
@@ -102,7 +102,7 @@
 											info === 'free' ? '' : 'text-white'
 										}`}
 									>
-										$15
+										0
 									</p>
 								{/if}
 								<!-- Price, update based on frequency toggle state -->
@@ -203,7 +203,7 @@
 					<div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
 						<h3
 							id="tier-starter"
-							class={`text-sm font-semibold leading-6 ${info === 'starter' ? '' : 'text-white'}`}
+							class={`text-2xl font-semibold leading-6 ${info === 'starter' ? '' : 'text-white'}`}
 						>
 							Starter
 						</h3>
@@ -369,7 +369,7 @@
 					<div class="p-8 lg:pt-12 xl:p-10 xl:pt-14">
 						<h3
 							id="tier-pro"
-							class={`text-sm font-semibold leading-6 ${info === 'pro' ? '' : 'text-white'}`}
+							class={`text-2xl font-semibold leading-6 ${info === 'pro' ? '' : 'text-white'}`}
 						>
 							Pro
 						</h3>
@@ -383,7 +383,7 @@
 											info === 'pro' ? '' : 'text-white'
 										}`}
 									>
-										$150
+										$500
 									</p>
 								{:else}
 									<p
@@ -391,7 +391,7 @@
 											info === 'pro' ? '' : 'text-white'
 										}`}
 									>
-										$15
+										$50
 									</p>
 								{/if}
 								<div class="text-sm leading-5">
