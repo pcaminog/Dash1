@@ -12,7 +12,7 @@
 	function toggleMenu() {
 		isOpen = !isOpen;
 	}
-
+	console.log(data);
 	const acc_id = data.session?.user.account_id;
 </script>
 
