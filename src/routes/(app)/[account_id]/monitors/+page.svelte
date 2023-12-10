@@ -33,9 +33,6 @@
 			ips: JSON.parse(monitor.ips)
 		}));
 	}
-	console.log($page);
-	let timeRemaining = 0;
-
 	console.log(data);
 
 	const { enhance: delenhance } = superForm(data.delMonitorForm, {

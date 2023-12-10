@@ -8,10 +8,7 @@
 	import { Toaster } from 'svelte-french-toast';
 	export let data;
 	$: alertCount = data.alert_count;
-	$: console.log(alertCount);
 	let isOpen = false;
-	console.log(data);
-	console.log(data.session?.user.account_id);
 	function toggleMenu() {
 		isOpen = !isOpen;
 	}
