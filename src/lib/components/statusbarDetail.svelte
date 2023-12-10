@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	export let monitorData: { last_checked: string; ok: boolean; status: number }[];
+	export let monitorData: { last_checked: number; ok: boolean; ips: string }[];
 </script>
 
 <div class="flex flex-row justify-between">

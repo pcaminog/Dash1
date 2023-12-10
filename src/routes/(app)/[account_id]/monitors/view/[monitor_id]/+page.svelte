@@ -15,7 +15,7 @@
 		PowerCircle,
 		XOctagon
 	} from 'lucide-svelte';
-	import type { monitorDNSDBType } from '$lib/types';
+	import type { AlertType, monitorDNSDBType } from '$lib/types';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { QuestionMarkCircled } from 'radix-icons-svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
@@ -27,6 +27,11 @@
 		checks: number;
 		uptime: number;
 		healthy: number;
+		rawChecks: {
+			last_checked: number;
+			ok: boolean;
+			ips: string;
+		}[];
 		alerts: {
 			alert_id: string;
 			account_id: string;
@@ -70,7 +75,7 @@
 		return acc;
 	}, {});
 
-	let mergedAlerts = Object.entries(groupedAlerts).reduce<Record<string, unknown>>(
+	let mergedAlerts = Object.entries(groupedAlerts).reduce<Record<string, AlertType>>(
 		//@ts-expect-error
 		(acc: Record<string, unknown>, [key, value]: [string, Array<Record<string, unknown>>]) => {
 			acc[key] = value.reduce<Record<string, unknown>>(

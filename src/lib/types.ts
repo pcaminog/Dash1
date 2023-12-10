@@ -234,3 +234,18 @@ export interface alertType {
 	monitor_id: string;
 	state: string;
 }
+
+
+export type AlertType = {
+    isActive: boolean;
+    isopened_time: string;
+    alert_id: string;
+    state: string;
+    error_detail_opened?: {
+        addedIPs: string[];
+        removedIPs: string[];
+    };
+    isclosed?: boolean;
+    isclosed_time?: string;
+    // Add other properties as needed
+};
