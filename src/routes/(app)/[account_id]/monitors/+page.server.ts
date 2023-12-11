@@ -46,8 +46,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 	});
 	const { message: monDns } = await monDNSReq.json();
-
-	return {
+	console.log(monCode);
+	return 	{
 		session,
 		standard: monStandard,
 		code: monCode,
@@ -133,7 +133,7 @@ export const actions = {
 	},
 	newstandard: async ({ request, params, locals }) => {
 		const form = await superValidate(request, monitorStandardSchema);
-
+		console.log(form);
 		if (!form.valid) {
 			// Again, return { form } and things will just work.
 			return fail(400, { form });
@@ -181,8 +181,11 @@ export const actions = {
 			}
 		);
 
-		const acc = await createMonitor.json();
-		if (acc.message?.code === '23505') {
+		const { success, message } = await createMonitor.json();
+		if (!success) {
+			throw error(401, message);
+		}
+		if (message?.code === '23505') {
 			throw error(401, 'Duplicate Account: A account with the same name already exists');
 		}
 		return { form };
@@ -216,10 +219,14 @@ export const actions = {
 				})
 			}
 		);
-		const acc = await createMonitor.json();
-		if (acc.message?.code === '23505') {
+		const { success, message } = await createMonitor.json();
+		if (!success) {
+			throw error(401, message);
+		}
+		if (message?.code === '23505') {
 			throw error(401, 'Duplicate Account: A account with the same name already exists');
 		}
+
 		return { form };
 	},
 	// updatedns: async ({ request, locals }) => {

@@ -69,12 +69,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 };
 
-export const handleError: HandleServerError = ({ error, event }) => {
-	// example integration with https://sentry.io/
-	const stringError = JSON.stringify(error);
+// export const handleError: HandleServerError = ({ error, event }) => {
+// 	// example integration with https://sentry.io/
+// 	const stringError = JSON.stringify(error);
 
-	return {
-		message: `Whoops!, ${stringError}`,
-		code: error ?? 'UNKNOWN'
-	};
-};
+// 	return {
+// 		message: `Whoops!, ${stringError}`,
+// 		code: error ?? 'UNKNOWN'
+// 	};
+// };

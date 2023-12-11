@@ -11,6 +11,7 @@ export const load = (async ({ params }) => {
 			}
 		}
 	);
+
 	const { message: monDns } = await monDNSReq.json();
-	return {monDns};
+	return { monDns };
 }) satisfies PageServerLoad;

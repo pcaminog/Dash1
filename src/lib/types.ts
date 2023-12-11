@@ -167,7 +167,7 @@ export interface monitorHTTPStandardDBType {
 	checks_up: number;
 	open_incident: boolean;
 	status_code: number;
-	checks: any;
+	checks: { last_checked: number; url: string; status: number }[];
 	mon_status: 'active' | 'paused' | 'deleted';
 }
 
@@ -235,17 +235,16 @@ export interface alertType {
 	state: string;
 }
 
-
 export type AlertType = {
-    isActive: boolean;
-    isopened_time: string;
-    alert_id: string;
-    state: string;
-    error_detail_opened?: {
-        addedIPs: string[];
-        removedIPs: string[];
-    };
-    isclosed?: boolean;
-    isclosed_time?: string;
-    // Add other properties as needed
+	isActive: boolean;
+	isopened_time: string;
+	alert_id: string;
+	state: string;
+	error_detail_opened?: {
+		addedIPs: string[];
+		removedIPs: string[];
+	};
+	isclosed?: boolean;
+	isclosed_time?: string;
+	// Add other properties as needed
 };

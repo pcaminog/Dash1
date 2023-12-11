@@ -203,7 +203,7 @@
 							<Select.Value placeholder="Select an interval" />
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value={30}>30 Seconds</Select.Item>
+							<Select.Item value={5}>5 Minutes</Select.Item>
 							<Select.Item value={1}>1 Minute</Select.Item>
 							<Select.Item value={2}>2 Minutes</Select.Item>
 						</Select.Content>

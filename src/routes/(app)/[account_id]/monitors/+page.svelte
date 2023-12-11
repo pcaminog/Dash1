@@ -21,6 +21,7 @@
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import StatusbarHttpStandard from '$lib/components/statusbarHTTPStandard.svelte';
 	export let data: PageData;
 	let CodeMonitor: monitorHTTPCodeDBType[] = [];
 	$: CodeMonitor = data.code;
@@ -85,81 +86,45 @@
 	</h4>
 
 	{#each StandardHTTPMonitor as monitor}
-		<Alert.Root class="m-5">
+		<Alert.Root class="m-5 overflow-hidden">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-base "
-						>{monitor.name}
-						<Button variant="link" href={monitor.url}>
-							<p class="font-light text-xs">{monitor.url}</p></Button
-						></Alert.Title
-					>
+					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
 
-					<Alert.Title class="text-lg text-muted-foreground">
-						<p class="text-sm underline decoration-green-900 text-muted-foreground">
-							{Math.floor(monitor.checks[0].status)} at {new Date(
-								Math.floor(monitor.checks[0].last_checked)
-							).toLocaleString()}
-						</p>
-					</Alert.Title>
+					<Alert.Title class="font-light text-sm hover:underline"
+						><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
+					>
 				</div>
 				<div class=" flex flex-col gap-4">
-					<CircleDot
-						class={`mx-auto text-white ${
-							monitor.open_incident ? ' fill-destructive' : 'fill-green-700'
-						} hover:animate-ping`}
-					/>
-					{#if monitor.interval === 1 || monitor.interval === 2}
-						<p class="text-muted-foreground text-sm">{monitor.interval} minutes</p>
+					{#if monitor.mon_status === 'active'}
+						<Badge class="w-fit mx-auto bg-blue">Active</Badge>
+					{:else if monitor.mon_status === 'paused'}
+						<Badge class="w-fit mx-auto">Paused</Badge>
+					{/if}
+
+					<p class="text-muted-foreground text-sm">
+						Checks every {monitor.interval} minutes
+					</p>
+
+					{#if monitor.checks[0]?.status >= 200 && monitor.checks[0]?.status <= 299}
+						<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
+					{:else if monitor.checks[0]?.status < 200 || monitor.checks[0]?.status > 299}
+						<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
 					{:else}
-						<p class="text-muted-foreground text-sm">{monitor.interval} seconds</p>
+						<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
 					{/if}
 				</div>
 			</div>
-			<Accordion.Root>
-				<Accordion.Item value="item-1">
-					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
-					<Accordion.Content>
-						{#each monitor.checks as check}
-							<div class="flex flex-row justify-between leading-3 my-2">
-								<p class=" text-sm text-muted-foreground">
-									{new Date(Math.floor(check.last_checked)).toLocaleString()}
-								</p>
-								<p class=" text-sm text-muted-foreground">{JSON.parse(check.status)}</p>
-							</div>
-						{/each}
-						<Separator class="mb-4" />
-						<div class="flex flex-row gap-4">
-							<Button variant="ghost"><RefreshCcw class="h-5 hover:animate-spin" /> Refresh</Button>
+			<StatusbarHttpStandard monitorData={monitor.checks} />
 
-							<AlertDialog.Root>
-								<AlertDialog.Trigger asChild let:builder>
-									<Button builders={[builder]} variant="destructive">
-										<Trash2 class="h-4" /> Delete</Button
-									>
-								</AlertDialog.Trigger>
-								<AlertDialog.Content>
-									<AlertDialog.Header>
-										<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-										<AlertDialog.Description>
-											This action cannot be undone. This will permanently delete your monitor and
-											the monitor data from our servers.
-										</AlertDialog.Description>
-									</AlertDialog.Header>
-									<AlertDialog.Footer>
-										<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-										<form action="?/deldns" method="POST" use:delenhance>
-											<input hidden name="mon_id" value={monitor.monitor_id} />
-											<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
-										</form>
-									</AlertDialog.Footer>
-								</AlertDialog.Content>
-							</AlertDialog.Root>
-						</div>
-					</Accordion.Content>
-				</Accordion.Item>
-			</Accordion.Root>
-			<Alert.Description />
+			<Alert.Description class="my-4"
+				><Button
+					variant="link"
+					on:click={() => {
+						goto(`/${$page.params.account_id}/monitors/view/http/standard/${monitor.monitor_id}`);
+					}}>Details</Button
+				></Alert.Description
+			>
 		</Alert.Root>
 	{/each}
 
@@ -173,81 +138,45 @@
 	</h4>
 
 	{#each CodeMonitor as monitor}
-		<Alert.Root class="m-5">
+		<Alert.Root class="m-5 overflow-hidden">
 			<div class="flex flex-row justify-between">
 				<div>
-					<Alert.Title class="text-base text-blue"
-						>{monitor.name}
-						<Button variant="link" href={monitor.url}
-							><p class="font-light text-xs">{monitor.url}</p></Button
-						></Alert.Title
-					>
+					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
 
-					<Alert.Title class="text-lg text-muted-foreground">
-						<p class="text-sm underline decoration-green-900 text-muted-foreground">
-							{Math.floor(monitor.checks[0].status)} at {new Date(
-								Math.floor(monitor.checks[0].last_checked)
-							).toLocaleString()}
-						</p>
-					</Alert.Title>
+					<Alert.Title class="font-light text-sm hover:underline"
+						><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
+					>
 				</div>
 				<div class=" flex flex-col gap-4">
-					<CircleDot
-						class={`mx-auto text-white ${
-							monitor.open_incident ? ' fill-destructive' : 'fill-green-700'
-						} hover:animate-ping`}
-					/>
-					{#if monitor.interval === 1 || monitor.interval === 2}
-						<p class="text-muted-foreground text-sm">{monitor.interval} minutes</p>
+					{#if monitor.mon_status === 'active'}
+						<Badge class="w-fit mx-auto bg-blue">Active</Badge>
+					{:else if monitor.mon_status === 'paused'}
+						<Badge class="w-fit mx-auto">Paused</Badge>
+					{/if}
+
+					<p class="text-muted-foreground text-sm">
+						Checks every {monitor.interval} minutes
+					</p>
+
+					{#if monitor.checks[0]?.status >= 200 && monitor.checks[0]?.status <= 299}
+						<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
+					{:else if monitor.checks[0]?.status < 200 || monitor.checks[0]?.status > 299}
+						<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
 					{:else}
-						<p class="text-muted-foreground text-sm">{monitor.interval} seconds</p>
+						<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
 					{/if}
 				</div>
 			</div>
-			<Accordion.Root>
-				<Accordion.Item value="item-1">
-					<Accordion.Trigger>Last 3 Checks</Accordion.Trigger>
-					<Accordion.Content>
-						{#each monitor.checks as check}
-							<div class="flex flex-row justify-between leading-3 my-2">
-								<p class=" text-sm text-muted-foreground">
-									{new Date(Math.floor(check.last_checked)).toLocaleString()}
-								</p>
-								<p class=" text-sm text-muted-foreground">{JSON.parse(check.status)}</p>
-							</div>
-						{/each}
-						<Separator class="mb-4" />
-						<div class="flex flex-row gap-4">
-							<Button variant="ghost"><RefreshCcw class="h-5 hover:animate-spin" /> Refresh</Button>
+			<StatusbarHttpStandard monitorData={monitor.checks} />
 
-							<AlertDialog.Root>
-								<AlertDialog.Trigger asChild let:builder>
-									<Button builders={[builder]} variant="destructive">
-										<Trash2 class="h-4" /> Delete</Button
-									>
-								</AlertDialog.Trigger>
-								<AlertDialog.Content>
-									<AlertDialog.Header>
-										<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-										<AlertDialog.Description>
-											This action cannot be undone. This will permanently delete your monitor and
-											the monitor data from our servers.
-										</AlertDialog.Description>
-									</AlertDialog.Header>
-									<AlertDialog.Footer>
-										<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-										<form action="?/deldns" method="POST" use:delenhance>
-											<input hidden name="mon_id" value={monitor.monitor_id} />
-											<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
-										</form>
-									</AlertDialog.Footer>
-								</AlertDialog.Content>
-							</AlertDialog.Root>
-						</div>
-					</Accordion.Content>
-				</Accordion.Item>
-			</Accordion.Root>
-			<Alert.Description />
+			<Alert.Description class="my-4"
+				><Button
+					variant="link"
+					on:click={() => {
+						goto(`/${$page.params.account_id}/monitors/view/http/code/${monitor.monitor_id}`);
+					}}>Details</Button
+				></Alert.Description
+			>
 		</Alert.Root>
 	{/each}
 	<Separator class="mb-4" />
@@ -259,7 +188,7 @@
 		Monitors will trigger if the DNS lookup reply with an error or with new IPs
 	</h4>
 	{#each DNSMonitor as monitor}
-		<Alert.Root class="m-5">
+		<Alert.Root class="m-5 overflow-hidden">
 			<div class="flex flex-row justify-between">
 				<div>
 					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
@@ -289,55 +218,11 @@
 			</div>
 			<Statusbar monitorData={monitor.checks} />
 
-			<!-- <Accordion.Root>
-				<Accordion.Item value="item-1">
-					<Accordion.Trigger>Last checks...</Accordion.Trigger>
-					<Accordion.Content>
-						{#each monitor.checks as check}
-							<div class="flex flex-row justify-between leading-3 my-2">
-								<p class=" text-sm text-muted-foreground">
-									{new Date(Math.floor(check.last_checked)).toLocaleString()}
-								</p>
-								<p class=" text-sm text-muted-foreground">{JSON.parse(check.ips)}</p>
-							</div>
-						{/each}
-						<Separator class="mb-4" />
-						<div class="flex flex-row gap-4">
-							<Button variant="ghost"><RefreshCcw class="h-5 hover:animate-spin" /> Refresh</Button>
-							<MonitorSheetUpdateDns monData={monitor} dnsForm={data.updateDNSform} /> -->
-
-			<!-- <AlertDialog.Root>
-								<AlertDialog.Trigger asChild let:builder>
-									<Button builders={[builder]} variant="destructive">
-										<Trash2 class="h-4" /> Delete</Button
-									>
-								</AlertDialog.Trigger>
-								<AlertDialog.Content>
-									<AlertDialog.Header>
-										<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-										<AlertDialog.Description>
-											This action cannot be undone. This will permanently delete your monitor and
-											the monitor data from our servers.
-										</AlertDialog.Description>
-									</AlertDialog.Header>
-									<AlertDialog.Footer>
-										<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-										<form action="?/deldns" method="POST" use:delenhance>
-											<input hidden name="mon_id" value={monitor.monitor_id} />
-											<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
-										</form>
-									</AlertDialog.Footer>
-								</AlertDialog.Content>
-							</AlertDialog.Root>
-						</div>
-					</Accordion.Content>
-				</Accordion.Item> -->
-			<!-- </Accordion.Root> -->
 			<Alert.Description class="my-4"
 				><Button
-				variant='link'
+					variant="link"
 					on:click={() => {
-						goto(`/${$page.params.account_id}/monitors/view/${monitor.monitor_id}`);
+						goto(`/${$page.params.account_id}/monitors/view/dns/${monitor.monitor_id}`);
 					}}>Details</Button
 				></Alert.Description
 			>
