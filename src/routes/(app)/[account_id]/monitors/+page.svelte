@@ -6,6 +6,8 @@
 	import MonitorSheetCreateStandard from '$lib/components/Monitor-Sheet-CreateStandard.svelte';
 	import MonitorSheetCreateCode from '$lib/components/Monitor-Sheet-CreateCode.svelte';
 	import MonitorSheetCreateDns from '$lib/components/Monitor-Sheet-CreateDNS.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+
 	import type {
 		monitorDNSDBType,
 		monitorHTTPCodeDBType,
@@ -84,49 +86,51 @@
 	<h4 class="text-xs text-muted-foreground">
 		Monitors will trigger if response is not on the range 200 - 299
 	</h4>
-
-	{#each StandardHTTPMonitor as monitor}
-		<Alert.Root class="m-5 overflow-hidden">
-			<div class="flex flex-row justify-between">
-				<div>
-					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
-
-					<Alert.Title class="font-light text-sm hover:underline"
-						><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
-					>
-				</div>
-				<div class=" flex flex-col gap-4">
-					{#if monitor.mon_status === 'active'}
-						<Badge class="w-fit mx-auto bg-blue">Active</Badge>
-					{:else if monitor.mon_status === 'paused'}
-						<Badge class="w-fit mx-auto">Paused</Badge>
-					{/if}
-
-					<p class="text-muted-foreground text-sm">
-						Checks every {monitor.interval} minutes
-					</p>
-
-					{#if monitor.checks[0]?.status >= 200 && monitor.checks[0]?.status <= 299}
-						<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
-					{:else if monitor.checks[0]?.status < 200 || monitor.checks[0]?.status > 299}
-						<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
-					{:else}
-						<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
-					{/if}
-				</div>
-			</div>
-			<StatusbarHttpStandard monitorData={monitor.checks} />
-
-			<Alert.Description class="my-4"
-				><Button
-					variant="link"
-					on:click={() => {
+	<div class="grid md:grid-cols-2 grid-cols-1 gap-4">
+		{#each StandardHTTPMonitor as monitor}
+			<button
+				on:click={() => {
+					goto(`/${$page.params.account_id}/monitors/view/http/standard/${monitor.monitor_id}`);
+				}}
+				on:keydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
 						goto(`/${$page.params.account_id}/monitors/view/http/standard/${monitor.monitor_id}`);
-					}}>Details</Button
-				></Alert.Description
+					}
+				}}
 			>
-		</Alert.Root>
-	{/each}
+				<Alert.Root class=" overflow-hidden">
+					<div class="grid md:grid-cols-3  grid-cols-1 justify-between">
+						<div>
+							<Alert.Title class="text-base truncate">{monitor.name}</Alert.Title>
+
+							<Alert.Title class="font-light text-sm hover:underline truncate"
+								><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
+							>
+						</div>
+						
+						{#if monitor.mon_status === 'active'}
+							<Badge class="w-fit h-6 my-2 md:my-0 mx-auto bg-blue hover:bg-blue-foreground">Active</Badge>
+						{:else if monitor.mon_status === 'paused'}
+							<Badge class="w-fit h-6 mx-auto">Paused</Badge>
+						{/if}
+						<div class=" flex flex-col gap-4">
+							<Tooltip.Root>
+								<Tooltip.Trigger
+									><p class="text-muted-foreground text-sm underline">
+										{monitor.interval} minutes
+									</p></Tooltip.Trigger
+								>
+								<Tooltip.Content>
+									<p>The monitor will check the URL every {monitor.interval} minutes</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						</div>
+					</div>
+					<StatusbarHttpStandard monitorData={monitor.checks} />
+				</Alert.Root>
+			</button>
+		{/each}
+	</div>
 
 	<Separator class="mb-4" />
 
@@ -136,49 +140,53 @@
 	<h4 class="text-xs text-muted-foreground">
 		Monitors will trigger if response of the specified Status Code
 	</h4>
-
-	{#each CodeMonitor as monitor}
-		<Alert.Root class="m-5 overflow-hidden">
-			<div class="flex flex-row justify-between">
-				<div>
-					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
-
-					<Alert.Title class="font-light text-sm hover:underline"
-						><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
-					>
-				</div>
-				<div class=" flex flex-col gap-4">
-					{#if monitor.mon_status === 'active'}
-						<Badge class="w-fit mx-auto bg-blue">Active</Badge>
-					{:else if monitor.mon_status === 'paused'}
-						<Badge class="w-fit mx-auto">Paused</Badge>
-					{/if}
-
-					<p class="text-muted-foreground text-sm">
-						Checks every {monitor.interval} minutes
-					</p>
-
-					{#if monitor.checks[0]?.status >= 200 && monitor.checks[0]?.status <= 299}
-						<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
-					{:else if monitor.checks[0]?.status < 200 || monitor.checks[0]?.status > 299}
-						<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
-					{:else}
-						<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
-					{/if}
-				</div>
-			</div>
-			<StatusbarHttpStandard monitorData={monitor.checks} />
-
-			<Alert.Description class="my-4"
-				><Button
-					variant="link"
-					on:click={() => {
+	<div class="grid md:grid-cols-2 grid-cols-1 gap-4">
+		{#each CodeMonitor as monitor}
+			<button
+				on:click={() => {
+					goto(`/${$page.params.account_id}/monitors/view/http/code/${monitor.monitor_id}`);
+				}}
+				on:keydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
 						goto(`/${$page.params.account_id}/monitors/view/http/code/${monitor.monitor_id}`);
-					}}>Details</Button
-				></Alert.Description
+					}
+				}}
 			>
-		</Alert.Root>
-	{/each}
+				<Alert.Root class="m-5 overflow-hidden md:grid md:grid-cols-6  flex-col">
+					<div class="text-center">
+						<Alert.Title class="text-base">{monitor.name}</Alert.Title>
+
+						<Alert.Title class="font-light text-sm hover:underline"
+							><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
+						>
+					</div>
+					<div class=" flex md:flex-col flex-row gap-4 col-span-2">
+						{#if monitor.mon_status === 'active'}
+							<Badge class="w-fit h-6 mx-auto bg-blue">Active</Badge>
+						{:else if monitor.mon_status === 'paused'}
+							<Badge class="w-fit h-6 mx-auto">Paused</Badge>
+						{/if}
+						<div class="mx-auto">
+							<p class="text-muted-foreground text-sm">
+								{monitor.interval} minutes
+							</p>
+						</div>
+
+						{#if monitor.checks[0]?.status >= 200 && monitor.checks[0]?.status <= 299}
+							<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
+						{:else if monitor.checks[0]?.status < 200 || monitor.checks[0]?.status > 299}
+							<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
+						{:else}
+							<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
+						{/if}
+					</div>
+					<div class="col-span-3 my-2">
+						<StatusbarHttpStandard monitorData={monitor.checks} />
+					</div>
+				</Alert.Root>
+			</button>
+		{/each}
+	</div>
 	<Separator class="mb-4" />
 
 	<h2 class="text-xl font-semibold flex flex-row justify-between">
@@ -187,45 +195,49 @@
 	<h4 class="text-xs text-muted-foreground">
 		Monitors will trigger if the DNS lookup reply with an error or with new IPs
 	</h4>
-	{#each DNSMonitor as monitor}
-		<Alert.Root class="m-5 overflow-hidden">
-			<div class="flex flex-row justify-between">
-				<div>
-					<Alert.Title class="text-base">{monitor.name}</Alert.Title>
-					{#each monitor.ips as ip}
-						<Alert.Title class={`text-sm text-muted-foreground`}>{ip}</Alert.Title>
-					{/each}
-				</div>
-				<div class=" flex flex-col gap-4">
-					{#if monitor.mon_status === 'active'}
-						<Badge class="w-fit mx-auto bg-blue">Active</Badge>
-					{:else if monitor.mon_status === 'paused'}
-						<Badge class="w-fit mx-auto">Paused</Badge>
-					{/if}
-
-					<p class="text-muted-foreground text-sm">
-						Checks every {monitor.interval} minutes
-					</p>
-
-					{#if monitor.checks[0]?.ok}
-						<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
-					{:else if !monitor.checks[0]?.ok}
-						<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
-					{:else}
-						<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
-					{/if}
-				</div>
-			</div>
-			<Statusbar monitorData={monitor.checks} />
-
-			<Alert.Description class="my-4"
-				><Button
-					variant="link"
-					on:click={() => {
+	<div class="grid md:grid-cols-2 grid-cols-1 gap-4">
+		{#each DNSMonitor as monitor}
+			<button
+				on:click={() => {
+					goto(`/${$page.params.account_id}/monitors/view/dns/${monitor.monitor_id}`);
+				}}
+				on:keydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
 						goto(`/${$page.params.account_id}/monitors/view/dns/${monitor.monitor_id}`);
-					}}>Details</Button
-				></Alert.Description
+					}
+				}}
 			>
-		</Alert.Root>
-	{/each}
+				<Alert.Root class="m-5 overflow-hidden">
+					<div class="flex flex-row justify-between">
+						<div>
+							<Alert.Title class="text-base">{monitor.name}</Alert.Title>
+							{#each monitor.ips as ip}
+								<Alert.Title class={`text-sm text-muted-foreground`}>{ip}</Alert.Title>
+							{/each}
+						</div>
+						<div class=" flex flex-col gap-4">
+							{#if monitor.mon_status === 'active'}
+								<Badge class="w-fit mx-auto bg-blue">Active</Badge>
+							{:else if monitor.mon_status === 'paused'}
+								<Badge class="w-fit mx-auto">Paused</Badge>
+							{/if}
+
+							<p class="text-muted-foreground text-sm">
+								Checks every {monitor.interval} minutes
+							</p>
+
+							{#if monitor.checks[0]?.ok}
+								<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge>
+							{:else if !monitor.checks[0]?.ok}
+								<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
+							{:else}
+								<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>
+							{/if}
+						</div>
+					</div>
+					<Statusbar monitorData={monitor.checks} />
+				</Alert.Root>
+			</button>
+		{/each}
+	</div>
 {/if}

@@ -14,6 +14,7 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { QuestionMarkCircled } from 'radix-icons-svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+	import StatusbarDetail from '$lib/components/statusbarDetail.svelte';
 	import StatusbarDetailHttpStandard from '$lib/components/statusbarDetailHTTPStandard.svelte';
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
@@ -23,6 +24,7 @@
 	let chart: ApexCharts | undefined; // Define chart variable in the outer scope
 	let container: HTMLElement;
 	let transformedRawChecks: string[][] = [];
+	let labels: string[] = [];
 	$: if (monitorStats && monitorStats.rawChecks) {
 		if (monitorStats.rawChecks.length > 0) {
 			transformedRawChecks = monitorStats.rawChecks.map((check) => [
@@ -31,9 +33,16 @@
 			]);
 		}
 	}
+	$: if (transformedRawChecks) {
+		if (transformedRawChecks.length > 0) {
+			labels = transformedRawChecks.map((check) => new Date(check[0]).toLocaleString());
+		}
+	}
 
+	$: console.log(labels);
 	let options = {};
 	$: if (transformedRawChecks && transformedRawChecks.length > 0) {
+		labels = transformedRawChecks.map((check) => new Date(check[0]).toLocaleString());
 		options = {
 			chart: {
 				toolbar: {
@@ -75,6 +84,7 @@
 		}
 	}
 
+	let chartData = {};
 	export let data: PageData;
 	console.log(data);
 
@@ -177,14 +187,14 @@
 			</Card.Content>
 		</Card.Root>
 		<Card.Root
-			class={monitorStats.healthy === 200 ? 'ring-1 ring-green-600' : 'ring-1  ring-destructive'}
+			class={monitorStats.healthy === 1 ? 'ring-1 ring-green-600' : 'ring-1  ring-destructive'}
 		>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class="text-sm font-medium">Status</Card.Title>
 				<CandlestickChart class="h-4 w-4 text-muted-foreground" />
 			</Card.Header>
 			<Card.Content>
-				{#if monitorStats.healthy >= 200 && monitorStats.healthy <= 299}
+				{#if monitorStats.healthy === 1}
 					<div class="text-2xl font-bold">Healthy</div>
 				{:else}
 					<div class="text-2xl font-bold">Critical</div>
@@ -277,7 +287,7 @@
 			</Card.Content>
 		</Card.Root>
 	</div>
-	<Card.Root class="col-span-2 h-fit">
+	<!-- <Card.Root class="col-span-2 h-fit">
 		<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 			<Card.Title class="text-sm font-medium">Alerts</Card.Title>
 			<AlertTriangle class="h-4 w-4 text-muted-foreground" />
@@ -333,11 +343,11 @@
 								</li>
 								<li>
 									<div class="relative pb-8">
-										<span
+										<!-- <span
 											class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
 											aria-hidden="true"
-										/>
-										<div class="relative flex space-x-3">
+										/> -->
+	<!-- <div class="relative flex space-x-3">
 											<div>
 												<Info class=" h-8 w-8 ring-8 ring-white bg-white " />
 											</div>
@@ -410,8 +420,8 @@
 				{/each}
 			</Accordion.Root>
 			<Separator class="my-2" />
-			<p class="text-xs mb-4 text-muted-foreground">Closed</p>
-			<Accordion.Root class="w-full ">
+			<p class="text-xs mb-4 text-muted-foreground">Closed</p> -->
+	<!-- <Accordion.Root class="w-full ">
 				{#each Object.values(mergedAlerts) as alert}
 					{#if !alert.isActive}
 						<Accordion.Item value={alert.alert_id}>
@@ -546,7 +556,7 @@
 						</Accordion.Item>
 					{/if}
 				{/each}
-			</Accordion.Root>
-		</Card.Content>
-	</Card.Root>
+			</Accordion.Root> -->
+	<!-- </Card.Content>
+	</Card.Root> -->
 </div>
