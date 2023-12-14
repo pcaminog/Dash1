@@ -53,6 +53,7 @@
 		"apexcharts": "^3.44.2",
 		"bits-ui": "^0.9.9",
 		"clsx": "^2.0.0",
+		"date-fns": "^2.30.0",
 		"echarts": "^5.4.3",
 		"lucia": "^2.7.4",
 		"lucide-svelte": "^0.292.0",

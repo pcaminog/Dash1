@@ -2,7 +2,6 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import Badge from './ui/badge/badge.svelte';
 	export let monitorData: { last_checked: number; url: string; status: number }[];
-	console.log(monitorData);
 </script>
 
 <div class="flex flex-row justify-between">

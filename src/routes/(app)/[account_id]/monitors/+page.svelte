@@ -12,9 +12,7 @@
 		monitorHTTPStandardDBType
 	} from '$lib/types';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { superForm } from 'sveltekit-superforms/client';
-	import toast from 'svelte-french-toast';
-	import { toast_error_style } from '$lib/utils';
+
 	import Statusbar from '$lib/components/statusbar.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import { goto } from '$app/navigation';
@@ -34,22 +32,7 @@
 	}
 	console.log(data);
 
-	const { enhance: delenhance } = superForm(data.delMonitorForm, {
-		onError({ result }) {
-			toast.error(result.error.message, {
-				style: toast_error_style,
-				position: 'bottom-right'
-			});
-		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				toast.success('Monitor delete succesfully', {
-					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
-					position: 'bottom-right'
-				});
-			}
-		}
-	});
+
 </script>
 
 {#if DNSMonitor.length === 0 && CodeMonitor.length === 0 && StandardHTTPMonitor.length === 0}
@@ -109,7 +92,7 @@
 								>Active</Badge
 							>
 						{:else if monitor.mon_status === 'paused'}
-							<Badge class="w-fit h-6 mx-auto">Paused</Badge>
+							<Badge class="w-fit h-6 mx-auto bg-yellow-700 hover:bg-yellow-500">Paused</Badge>
 						{/if}
 						<div class=" flex flex-col gap-4">
 							<Tooltip.Root>
@@ -165,7 +148,7 @@
 								>Active</Badge
 							>
 						{:else if monitor.mon_status === 'paused'}
-							<Badge class="w-fit h-6 mx-auto">Paused</Badge>
+							<Badge class="w-fit h-6 mx-auto bg-yellow-700 hover:bg-yellow-500">Paused</Badge>
 						{/if}
 						<div class=" flex flex-col gap-4">
 							<Tooltip.Root>
@@ -190,7 +173,7 @@
 	<h2 class="text-xl font-semibold flex flex-row justify-between">
 		DNS Monitors <MonitorSheetCreateDns dnsForm={data.monitorDNSform} />
 	</h2>
-	<h4 class="text-xs text-muted-foreground">
+	<h4 class="text-xs mb-4 text-muted-foreground">
 		Monitors will trigger if the DNS lookup reply with an error or with new IPs
 	</h4>
 	<div class="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -220,7 +203,7 @@
 								>Active</Badge
 							>
 						{:else if monitor.mon_status === 'paused'}
-							<Badge class="w-fit h-6 mx-auto">Paused</Badge>
+							<Badge class="w-fit h-6 mx-auto bg-yellow-500  hover:bg-yellow-700">Paused</Badge>
 						{/if}
 						<div class=" flex flex-col gap-4">
 							<Tooltip.Root>

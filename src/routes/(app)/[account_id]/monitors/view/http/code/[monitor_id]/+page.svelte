@@ -2,29 +2,45 @@
 	import {
 		AlertOctagon,
 		AlertTriangle,
+		CalendarDays,
 		CandlestickChart,
 		CheckCheck,
 		ChevronsUp,
+		Edit,
 		Fingerprint,
 		Info,
+		Link2,
+		Pause,
+		Pencil,
+		Play,
 		PowerCircle,
+		Timer,
+		Trash2,
 		XOctagon
 	} from 'lucide-svelte';
-	import type { AlertType, monitorHTTPStandardDBType } from '$lib/types';
+	import type { AlertType, monitorHTTPCodeDBType } from '$lib/types';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { QuestionMarkCircled } from 'radix-icons-svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
-	import StatusbarDetail from '$lib/components/statusbarDetail.svelte';
+	import BackButton from '$lib/components/BackButton.svelte';
 	import StatusbarDetailHttpStandard from '$lib/components/statusbarDetailHTTPStandard.svelte';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import * as Accordion from '$lib/components/ui/accordion';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { formatDistanceToNow } from 'date-fns';
+
 	import { onMount } from 'svelte';
 	import * as Table from '$lib/components/ui/table';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { page } from '$app/stores';
+	import { superForm } from 'sveltekit-superforms/client';
+	import toast from 'svelte-french-toast';
+	import { toast_error_style } from '$lib/utils';
 	let chart: ApexCharts | undefined; // Define chart variable in the outer scope
 	let container: HTMLElement;
 	let transformedRawChecks: string[][] = [];
-	let labels: string[] = [];
 	$: if (monitorStats && monitorStats.rawChecks) {
 		if (monitorStats.rawChecks.length > 0) {
 			transformedRawChecks = monitorStats.rawChecks.map((check) => [
@@ -33,16 +49,8 @@
 			]);
 		}
 	}
-	$: if (transformedRawChecks) {
-		if (transformedRawChecks.length > 0) {
-			labels = transformedRawChecks.map((check) => new Date(check[0]).toLocaleString());
-		}
-	}
-
-	$: console.log(labels);
 	let options = {};
 	$: if (transformedRawChecks && transformedRawChecks.length > 0) {
-		labels = transformedRawChecks.map((check) => new Date(check[0]).toLocaleString());
 		options = {
 			chart: {
 				toolbar: {
@@ -58,9 +66,7 @@
 				}
 			],
 			stroke: {
-				curve: 'smooth',
-				width: 2,
-				lineCap: 'round'
+				width: 2
 			},
 			xaxis: {
 				type: 'datetime'
@@ -84,7 +90,6 @@
 		}
 	}
 
-	let chartData = {};
 	export let data: PageData;
 	console.log(data);
 
@@ -92,6 +97,8 @@
 		checks: number;
 		uptime: number;
 		healthy: number;
+		since: number;
+
 		rawChecks: {
 			last_checked: number;
 			status: number;
@@ -110,11 +117,19 @@
 		}[];
 	};
 
-	$: monitorStats = data.monStandard.statistics;
+	$: monitorStats = data.monCode.statistics;
 
-	let StandardMonitor: monitorHTTPStandardDBType;
-	$: StandardMonitor = data.monStandard.monitor[0];
-	let groupedAlerts = data.monStandard.statistics.alerts.reduce((acc, alert) => {
+	// console.log(monitorStats.since);
+	let timeElapsed: string;
+
+	$: if (monitorStats.since) {
+		timeElapsed = formatDistanceToNow(monitorStats.since * 1000,  { addSuffix: true });
+	}
+	$: console.log(monitorStats.since);
+
+	let codeMonitor: monitorHTTPCodeDBType;
+	$: codeMonitor = data.monCode.monitor[0];
+	let groupedAlerts = data.monCode.statistics.alerts.reduce((acc, alert) => {
 		if (!acc[alert.alert_id]) {
 			acc[alert.alert_id] = [];
 		}
@@ -171,43 +186,87 @@
 		},
 		{}
 	);
-</script>
 
+	const { enhance: delenhance } = superForm(data.DeleteMonitorform, {
+		onError({ result }) {
+			toast.error(result.error.message, {
+				style: toast_error_style,
+				position: 'bottom-right'
+			});
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				toast.success(delMessage, {
+					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
+					position: 'bottom-right'
+				});
+			}
+		}
+	});
+
+	const { enhance: pauseenhance } = superForm(data.PausedMonitorform, {
+		onError({ result }) {
+			toast.error(result.error.message, {
+				style: toast_error_style,
+				position: 'bottom-right'
+			});
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				toast.success(form.message, {
+					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
+					position: 'bottom-right'
+				});
+			}
+		}
+	});
+</script>
+<BackButton />
 <div class="grid grid-cols-6 gap-4">
 	<div class=" col-span-4 grid grid-cols-4 h-fit gap-4">
-		<Card.Root class="ring-1 ring-green-600">
+		<Card.Root
+			class={codeMonitor.mon_status === 'active'
+				? 'ring-2 ring-green-600'
+				: 'ring-2  ring-yellow-500 '}
+		>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class="text-sm font-medium">State</Card.Title>
 				<PowerCircle class="h-4 w-4 text-muted-foreground" />
 			</Card.Header>
 			<Card.Content>
 				<div class="text-2xl font-bold">
-					{StandardMonitor.mon_status.charAt(0).toUpperCase() + StandardMonitor.mon_status.slice(1)}
+					{codeMonitor.mon_status.charAt(0).toUpperCase() + codeMonitor.mon_status.slice(1)}
 				</div>
 			</Card.Content>
 		</Card.Root>
 		<Card.Root
-			class={monitorStats.healthy === 1 ? 'ring-1 ring-green-600' : 'ring-1  ring-destructive'}
+			class={monitorStats.healthy === data.monCode.monitor[0].status_code
+				? 'ring-2 ring-green-600'
+				: 'ring-2  ring-destructive'}
 		>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class="text-sm font-medium">Status</Card.Title>
 				<CandlestickChart class="h-4 w-4 text-muted-foreground" />
 			</Card.Header>
 			<Card.Content>
-				{#if monitorStats.healthy === 1}
+				{#if monitorStats.healthy === data.monCode.monitor[0].status_code}
 					<div class="text-2xl font-bold">Healthy</div>
 				{:else}
 					<div class="text-2xl font-bold">Critical</div>
 				{/if}
-				<p class="text-xs text-muted-foreground">Since ...</p>
+				<p class="text-xs text-muted-foreground">
+					{#if monitorStats.since}
+						{timeElapsed}
+					{/if}
+				</p>
 			</Card.Content>
 		</Card.Root>
 		<Card.Root
 			class={monitorStats.uptime < 70
-				? 'ring-1 ring-destructive'
+				? 'ring-2 ring-destructive'
 				: monitorStats.uptime >= 90
-				? 'ring-1 ring-green-600'
-				: 'ring-1  ring-orange-600'}
+				? 'ring-2 ring-green-600'
+				: 'ring-2  ring-orange-600'}
 		>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class="text-sm font-medium">Uptime</Card.Title>
@@ -228,6 +287,59 @@
 				<p class="text-xs text-muted-foreground">Last 24 hours</p>
 			</Card.Content>
 		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">URL</Card.Title>
+				<Link2 class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs truncate">
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							<a target="_blank" href={codeMonitor.url}>{codeMonitor.url}</a>
+						</Tooltip.Trigger>
+						<Tooltip.Content>
+							<p>{codeMonitor.url}</p>
+						</Tooltip.Content>
+					</Tooltip.Root>
+				</div>
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Interval</Card.Title>
+				<Timer class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs">
+					{codeMonitor.interval} minutes
+				</div>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Name</Card.Title>
+				<Pencil class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs">
+					{codeMonitor.name}
+				</div>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Created at</Card.Title>
+				<CalendarDays class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs">
+					{codeMonitor.created_at}
+				</div>
+			</Card.Content>
+		</Card.Root>
+
 		<Card.Root class="col-span-4 overflow-hidden">
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class=" font-medium mb-3">Uptime</Card.Title>
@@ -287,92 +399,19 @@
 			</Card.Content>
 		</Card.Root>
 	</div>
-	<!-- <Card.Root class="col-span-2 h-fit">
-		<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-			<Card.Title class="text-sm font-medium">Alerts</Card.Title>
-			<AlertTriangle class="h-4 w-4 text-muted-foreground" />
-		</Card.Header>
-		<Card.Content>
-			<p class="text-xs text-muted-foreground">Active</p>
-			<Accordion.Root class="w-full ">
-				{#each Object.values(mergedAlerts) as alert}
-					{#if alert.isActive}
-						<div class="flow-root m-4">
-							<ul role="list" class="-mb-8">
-								<li>
-									<div class="relative pb-8">
-										<span
-											class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-											aria-hidden="true"
-										/>
-										<div class="relative flex space-x-3">
-											<div>
-												<AlertOctagon
-													class=" h-8 w-8 ring-8 ring-white bg-white text-destructive"
-												/>
-											</div>
-											<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-												<div>
-													<p class="text-sm text-gray-500">
-														Alert created at {new Date(alert.isopened_time).toLocaleString()}
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-								<li>
-									<div class="relative pb-8">
-										<span
-											class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-											aria-hidden="true"
-										/>
-										<div class="relative flex space-x-3">
-											<div>
-												<Fingerprint class=" h-8 w-8 ring-8 ring-white bg-white " />
-											</div>
-											<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-												<div>
-													<p class="text-sm text-gray-500">
-														Alert ID: {alert.alert_id}
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-								<li>
-									<div class="relative pb-8">
-										<!-- <span
-											class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-											aria-hidden="true"
-										/> -->
-	<!-- <div class="relative flex space-x-3">
-											<div>
-												<Info class=" h-8 w-8 ring-8 ring-white bg-white " />
-											</div>
-											<div class=" min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-												<div>
-													<p class="text-sm text-gray-500">Details</p>
-												</div>
-												<div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
-													<div class="flex justify-between gap-x-4" />
-													<p class="text-sm leading-6 text-gray-500">
-														{#if alert.error_detail_opened}
-															<p class="text-xs text-muted-foreground">
-																Added IPs: {alert.error_detail_opened.addedIPs.join(', ')}
-															</p>
-															<p class="text-xs text-muted-foreground">
-																Removed IPs: {alert.error_detail_opened.removedIPs.join(', ')}
-															</p>
-														{/if}
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-								{#if alert.state !== 'opened' && alert.state !== 'closed'}
+	<div class="col-span-2">
+		<Card.Root class="col-span-2 h-fit">
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Alerts</Card.Title>
+				<AlertTriangle class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<p class="text-xs text-muted-foreground">Active</p>
+				<Accordion.Root class="w-full ">
+					{#each Object.values(mergedAlerts) as alert}
+						{#if alert.isActive}
+							<div class="flow-root m-4">
+								<ul role="list" class="-mb-8">
 									<li>
 										<div class="relative pb-8">
 											<span
@@ -381,58 +420,72 @@
 											/>
 											<div class="relative flex space-x-3">
 												<div>
-													<QuestionMarkCircled
-														class=" h-8 w-8 ring-8 ring-white bg-white text-green-600"
+													<AlertOctagon
+														class=" h-8 w-8 ring-8 ring-white bg-white text-destructive"
 													/>
 												</div>
 												<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
 													<div>
 														<p class="text-sm text-gray-500">
-															New Alert state: {alert.state}
+															Alert created at {new Date(alert.isopened_time).toLocaleString()}
 														</p>
 													</div>
 												</div>
 											</div>
 										</div>
 									</li>
-								{/if}
-								{#if alert.isclosed}
 									<li>
 										<div class="relative pb-8">
+											<span
+												class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+												aria-hidden="true"
+											/>
 											<div class="relative flex space-x-3">
 												<div>
-													<XOctagon class=" h-8 w-8 ring-8 ring-white bg-white text-green-600" />
+													<Fingerprint class=" h-8 w-8 ring-8 ring-white bg-white " />
 												</div>
 												<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
 													<div>
 														<p class="text-sm text-gray-500">
-															Closed at: {new Date(alert.isclosed_time).toLocaleString()}
+															Alert ID: {alert.alert_id}
 														</p>
 													</div>
 												</div>
 											</div>
 										</div>
 									</li>
-								{/if}
-							</ul>
-						</div>
-					{/if}
-				{/each}
-			</Accordion.Root>
-			<Separator class="my-2" />
-			<p class="text-xs mb-4 text-muted-foreground">Closed</p> -->
-	<!-- <Accordion.Root class="w-full ">
-				{#each Object.values(mergedAlerts) as alert}
-					{#if !alert.isActive}
-						<Accordion.Item value={alert.alert_id}>
-							<Accordion.Trigger class="truncate text-xs"
-								>{new Date(alert.isopened_time).toLocaleString() +
-									' - ' +
-									alert.alert_id}</Accordion.Trigger
-							>
-							<Accordion.Content>
-								<div class="flow-root m-4">
-									<ul role="list" class="-mb-8">
+									<li>
+										<div class="relative pb-8">
+											<span
+												class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+												aria-hidden="true"
+											/>
+											<div class="relative flex space-x-3">
+												<div>
+													<Info class=" h-8 w-8 ring-8 ring-white bg-white " />
+												</div>
+												<div class=" min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+													<div>
+														<p class="text-sm text-gray-500">Details</p>
+													</div>
+													<div class="flex-auto rounded-md p-3 ring-2 ring-inset ring-gray-200">
+														<div class="flex justify-between gap-x-4" />
+														<p class="text-sm leading-6 text-gray-500">
+															{#if alert.error_detail_opened}
+																<p class="text-xs text-muted-foreground">
+																	Added IPs: {alert.error_detail_opened.addedIPs.join(', ')}
+																</p>
+																<p class="text-xs text-muted-foreground">
+																	Removed IPs: {alert.error_detail_opened.removedIPs.join(', ')}
+																</p>
+															{/if}
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+									{#if alert.state !== 'opened' && alert.state !== 'closed'}
 										<li>
 											<div class="relative pb-8">
 												<span
@@ -441,72 +494,58 @@
 												/>
 												<div class="relative flex space-x-3">
 													<div>
-														<AlertOctagon
-															class=" h-8 w-8 ring-8 ring-white bg-white text-destructive"
+														<QuestionMarkCircled
+															class=" h-8 w-8 ring-8 ring-white bg-white text-green-600"
 														/>
 													</div>
 													<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
 														<div>
 															<p class="text-sm text-gray-500">
-																Alert created at {new Date(alert.isopened_time).toLocaleString()}
+																New Alert state: {alert.state}
 															</p>
 														</div>
 													</div>
 												</div>
 											</div>
 										</li>
+									{/if}
+									{#if alert.isclosed}
 										<li>
 											<div class="relative pb-8">
-												<span
-													class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-													aria-hidden="true"
-												/>
 												<div class="relative flex space-x-3">
 													<div>
-														<Fingerprint class=" h-8 w-8 ring-8 ring-white bg-white " />
+														<XOctagon class=" h-8 w-8 ring-8 ring-white bg-white text-green-600" />
 													</div>
 													<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
 														<div>
 															<p class="text-sm text-gray-500">
-																Alert ID: {alert.alert_id}
+																Closed at: {new Date(alert.isclosed_time).toLocaleString()}
 															</p>
 														</div>
 													</div>
 												</div>
 											</div>
 										</li>
-										<li>
-											<div class="relative pb-8">
-												<span
-													class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-													aria-hidden="true"
-												/>
-												<div class="relative flex space-x-3">
-													<div>
-														<Info class=" h-8 w-8 ring-8 ring-white bg-white " />
-													</div>
-													<div class=" min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-														<div>
-															<p class="text-sm text-gray-500">Details</p>
-														</div>
-														<div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
-															<div class="flex justify-between gap-x-4" />
-															<p class="text-sm leading-6 text-gray-500">
-																{#if alert.error_detail_opened}
-																	<p class="text-xs text-muted-foreground">
-																		Added IPs: {alert.error_detail_opened.addedIPs.join(', ')}
-																	</p>
-																	<p class="text-xs text-muted-foreground">
-																		Removed IPs: {alert.error_detail_opened.removedIPs.join(', ')}
-																	</p>
-																{/if}
-															</p>
-														</div>
-													</div>
-												</div>
-											</div>
-										</li>
-										{#if alert.state !== 'opened' && alert.state !== 'closed'}
+									{/if}
+								</ul>
+							</div>
+						{/if}
+					{/each}
+				</Accordion.Root>
+				<Separator class="my-2" />
+				<p class="text-xs mb-4 text-muted-foreground">Closed</p>
+				<Accordion.Root class="w-full ">
+					{#each Object.values(mergedAlerts) as alert}
+						{#if !alert.isActive}
+							<Accordion.Item value={alert.alert_id}>
+								<Accordion.Trigger class="truncate text-xs"
+									>{new Date(alert.isopened_time).toLocaleString() +
+										' - ' +
+										alert.alert_id}</Accordion.Trigger
+								>
+								<Accordion.Content>
+									<div class="flow-root m-4">
+										<ul role="list" class="-mb-8">
 											<li>
 												<div class="relative pb-8">
 													<span
@@ -515,48 +554,193 @@
 													/>
 													<div class="relative flex space-x-3">
 														<div>
-															<QuestionMarkCircled
-																class=" h-8 w-8 ring-8 ring-white bg-white text-green-600"
+															<AlertOctagon
+																class=" h-8 w-8 ring-8 ring-white bg-white text-destructive"
 															/>
 														</div>
 														<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
 															<div>
 																<p class="text-sm text-gray-500">
-																	New Alert state: {alert.state}
+																	Alert created at {new Date(alert.isopened_time).toLocaleString()}
 																</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</li>
-										{/if}
-										{#if alert.isclosed}
 											<li>
 												<div class="relative pb-8">
+													<span
+														class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+														aria-hidden="true"
+													/>
 													<div class="relative flex space-x-3">
 														<div>
-															<XOctagon
-																class=" h-8 w-8 ring-8 ring-white bg-white text-green-600"
-															/>
+															<Fingerprint class=" h-8 w-8 ring-8 ring-white bg-white " />
 														</div>
 														<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
 															<div>
 																<p class="text-sm text-gray-500">
-																	Closed at: {new Date(alert.isclosed_time).toLocaleString()}
+																	Alert ID: {alert.alert_id}
 																</p>
 															</div>
 														</div>
 													</div>
 												</div>
 											</li>
-										{/if}
-									</ul>
-								</div>
-							</Accordion.Content>
-						</Accordion.Item>
-					{/if}
-				{/each}
-			</Accordion.Root> -->
-	<!-- </Card.Content>
-	</Card.Root> -->
+											<li>
+												<div class="relative pb-8">
+													<span
+														class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+														aria-hidden="true"
+													/>
+													<div class="relative flex space-x-3">
+														<div>
+															<Info class=" h-8 w-8 ring-8 ring-white bg-white " />
+														</div>
+														<div class=" min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+															<div>
+																<p class="text-sm text-gray-500">Details</p>
+															</div>
+															<div class="flex-auto rounded-md p-3 ring-2 ring-inset ring-gray-200">
+																<div class="flex justify-between gap-x-4" />
+																<p class="text-sm leading-6 text-gray-500">
+																	{#if alert.error_detail_opened}
+																		<p class="text-xs text-muted-foreground">
+																			Added IPs: {alert.error_detail_opened.addedIPs.join(', ')}
+																		</p>
+																		<p class="text-xs text-muted-foreground">
+																			Removed IPs: {alert.error_detail_opened.removedIPs.join(', ')}
+																		</p>
+																	{/if}
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+											{#if alert.state !== 'opened' && alert.state !== 'closed'}
+												<li>
+													<div class="relative pb-8">
+														<span
+															class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+															aria-hidden="true"
+														/>
+														<div class="relative flex space-x-3">
+															<div>
+																<QuestionMarkCircled
+																	class=" h-8 w-8 ring-8 ring-white bg-white text-green-600"
+																/>
+															</div>
+															<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+																<div>
+																	<p class="text-sm text-gray-500">
+																		New Alert state: {alert.state}
+																	</p>
+																</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											{/if}
+											{#if alert.isclosed}
+												<li>
+													<div class="relative pb-8">
+														<div class="relative flex space-x-3">
+															<div>
+																<XOctagon
+																	class=" h-8 w-8 ring-8 ring-white bg-white text-green-600"
+																/>
+															</div>
+															<div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+																<div>
+																	<p class="text-sm text-gray-500">
+																		Closed at: {new Date(alert.isclosed_time).toLocaleString()}
+																	</p>
+																</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											{/if}
+										</ul>
+									</div>
+								</Accordion.Content>
+							</Accordion.Item>
+						{/if}
+					{/each}
+				</Accordion.Root>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root class="my-4"
+			><Card.Header>
+				<Card.Title>Monitor Actions</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<Button class="font-light"><Edit class="h-4 my-auto" />Edit</Button>
+
+				<AlertDialog.Root>
+					<AlertDialog.Trigger asChild let:builder>
+						<Button class="font-light" builders={[builder]} variant="destructive">
+							<Trash2 class="h-4 my-auto" /> Delete</Button
+						>
+					</AlertDialog.Trigger>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you sure you want to delete the monitor?</AlertDialog.Title>
+							<AlertDialog.Description>
+								<p>
+									This action is irreversible and will permanently remove the monitor, along with
+									all its associated data and logs.
+								</p>
+								<p>
+									This means you will lose access to historical HTTP traffic records and analysis.
+								</p>
+							</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+							<form action="?/deletemonitor" method="POST" use:delenhance>
+								<input hidden name="account_id" value={$page.params.account_id} />
+								<input hidden name="monitor_id" value={$page.params.monitor_id} />
+
+								<AlertDialog.Action class="bg-destructive hover:bg-red-700" type="submit"
+									>Continue</AlertDialog.Action
+								>
+							</form>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
+
+				<AlertDialog.Root>
+					<AlertDialog.Trigger asChild let:builder>
+						<Button class="font-light" builders={[builder]} variant="outline">
+							{#if codeMonitor.mon_status === 'active'}
+								<Pause class="h-4 my-auto" /> Pause
+							{:else}
+								<Play class="h-4 my-auto" /> Resume
+							{/if}
+						</Button>
+					</AlertDialog.Trigger>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you sure you want to pause the monitor?</AlertDialog.Title>
+							<AlertDialog.Description>
+								This action will temporarily stop monitoring and logging of all HTTP traffic.
+							</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+							<form action="?/pausedmonitor" method="POST" use:pauseenhance>
+								<input hidden name="status" value={codeMonitor.mon_status} />
+								<input hidden name="monitor_id" value={$page.params.monitor_id} />
+
+								<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+							</form>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
+			</Card.Content>
+		</Card.Root>
+	</div>
 </div>

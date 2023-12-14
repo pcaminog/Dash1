@@ -54,6 +54,17 @@ export const monitorCodeSchema = z.object({
 
 export type monitorCodeType = z.infer<typeof monitorCodeSchema>;
 
+export const deleteMonitorSchema = z.object({
+	monitor_id: z.string()
+});
+export type deleteMonitorType = z.infer<typeof deleteMonitorSchema>;
+
+export const pauseMonitorSchema = z.object({
+	monitor_id: z.string(),
+	status: z.string(),
+});
+export type pauseMonitorType = z.infer<typeof pauseMonitorSchema>;
+
 export const settingsnotificationEmailSchema = z.object({
 	email: z.string().email()
 });
@@ -158,6 +169,7 @@ export interface monitorHTTPStandardDBType {
 	url: string;
 	ssl_verify: boolean;
 	follow_redir: boolean;
+	createt_at: string;
 	method: string;
 	req_timeout: number;
 	req_headers: reqHeaderType[];
@@ -175,7 +187,6 @@ export interface monitorHTTPCodeDBType {
 	id: string;
 	account_id: string;
 	monitor_id: string;
-
 	name: string;
 	url: string;
 	ssl_verify: boolean;
