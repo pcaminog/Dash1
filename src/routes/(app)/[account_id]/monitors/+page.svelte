@@ -27,12 +27,11 @@
 	$: {
 		DNSMonitor = data.dns.map((monitor: monitorDNSDBType) => ({
 			...monitor,
-			ips: JSON.parse(monitor.ips)
+			ips: JSON.parse(monitor.ips),
+			receivedIPs: JSON.parse(monitor.checks[0].ips)
 		}));
 	}
-	console.log(data);
-
-
+	$: console.log(DNSMonitor);
 </script>
 
 {#if DNSMonitor.length === 0 && CodeMonitor.length === 0 && StandardHTTPMonitor.length === 0}
@@ -193,9 +192,16 @@
 						<div>
 							<Alert.Title class="text-base truncate">{monitor.name}</Alert.Title>
 
-							<!-- {#each monitor.ips as ip} -->
-								<Alert.Title class={`text-sm text-muted-foreground truncate`}>{monitor.ips}</Alert.Title>
-							<!-- {/each} -->
+							<Alert.Title class={`text-sm text-muted-foreground truncate`}
+								><span class="text-xs font-light">Set IPs:</span>{monitor.ips}</Alert.Title
+							>
+							<Alert.Title
+								class={`${
+									!monitor.checks[0].ok ? 'text-sm text-destructive truncate' : ' text-sm truncate'
+								}`}
+								><span class="text-xs font-light">Received IPs:</span
+								>{monitor.receivedIPs}</Alert.Title
+							>
 						</div>
 
 						{#if monitor.mon_status === 'active'}

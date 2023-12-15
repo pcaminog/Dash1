@@ -61,7 +61,7 @@ export type deleteMonitorType = z.infer<typeof deleteMonitorSchema>;
 
 export const pauseMonitorSchema = z.object({
 	monitor_id: z.string(),
-	status: z.string(),
+	status: z.string()
 });
 export type pauseMonitorType = z.infer<typeof pauseMonitorSchema>;
 
@@ -83,6 +83,12 @@ export const inviteMemberEmailSchema = z.object({
 
 export const accountnameSchema = z.object({
 	account_name: z.string()
+});
+
+export const deleteaccountschema = z.object({
+	account_id: z.string(),
+	reason: z.string(),
+	reason_detail: z.string().optional()
 });
 
 export type settingsnotificationEmailSchemaType = z.infer<typeof settingsnotificationEmailSchema>;
@@ -217,6 +223,7 @@ export interface monitorDNSDBType {
 	checks_down: number;
 	checks_up: number;
 	open_incident: boolean;
+	receivedIPs: string;
 	mon_status: 'active' | 'paused' | 'deleted';
 }
 

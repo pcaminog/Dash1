@@ -250,7 +250,7 @@ import {
 				{/if}
 				<p class="text-xs text-muted-foreground">
 					{#if monitorStats.since}
-						{timeElapsed}
+					since {timeElapsed}
 					{/if}
 				</p>
 			</Card.Content>
@@ -293,7 +293,7 @@ import {
 							<a target="_blank" href={StandardMonitor.url}>{StandardMonitor.url}</a>
 						</Tooltip.Trigger>
 						<Tooltip.Content>
-							<p>{StandardMonitor.url}</p>
+							<p> {StandardMonitor.url}</p>
 						</Tooltip.Content>
 					</Tooltip.Root>
 				</div>

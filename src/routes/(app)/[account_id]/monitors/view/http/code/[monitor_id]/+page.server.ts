@@ -1,7 +1,7 @@
 import { API_URL } from '$env/static/private';
 import type { PageServerLoad } from './$types';
 import { deleteMonitorSchema, pauseMonitorSchema } from '$lib/types';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms/client';
 export const load = (async ({ params }) => {
 	const DeleteMonitorform = superValidate(deleteMonitorSchema);
@@ -27,7 +27,7 @@ export const actions = {
 			return fail(400, { form });
 		}
 		const deleteMonitor = await fetch(
-			`${API_URL}/monitor/http/standard/delete?monitor_id=${form.data.monitor_id}&account_id=${params.account_id}`,
+			`${API_URL}/monitor/http/code/delete?monitor_id=${form.data.monitor_id}&account_id=${params.account_id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -42,7 +42,7 @@ export const actions = {
 			throw error(401, 'Error DB deleting the monitor, try again ');
 		}
 
-		return { form };
+		throw redirect(301, `/${params.account_id}/monitors`);
 	},
 	pausedmonitor: async ({ request, params }) => {
 		const form = await superValidate(request, pauseMonitorSchema);

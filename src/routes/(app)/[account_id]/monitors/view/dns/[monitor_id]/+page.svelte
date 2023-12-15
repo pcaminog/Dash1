@@ -4,19 +4,25 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 	import * as Table from '$lib/components/ui/table';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 
 	import {
-		Trash2,
-		Edit,
-		Pause,
 		AlertOctagon,
 		AlertTriangle,
+		CalendarDays,
 		CandlestickChart,
 		CheckCheck,
 		ChevronsUp,
+		Edit,
 		Fingerprint,
 		Info,
+		Link2,
+		Pause,
+		Pencil,
+		Play,
 		PowerCircle,
+		Timer,
+		Trash2,
 		XOctagon
 	} from 'lucide-svelte';
 	import type { AlertType, monitorDNSDBType } from '$lib/types';
@@ -159,15 +165,52 @@
 				<p class="text-xs text-muted-foreground">Last 24 hours</p>
 			</Card.Content>
 		</Card.Root>
-		<Card.Root class="col-span-4">
+		<Card.Root>
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class=" font-medium mb-3">Uptime</Card.Title>
+				<Card.Title class="text-sm font-medium">Set IPs</Card.Title>
+				<Link2 class="h-4 w-4 text-muted-foreground" />
 			</Card.Header>
 			<Card.Content>
-				<StatusbarDetail monitorData={monitorStats.rawChecks} />
+				<div class="text-xs truncate">
+					<p>{DNSMonitor.ips}</p>
+				</div>
 			</Card.Content>
-			<Card.Footer class="font-medium ">Last 50 checks</Card.Footer>
 		</Card.Root>
+
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Interval</Card.Title>
+				<Timer class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs">
+					{DNSMonitor.interval} minutes
+				</div>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Name</Card.Title>
+				<Pencil class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs">
+					{DNSMonitor.name}
+				</div>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root>
+			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+				<Card.Title class="text-sm font-medium">Created at</Card.Title>
+				<CalendarDays class="h-4 w-4 text-muted-foreground" />
+			</Card.Header>
+			<Card.Content>
+				<div class="text-xs">
+					{DNSMonitor.created_at}
+				</div>
+			</Card.Content>
+		</Card.Root>
+
 		<Card.Root class="col-span-4">
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 				<Card.Title class=" font-medium">Activity check log</Card.Title>

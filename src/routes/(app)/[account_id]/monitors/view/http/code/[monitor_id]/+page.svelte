@@ -256,7 +256,7 @@
 				{/if}
 				<p class="text-xs text-muted-foreground">
 					{#if monitorStats.since}
-						{timeElapsed}
+					since {timeElapsed}
 					{/if}
 				</p>
 			</Card.Content>

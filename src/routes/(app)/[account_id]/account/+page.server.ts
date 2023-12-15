@@ -1,10 +1,11 @@
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
 import {
 	accountnameSchema,
 	deleteMemberEmailSchema,
+	deleteaccountschema,
 	inviteMemberEmailSchema,
 	resendMemberEmailSchema,
 	settingsnotificationEmailSchema
@@ -17,6 +18,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const delmember = superValidate(deleteMemberEmailSchema);
 	const memberres = superValidate(resendMemberEmailSchema);
 	const accountname = superValidate(accountnameSchema);
+	const deleteaccount = superValidate(deleteaccountschema);
 
 	const getMemberReq = await fetch(
 		`${API_URL}/account/members/get?&account_id=${params.account_id}`,
@@ -29,7 +31,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	);
 	const { message: members } = await getMemberReq.json();
 
-	return { invitationemail, members, delmember, memberres, accountname };
+	return { invitationemail, members, delmember, memberres, accountname, deleteaccount };
 };
 
 export const actions = {
@@ -133,5 +135,28 @@ export const actions = {
 		await locals.lucia.deleteUser(form.data.user_id);
 
 		return { form };
+	},
+	deleteaccount: async ({ request, locals, params }) => {
+		const form = await superValidate(request, deleteaccountschema);
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		if (form.data.account_id !== locals.session.user.account_id) {
+			throw redirect(303, `/${locals.session.user.account_id}/account`);
+		}
+
+		await fetch(`${API_URL}/account/close?account_id=${params.account_id}`, {
+			method: 'POST',
+			headers: {
+				Authorization:
+					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			},
+			body: JSON.stringify({
+				reason: form.data.reason,
+				reason_detail: form.data.reason_detail
+			})
+		});
+		throw redirect(303, 'https://www.mon1tor.com');
 	}
 };

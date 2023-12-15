@@ -12,7 +12,11 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-
+	import { page } from '$app/stores';
+	import * as RadioGroup from '$lib/components/ui/radio-group';
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+	let reasonDelete: string;
+	$: console.log(reasonDelete);
 	export let data: PageData;
 	console.log(data);
 	const { enhance: inviteemailenhance } = superForm(data.invitationemail, {
@@ -69,6 +73,23 @@
 	});
 
 	const { enhance: nameenhance } = superForm(data.accountname, {
+		onError({ result }) {
+			toast.error(result.error.message, {
+				style: toast_error_style,
+				position: 'bottom-right'
+			});
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				toast.success('Account Name updated succesully', {
+					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
+					position: 'bottom-right'
+				});
+			}
+		}
+	});
+
+	const { enhance: delaccountenhance } = superForm(data.deleteaccount, {
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
@@ -152,8 +173,9 @@
 										<AlertDialog.Header>
 											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 											<AlertDialog.Description>
-												Removing <span class="underline font-semibold text-black">{email.email}</span> as member will revoke their access to all organization
-												resources and information.
+												Removing <span class="underline font-semibold text-black"
+													>{email.email}</span
+												> as member will revoke their access to all organization resources and information.
 											</AlertDialog.Description>
 										</AlertDialog.Header>
 										<AlertDialog.Footer>
@@ -206,5 +228,73 @@
 				{/each}
 			</Table.Body>
 		</Table.Root>
+	</Card.Content>
+</Card.Root>
+
+<Separator class="my-4" />
+<Card.Root class="ring-2 ring-destructive">
+	<Card.Header>
+		<Card.Title class="text-destructive">Delete Account</Card.Title>
+	</Card.Header>
+	<Card.Content>
+		<AlertDialog.Root>
+			<AlertDialog.Trigger asChild let:builder>
+				<Button builders={[builder]} variant="outline">Delete</Button>
+			</AlertDialog.Trigger>
+			<AlertDialog.Content>
+				<form action="?/deleteaccount" method="POST" use:delaccountenhance>
+					<AlertDialog.Header>
+						<AlertDialog.Title>We are sorry to see you go.😢</AlertDialog.Title>
+						<AlertDialog.Description>
+							Before delete the account please specify the reason you are leaving.
+
+							<RadioGroup.Root bind:value={reasonDelete} class="my-2">
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="noLongerneed" id="noLongerneed" />
+									<Label for="noLongerneed">I no longer need the service.</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="dissatisfied" id="dissatisfied" />
+									<Label for="dissatisfied">I'm dissatisfied with the service.</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="foundalternate" id="foundalternate" />
+									<Label for="foundalternate">I found an alternative service.</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="expensive" id="expensive" />
+									<Label for="expensive">The service is too expensive.</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="privacySecurity" id="privacySecurity" />
+									<Label for="privacySecurity">Concerns about privacy or data security.</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="complicated" id="complicated" />
+									<Label for="complicated">The service is too complicated to use.</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="other" id="other" />
+									<Label for="other">Other (please specify).</Label>
+								</div>
+								{#if reasonDelete === 'dissatisfied' || reasonDelete === 'other' || reasonDelete === 'complicated'}
+									<Textarea name="reason_detail" />
+								{/if}
+							</RadioGroup.Root>
+							<p>
+								This action is irreversible. Once confirmed, all data, settings, monitors, and user
+								accounts will be permanently erased and cannot be recovered.
+							</p>
+						</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+						<input hidden name="reason" value={reasonDelete} />
+						<input hidden name="account_id" value={$page.params.account_id} />
+						<AlertDialog.Action type="submit">Continue</AlertDialog.Action>
+					</AlertDialog.Footer>
+				</form>
+			</AlertDialog.Content>
+		</AlertDialog.Root>
 	</Card.Content>
 </Card.Root>
