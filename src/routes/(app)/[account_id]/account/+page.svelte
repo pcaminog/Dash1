@@ -16,6 +16,7 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	let reasonDelete: string;
+	let open = false;
 	$: console.log(reasonDelete);
 	export let data: PageData;
 	console.log(data);
@@ -89,12 +90,13 @@
 		}
 	});
 
-	const { enhance: delaccountenhance } = superForm(data.deleteaccount, {
+	const { enhance: delaccountenhance, errors: delaccounterrors } = superForm(data.deleteaccount, {
 		onError({ result }) {
 			toast.error(result.error.message, {
 				style: toast_error_style,
 				position: 'bottom-right'
 			});
+			open = true;
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
@@ -105,6 +107,7 @@
 			}
 		}
 	});
+	$: console.log(open);
 </script>
 
 <h2 class="text-xl font-semibold flex flex-row justify-between">Account Name</h2>
@@ -237,7 +240,7 @@
 		<Card.Title class="text-destructive">Delete Account</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<AlertDialog.Root>
+		<AlertDialog.Root bind:open>
 			<AlertDialog.Trigger asChild let:builder>
 				<Button builders={[builder]} variant="outline">Delete</Button>
 			</AlertDialog.Trigger>
@@ -246,12 +249,16 @@
 					<AlertDialog.Header>
 						<AlertDialog.Title>We are sorry to see you go.😢</AlertDialog.Title>
 						<AlertDialog.Description>
-							Before delete the account please specify the reason you are leaving.
+							<p>
+								This action is irreversible. Once confirmed, all data, settings, monitors, and user
+								accounts will be permanently erased and cannot be recovered.
+							</p>
+							Please specify the reason you are leaving.
 
 							<RadioGroup.Root bind:value={reasonDelete} class="my-2">
 								<div class="flex items-center space-x-2">
-									<RadioGroup.Item value="noLongerneed" id="noLongerneed" />
-									<Label for="noLongerneed">I no longer need the service.</Label>
+									<RadioGroup.Item value="nolongerneed" id="nolongerneed" />
+									<Label for="nolongerneed">I no longer need the service.</Label>
 								</div>
 								<div class="flex items-center space-x-2">
 									<RadioGroup.Item value="dissatisfied" id="dissatisfied" />
@@ -266,8 +273,8 @@
 									<Label for="expensive">The service is too expensive.</Label>
 								</div>
 								<div class="flex items-center space-x-2">
-									<RadioGroup.Item value="privacySecurity" id="privacySecurity" />
-									<Label for="privacySecurity">Concerns about privacy or data security.</Label>
+									<RadioGroup.Item value="privacysecurity" id="privacysecurity" />
+									<Label for="privacysecurity">Concerns about privacy or data security.</Label>
 								</div>
 								<div class="flex items-center space-x-2">
 									<RadioGroup.Item value="complicated" id="complicated" />
@@ -277,14 +284,20 @@
 									<RadioGroup.Item value="other" id="other" />
 									<Label for="other">Other (please specify).</Label>
 								</div>
-								{#if reasonDelete === 'dissatisfied' || reasonDelete === 'other' || reasonDelete === 'complicated'}
-									<Textarea name="reason_detail" />
-								{/if}
 							</RadioGroup.Root>
-							<p>
-								This action is irreversible. Once confirmed, all data, settings, monitors, and user
-								accounts will be permanently erased and cannot be recovered.
-							</p>
+							<span id="name-error" aria-live="assertive" class=" text-destructive text-sm">
+								{#if $delaccounterrors.reason}
+									{$delaccounterrors.reason}
+								{/if}
+							</span>
+							{#if reasonDelete === 'dissatisfied' || reasonDelete === 'other' || reasonDelete === 'complicated'}
+								<Textarea name="reason_detail" />
+								<span id="name-error" aria-live="assertive" class=" text-destructive text-sm">
+									{#if $delaccounterrors.reason_detail}
+										{$delaccounterrors.reason_detail}
+									{/if}
+								</span>
+							{/if}
 						</AlertDialog.Description>
 					</AlertDialog.Header>
 					<AlertDialog.Footer>

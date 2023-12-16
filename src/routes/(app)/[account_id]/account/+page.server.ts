@@ -138,8 +138,9 @@ export const actions = {
 	},
 	deleteaccount: async ({ request, locals, params }) => {
 		const form = await superValidate(request, deleteaccountschema);
+		console.log(form);
 		if (!form.valid) {
-			return fail(400, { form });
+			throw error(400, 'Please select a option');
 		}
 
 		if (form.data.account_id !== locals.session.user.account_id) {

@@ -18,6 +18,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import StatusbarHttpStandard from '$lib/components/statusbarHTTPStandard.svelte';
+	import StatusbarHttpCode from '$lib/components/statusbarHTTPCode.svelte';
 	export let data: PageData;
 	let CodeMonitor: monitorHTTPCodeDBType[] = [];
 	$: CodeMonitor = data.code;
@@ -31,7 +32,6 @@
 			receivedIPs: JSON.parse(monitor.checks[0].ips)
 		}));
 	}
-	$: console.log(DNSMonitor);
 </script>
 
 {#if DNSMonitor.length === 0 && CodeMonitor.length === 0 && StandardHTTPMonitor.length === 0}
@@ -140,6 +140,12 @@
 							<Alert.Title class="font-light text-sm hover:underline truncate"
 								><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
 							>
+							<Alert.Title class="font-light text-xs  truncate"
+								>Expected: {monitor.status_code}</Alert.Title
+							>
+							<Alert.Title class="font-light text-xs truncate"
+								>Received: {monitor.checks[0].status}</Alert.Title
+							>
 						</div>
 
 						{#if monitor.mon_status === 'active'}
@@ -162,7 +168,7 @@
 							</Tooltip.Root>
 						</div>
 					</div>
-					<StatusbarHttpStandard monitorData={monitor.checks} />
+					<StatusbarHttpCode expectedStatus={monitor.status_code} monitorData={monitor.checks} />
 				</Alert.Root>
 			</button>
 		{/each}

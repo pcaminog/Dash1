@@ -38,6 +38,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import toast from 'svelte-french-toast';
 	import { toast_error_style } from '$lib/utils';
+	import StatusbarHttpCodeDetail from '$lib/components/statusbarHTTPCodeDetail.svelte';
 	let chart: ApexCharts | undefined; // Define chart variable in the outer scope
 	let container: HTMLElement;
 	let transformedRawChecks: string[][] = [];
@@ -123,7 +124,7 @@
 	let timeElapsed: string;
 
 	$: if (monitorStats.since) {
-		timeElapsed = formatDistanceToNow(monitorStats.since * 1000,  { addSuffix: true });
+		timeElapsed = formatDistanceToNow(monitorStats.since * 1000, { addSuffix: true });
 	}
 	$: console.log(monitorStats.since);
 
@@ -221,6 +222,7 @@
 		}
 	});
 </script>
+
 <BackButton />
 <div class="grid grid-cols-6 gap-4">
 	<div class=" col-span-4 grid grid-cols-4 h-fit gap-4">
@@ -256,7 +258,7 @@
 				{/if}
 				<p class="text-xs text-muted-foreground">
 					{#if monitorStats.since}
-					since {timeElapsed}
+						since {timeElapsed}
 					{/if}
 				</p>
 			</Card.Content>
@@ -296,7 +298,7 @@
 				<div class="text-xs truncate">
 					<Tooltip.Root>
 						<Tooltip.Trigger>
-							<a target="_blank" href={codeMonitor.url}>{codeMonitor.url}</a>
+							<a target="_blank" class='truncate' href={codeMonitor.url}>{codeMonitor.url}</a>
 						</Tooltip.Trigger>
 						<Tooltip.Content>
 							<p>{codeMonitor.url}</p>
@@ -323,7 +325,7 @@
 				<Pencil class="h-4 w-4 text-muted-foreground" />
 			</Card.Header>
 			<Card.Content>
-				<div class="text-xs">
+				<div class="text-xs truncate">
 					{codeMonitor.name}
 				</div>
 			</Card.Content>
@@ -345,7 +347,10 @@
 				<Card.Title class=" font-medium mb-3">Uptime</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<StatusbarDetailHttpStandard monitorData={monitorStats.rawChecks} />
+				<StatusbarHttpCodeDetail
+					expectedStatus={codeMonitor.status_code}
+					monitorData={monitorStats.rawChecks}
+				/>
 			</Card.Content>
 			<Card.Footer class="font-medium ">Last 50 checks</Card.Footer>
 		</Card.Root>
@@ -382,10 +387,10 @@
 								<Table.Cell>{check.status}</Table.Cell>
 								<Table.Cell>{check.timing} ms</Table.Cell>
 								<Table.Cell>
-									{#if check.status >= 200 && check.status <= 299}
+									{#if check.status === codeMonitor.status_code}
 										<Badge class="w-fit mx-auto h-6 bg-green-600 hover:bg-green-800 ">Healthy</Badge
 										>
-									{:else if check.status < 200 || check.status > 299}
+									{:else if check.status !== codeMonitor.status_code}
 										<Badge class="w-fit mx-auto h-6 bg-destructive ">Critical</Badge>
 									{:else}
 										<Badge class="w-fit mx-auto h-6 bg-blue ">Pending</Badge>

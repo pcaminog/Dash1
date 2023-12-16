@@ -1,5 +1,5 @@
 <script lang="ts">
-import {
+	import {
 		AlertOctagon,
 		AlertTriangle,
 		CalendarDays,
@@ -250,7 +250,7 @@ import {
 				{/if}
 				<p class="text-xs text-muted-foreground">
 					{#if monitorStats.since}
-					since {timeElapsed}
+						since {timeElapsed}
 					{/if}
 				</p>
 			</Card.Content>
@@ -293,7 +293,7 @@ import {
 							<a target="_blank" href={StandardMonitor.url}>{StandardMonitor.url}</a>
 						</Tooltip.Trigger>
 						<Tooltip.Content>
-							<p> {StandardMonitor.url}</p>
+							<p>{StandardMonitor.url}</p>
 						</Tooltip.Content>
 					</Tooltip.Root>
 				</div>
@@ -440,10 +440,12 @@ import {
 									</li>
 									<li>
 										<div class="relative pb-8">
-											<span
-												class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
-												aria-hidden="true"
-											/>
+											{#if alert.state !== 'opened' && alert.state !== 'closed'}
+												<span
+													class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+													aria-hidden="true"
+												/>
+											{/if}
 											<div class="relative flex space-x-3">
 												<div>
 													<Info class=" h-8 w-8 ring-8 ring-white bg-white " />
@@ -457,10 +459,7 @@ import {
 														<p class="text-sm leading-6 text-gray-500">
 															{#if alert.error_detail_opened}
 																<p class="text-xs text-muted-foreground">
-																	Added IPs: {alert.error_detail_opened.addedIPs.join(', ')}
-																</p>
-																<p class="text-xs text-muted-foreground">
-																	Removed IPs: {alert.error_detail_opened.removedIPs.join(', ')}
+																	HTTP Status: {alert.error_detail_opened}
 																</p>
 															{/if}
 														</p>

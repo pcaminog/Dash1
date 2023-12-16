@@ -87,7 +87,21 @@ export const accountnameSchema = z.object({
 
 export const deleteaccountschema = z.object({
 	account_id: z.string(),
-	reason: z.string(),
+	reason: z.enum(
+		[
+			'nolongerneed',
+			'dissatisfied',
+			'foundalternate',
+			'expensive',
+			'privacysecurity',
+			'complicated',
+			'other'
+		],
+		{
+			errorMap: (issue, ctx) => ({ message: 'Please select an option' })
+		}
+	),
+
 	reason_detail: z.string().optional()
 });
 

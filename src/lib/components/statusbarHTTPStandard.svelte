@@ -31,7 +31,7 @@
 						<Tooltip.Content >
 							<p>{new Date(monitorData[i].last_checked).toLocaleString()}</p>
 							<p>HTTP Response Code:{monitorData[i].status}</p>
-						</Tooltip.Content>.
+						</Tooltip.Content>
 					</Tooltip.Root>
 				{:else}
 					<div

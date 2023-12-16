@@ -26,13 +26,21 @@
 				accept: 'application/dns-json'
 			}
 		});
+
 		const { Answer, Status } = await (getDNS.json() as Promise<DNSResponse>);
 		if (Status === 0) {
-			Answer.forEach((data: { data: string }) => {
-				if (data.type === 1) {
-					IPs_client.update((value) => [...value, data.data]);
-				}
-			});
+			if (Answer) {
+				Answer.forEach((data: { data: string }) => {
+					if (data.type === 1) {
+						IPs_client.update((value) => [...value, data.data]);
+					}
+				});
+			} else {
+				toast.error(`Hostname Not Found: ${hostname} cannot be resolved to an IP address.`, {
+					style: toast_error_style,
+					position: 'bottom-right'
+				});
+			}
 		} else {
 			IPs_error = Status;
 		}
@@ -64,7 +72,7 @@
 
 <Sheet.Root bind:open>
 	<Sheet.Trigger asChild let:builder>
-		<Button variant='ghost'  class="w-fit items-start" builders={[builder]}
+		<Button variant="ghost" class="w-fit items-start" builders={[builder]}
 			><PlusCircle class=" h-4 w-4  my-auto" /></Button
 		>
 	</Sheet.Trigger>
