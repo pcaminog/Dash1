@@ -2,6 +2,7 @@
 	import {
 		AlertOctagon,
 		AlertTriangle,
+		ArrowDown,
 		CalendarDays,
 		CandlestickChart,
 		CheckCheck,
@@ -22,7 +23,6 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { QuestionMarkCircled } from 'radix-icons-svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
-	import StatusbarDetailHttpStandard from '$lib/components/statusbarDetailHTTPStandard.svelte';
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import * as Accordion from '$lib/components/ui/accordion';
@@ -37,10 +37,13 @@
 	import toast from 'svelte-french-toast';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { formatDistanceToNow } from 'date-fns';
+	import FormStandardMonitorEdit from '$lib/components/formStandardMonitorEdit.svelte';
 
+	let headers = [{ name: '', value: '' }];
+	let auth = { name: '', value: '' };
 	let chart: ApexCharts | undefined; // Define chart variable in the outer scope
 	let container: HTMLElement;
-	let transformedRawChecks: string[][] = [];
+	let transformedRawChecks: number[][] = [];
 	$: if (monitorStats && monitorStats.rawChecks) {
 		if (monitorStats.rawChecks.length > 0) {
 			transformedRawChecks = monitorStats.rawChecks.map((check) => [
@@ -121,28 +124,31 @@
 
 	let StandardMonitor: monitorHTTPStandardDBType;
 	$: StandardMonitor = data.monStandard.monitor[0];
-	let groupedAlerts = data.monStandard.statistics.alerts.reduce((acc, alert) => {
-		if (!acc[alert.alert_id]) {
-			acc[alert.alert_id] = [];
-		}
-
-		if (alert.error_detail && typeof alert.error_detail === 'string') {
-			try {
-				const parsed = JSON.parse(alert.error_detail);
-				if (parsed && typeof parsed === 'object') {
-					alert.error_detail = parsed;
-				}
-			} catch (e) {
-				console.error('Error parsing JSON for alert:', alert.alert_id);
+	let groupedAlerts = data.monStandard.statistics.alerts.reduce(
+		(acc: Record<string, any[]>, alert: AlertType) => {
+			if (!acc[alert.alert_id]) {
+				acc[alert.alert_id] = [];
 			}
-		}
-		acc[alert.alert_id].push(alert);
-		acc[alert.alert_id].sort(
-			(a: { created_at: string }, b: { created_at: string }) =>
-				new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-		);
-		return acc;
-	}, {});
+
+			if (alert.error_detail && typeof alert.error_detail === 'string') {
+				try {
+					const parsed = JSON.parse(alert.error_detail);
+					if (parsed && typeof parsed === 'object') {
+						alert.error_detail = parsed;
+					}
+				} catch (e) {
+					console.error('Error parsing JSON for alert:', alert.alert_id);
+				}
+			}
+			acc[alert.alert_id].push(alert);
+			acc[alert.alert_id].sort(
+				(a: { created_at: string }, b: { created_at: string }) =>
+					new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+			);
+			return acc;
+		},
+		{}
+	);
 
 	let rawChecksObject = {};
 	let isLoading = true;
@@ -150,6 +156,7 @@
 	$: if (monitorStats && monitorStats.rawChecks) {
 		if (monitorStats.rawChecks.length > 0) {
 			rawChecksObject = monitorStats.rawChecks.reduce((acc, check) => {
+				//@ts-expect-error
 				acc[new Date(check.last_checked).toLocaleString()] = check.timing;
 				return acc;
 			}, {});
@@ -193,7 +200,7 @@
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
-				toast.success(delMessage, {
+				toast.success(form.message, {
 					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
 					position: 'bottom-right'
 				});
@@ -217,7 +224,7 @@
 			}
 		}
 	});
-</script>
+	</script>
 
 <BackButton />
 <div class="grid grid-cols-6 gap-4">
@@ -653,6 +660,14 @@
 						{/if}
 					{/each}
 				</Accordion.Root>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root class="my-4"
+			><Card.Header>
+				<Card.Title>Monitor Settings</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<FormStandardMonitorEdit {StandardMonitor} StandartForm={data.editMonitorform} />
 			</Card.Content>
 		</Card.Root>
 		<Card.Root class="my-4"

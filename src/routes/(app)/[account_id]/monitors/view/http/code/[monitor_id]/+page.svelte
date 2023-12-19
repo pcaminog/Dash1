@@ -23,14 +23,12 @@
 	import { QuestionMarkCircled } from 'radix-icons-svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import BackButton from '$lib/components/BackButton.svelte';
-	import StatusbarDetailHttpStandard from '$lib/components/statusbarDetailHTTPStandard.svelte';
-	import type { ActionData, PageData } from './$types';
+	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { formatDistanceToNow } from 'date-fns';
-
 	import { onMount } from 'svelte';
 	import * as Table from '$lib/components/ui/table';
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -39,6 +37,7 @@
 	import toast from 'svelte-french-toast';
 	import { toast_error_style } from '$lib/utils';
 	import StatusbarHttpCodeDetail from '$lib/components/statusbarHTTPCodeDetail.svelte';
+	import FormCodeMonitorEdit from '$lib/components/formCodeMonitorEdit.svelte';
 	let chart: ApexCharts | undefined; // Define chart variable in the outer scope
 	let container: HTMLElement;
 	let transformedRawChecks: string[][] = [];
@@ -197,7 +196,7 @@
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
-				toast.success(delMessage, {
+				toast.success(form.message, {
 					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
 					position: 'bottom-right'
 				});
@@ -298,7 +297,7 @@
 				<div class="text-xs truncate">
 					<Tooltip.Root>
 						<Tooltip.Trigger>
-							<a target="_blank" class='truncate' href={codeMonitor.url}>{codeMonitor.url}</a>
+							<a target="_blank" class="truncate" href={codeMonitor.url}>{codeMonitor.url}</a>
 						</Tooltip.Trigger>
 						<Tooltip.Content>
 							<p>{codeMonitor.url}</p>
@@ -344,7 +343,7 @@
 
 		<Card.Root class="col-span-4 overflow-hidden">
 			<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<Card.Title class=" font-medium mb-3">Uptime</Card.Title>
+				<Card.Title class=" font-medium mb-3">Monitor Settings</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				<StatusbarHttpCodeDetail
@@ -675,6 +674,14 @@
 						{/if}
 					{/each}
 				</Accordion.Root>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root class="my-4"
+			><Card.Header>
+				<Card.Title>Monitor Actions</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<FormCodeMonitorEdit CodeMonitor={codeMonitor} CodeForm={data.editMonitorform} />
 			</Card.Content>
 		</Card.Root>
 		<Card.Root class="my-4"

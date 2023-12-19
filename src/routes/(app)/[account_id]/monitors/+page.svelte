@@ -84,6 +84,9 @@
 							<Alert.Title class="font-light text-sm hover:underline truncate"
 								><a target="_blank" href={monitor.url}>{monitor.url}</a></Alert.Title
 							>
+							<Alert.Title class="font-light text-xs truncate"
+								>Received: {monitor.checks[0]?.status}</Alert.Title
+							>
 						</div>
 
 						{#if monitor.mon_status === 'active'}
@@ -144,7 +147,7 @@
 								>Expected: {monitor.status_code}</Alert.Title
 							>
 							<Alert.Title class="font-light text-xs truncate"
-								>Received: {monitor.checks[0].status}</Alert.Title
+								>Received: {monitor.checks[0]?.status}</Alert.Title
 							>
 						</div>
 
@@ -199,14 +202,15 @@
 							<Alert.Title class="text-base truncate">{monitor.name}</Alert.Title>
 
 							<Alert.Title class={`text-sm text-muted-foreground truncate`}
-								><span class="text-xs font-light">Set IPs:</span>{monitor.ips}</Alert.Title
+								><span class="text-xs font-light">Expected IPs:</span>{monitor.ips}</Alert.Title
 							>
-							<Alert.Title
-								class={`${
-									!monitor.checks[0].ok ? 'text-sm text-destructive truncate' : ' text-sm truncate'
-								}`}
-								><span class="text-xs font-light">Received IPs:</span
-								>{monitor.receivedIPs}</Alert.Title
+							<Alert.Title class={`text-sm text-muted-foreground truncate`}
+								><span class="text-xs text-muted-foreground font-light">Received IPs: </span>
+								{#if monitor.receivedIPs === ''}
+									{monitor.receivedIPs}
+								{:else}
+									No IPs
+								{/if}</Alert.Title
 							>
 						</div>
 

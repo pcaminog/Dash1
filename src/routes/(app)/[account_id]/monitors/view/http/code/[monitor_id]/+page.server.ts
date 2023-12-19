@@ -1,11 +1,13 @@
 import { API_URL } from '$env/static/private';
 import type { PageServerLoad } from './$types';
-import { deleteMonitorSchema, pauseMonitorSchema } from '$lib/types';
+import { deleteMonitorSchema, editMonitorCodeSchema, pauseMonitorSchema } from '$lib/types';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms/client';
 export const load = (async ({ params }) => {
 	const DeleteMonitorform = superValidate(deleteMonitorSchema);
 	const PausedMonitorform = superValidate(pauseMonitorSchema);
+	const editMonitorform = superValidate(editMonitorCodeSchema);
+
 	const monCodeReq = await fetch(
 		`${API_URL}/monitor/http/code/get/details?account_id=${params.account_id}&monitor_id=${params.monitor_id}`,
 		{
@@ -17,7 +19,7 @@ export const load = (async ({ params }) => {
 	);
 
 	const { message: monCode } = await monCodeReq.json();
-	return { monCode, DeleteMonitorform, PausedMonitorform };
+	return { monCode, DeleteMonitorform, PausedMonitorform, editMonitorform };
 }) satisfies PageServerLoad;
 
 export const actions = {

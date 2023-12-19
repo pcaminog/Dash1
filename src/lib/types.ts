@@ -65,6 +65,48 @@ export const pauseMonitorSchema = z.object({
 });
 export type pauseMonitorType = z.infer<typeof pauseMonitorSchema>;
 
+export const editMonitorStandardSchema = z.object({
+	name: z
+		.string()
+		.min(1, { message: 'Name is required' })
+		.max(50, { message: 'Name cannot have more than 50 characteres' }),
+	ssl_verify: z.string().optional(),
+	url: z.string().url({ message: 'URL is required.' }),
+	method: z.string().min(1, { message: 'Method is required.' }),
+	interval: z.string().min(1, { message: 'Interval is required.' }),
+	follow_redir: z.string().optional(),
+	req_timeout: z.string().min(1, { message: 'Please select a timeout' }),
+	req_headers: z.string().optional(),
+	authentication: z.string().optional(),
+	checks_up: z.number().min(1, { message: 'Please select a number of checks' }),
+	checks_down: z.number().min(1, { message: 'Please select a number of checks' }),
+
+});
+
+export type editMonitorStandardType = z.infer<typeof editMonitorStandardSchema>;
+
+export const editMonitorCodeSchema = z.object({
+	name: z
+		.string()
+		.min(1, { message: 'Name is required' })
+		.max(50, { message: 'Name cannot have more than 50 characteres' }),
+	ssl_verify: z.string().optional(),
+	url: z.string().url({ message: 'URL is required.' }),
+	method: z.string().min(1, { message: 'Method is required.' }),
+	interval: z.string().min(1, { message: 'Interval is required.' }),
+	follow_redir: z.string().optional(),
+	req_timeout: z.string().min(1, { message: 'Please select a timeout' }),
+	req_headers: z.string().optional(),
+	authentication: z.string().optional(),
+	checks_up: z.number().min(1, { message: 'Please select a number of checks' }),
+	checks_down: z.number().min(1, { message: 'Please select a number of checks' }),
+	status_code: z
+	.number()
+	.min(100, { message: 'Status code must be greater than 100' })
+	.max(599, { message: 'Status code must be smaller than 600' })
+});
+
+export type editMonitorCodeType = z.infer<typeof editMonitorCodeSchema>;
 export const settingsnotificationEmailSchema = z.object({
 	email: z.string().email()
 });
@@ -185,6 +227,7 @@ export interface monitorHTTPStandardDBType {
 	id: string;
 	account_id: string;
 	monitor_id: string;
+	created_at: Date;
 	name: string;
 	url: string;
 	ssl_verify: boolean;
@@ -272,6 +315,10 @@ export type AlertType = {
 	isopened_time: string;
 	alert_id: string;
 	state: string;
+	error_detail?: {
+		addedIPs: string[];
+		removedIPs: string[];
+	};
 	error_detail_opened?: {
 		addedIPs: string[];
 		removedIPs: string[];
