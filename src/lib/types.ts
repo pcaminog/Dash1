@@ -79,8 +79,7 @@ export const editMonitorStandardSchema = z.object({
 	req_headers: z.string().optional(),
 	authentication: z.string().optional(),
 	checks_up: z.number().min(1, { message: 'Please select a number of checks' }),
-	checks_down: z.number().min(1, { message: 'Please select a number of checks' }),
-
+	checks_down: z.number().min(1, { message: 'Please select a number of checks' })
 });
 
 export type editMonitorStandardType = z.infer<typeof editMonitorStandardSchema>;
@@ -101,14 +100,25 @@ export const editMonitorCodeSchema = z.object({
 	checks_up: z.number().min(1, { message: 'Please select a number of checks' }),
 	checks_down: z.number().min(1, { message: 'Please select a number of checks' }),
 	status_code: z
-	.number()
-	.min(100, { message: 'Status code must be greater than 100' })
-	.max(599, { message: 'Status code must be smaller than 600' })
+		.number()
+		.min(100, { message: 'Status code must be greater than 100' })
+		.max(599, { message: 'Status code must be smaller than 600' })
 });
 
 export type editMonitorCodeType = z.infer<typeof editMonitorCodeSchema>;
 export const settingsnotificationEmailSchema = z.object({
 	email: z.string().email()
+});
+
+export const createwebhookSchema = z.object({
+	url: z.string().url()
+});
+export const validatewebhookSchema = z.object({
+	webhook_id: z.string()
+});
+
+export const deletewebhookSchema = z.object({
+	webhook_id: z.string()
 });
 
 export const deleteMemberEmailSchema = z.object({

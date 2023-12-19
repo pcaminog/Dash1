@@ -234,7 +234,7 @@
 	</Card.Content>
 </Card.Root>
 
-<Separator class="my-4" />
+
 <Card.Root class="ring-2 ring-destructive">
 	<Card.Header>
 		<Card.Title class="text-destructive">Delete Account</Card.Title>
