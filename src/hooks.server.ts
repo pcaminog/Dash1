@@ -46,7 +46,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					!event.url.pathname.startsWith('/login') &&
 					!event.url.pathname.startsWith('/members/validate') &&
 					!event.url.pathname.startsWith('/notifications/validate') &&
-					!event.url.pathname.startsWith('/integrations/slack')
+					!event.url.pathname.startsWith('/integration/slack')
 				) {
 					return new Response(null, {
 						status: 307,
