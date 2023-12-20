@@ -36,7 +36,7 @@ export const GET = async ({ url }) => {
 							'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
 					},
 					body: JSON.stringify({
-						slackRes
+						...slackRes
 					})
 				}
 			);
