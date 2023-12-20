@@ -279,7 +279,7 @@
 
 							<Table.Cell class="text-right">
 								<form action="?/deletewebhook" method="POST" use:delwebenhance>
-									<input hidden name="email" value={web.webhook_id} />
+									<input hidden name="webhook_id" value={web.webhook_id} />
 									<Button type="submit" variant="outline"
 										><Trash2 class="h-4 text-destructive" /></Button
 									>
@@ -331,7 +331,6 @@
 	<div class=" flex"><Blocks class="my-auto mr-2" />Integrations</div>
 </h2>
 <h4 class="text-xs text-muted-foreground">Integrate with your instant message service</h4>
-
 <Card.Root class="my-2">
 	<Card.Header />
 	<Card.Content class="grid grid-cols-1 md:grid-cols-3 gap-4">

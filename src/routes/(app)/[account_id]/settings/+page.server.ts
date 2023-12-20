@@ -187,13 +187,13 @@ export const actions = {
 		return { form };
 	},
 	deletewebhook: async ({ request, params }) => {
-		const form = await superValidate(request, settingsnotificationEmailSchema);
+		const form = await superValidate(request, deletewebhookSchema);
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 		const addEmail = await fetch(
-			`${API_URL}/account/settings/emails/delete?email=${form.data.email}&account_id=${params.account_id}`,
+			`${API_URL}/account/settings/emails/delete?email=${form.data.webhook_id}&account_id=${params.account_id}`,
 			{
 				method: 'DELETE',
 				headers: {
