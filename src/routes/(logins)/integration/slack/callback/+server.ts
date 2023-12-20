@@ -45,7 +45,12 @@ export const GET = async ({ url }) => {
 					status: 400
 				});
 			}
-			throw redirect(303, `${API_URL}/${state}/settings`);
+			return new Response(null, {
+				status: 302,
+				headers: {
+					Location: `https://app.mon1tor.com/${state}/settings`
+				}
+			});
 		}
 	} catch (e) {
 		if (e instanceof OAuthRequestError) {
@@ -54,7 +59,7 @@ export const GET = async ({ url }) => {
 				status: 400
 			});
 		}
-		return new Response(null, {
+		return new Response(JSON.stringify(e), {
 			status: 500
 		});
 	}

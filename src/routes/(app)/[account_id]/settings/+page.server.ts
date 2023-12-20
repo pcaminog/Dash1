@@ -40,11 +40,23 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	);
 	const { message: Webhooks } = await getWebhookReq.json();
 
+	const getIntegrations = await fetch(
+		`${API_URL}/account/settings/integrations?&account_id=${params.account_id}`,
+		{
+			headers: {
+				Authorization:
+					'Bearer ZGVf1sBBw46sB9l8L0BaEJhJUFT0jY9fm7ztodhgDE3kF3DUyKqK1zgoXBmzXrl1lLYpm059htoWSqYp'
+			}
+		}
+	);
+	const { message: integrations } = await getIntegrations.json();
+
 	return {
 		session,
 		email,
 		Notiemails,
 		Webhooks,
+		integrations,
 		emailres,
 		emaildel,
 		createwebhooks,
