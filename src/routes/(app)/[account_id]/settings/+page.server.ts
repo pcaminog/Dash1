@@ -193,7 +193,7 @@ export const actions = {
 			return fail(400, { form });
 		}
 		const addEmail = await fetch(
-			`${API_URL}/account/settings/emails/delete?email=${form.data.webhook_id}&account_id=${params.account_id}`,
+			`${API_URL}/account/settings/webhooks?webhook_id=${form.data.webhook_id}&account_id=${params.account_id}`,
 			{
 				method: 'DELETE',
 				headers: {

@@ -80,7 +80,7 @@
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
-				toast.success('Validation email send succesully', {
+				toast.success('Webhook created succesfully', {
 					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
 					position: 'bottom-right'
 				});
@@ -117,7 +117,7 @@
 		},
 		onUpdated({ form }) {
 			if (form.valid) {
-				toast.success('Validation email send succesully', {
+				toast.success('Webhook deleted succefully', {
 					style: 'border: 1px solid #000000; padding: 16px; color: #000000;',
 					position: 'bottom-right'
 				});
@@ -192,7 +192,7 @@
 		</Table.Root>
 	</Card.Content>
 </Card.Root>
-<h2 class="text-xl font-semibold flex flex-row justify-between  mt-10">
+<h2 class="text-xl font-semibold flex flex-row justify-between mt-10">
 	<div class=" flex"><Webhook class="my-auto mr-2" />Webhooks Endpoints</div>
 </h2>
 <h4 class="text-xs text-muted-foreground">Add a webhook enpoint to be notified</h4>
