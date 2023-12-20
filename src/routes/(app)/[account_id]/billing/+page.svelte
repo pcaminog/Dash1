@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	let isAnnual = false;
@@ -12,11 +13,11 @@
 		<div class="mx-auto max-w-7xl px-6 lg:px-8">
 			<div class="relative z-10">
 				<h2 class="mx-auto max-w-4xl text-center text-5xl font-bold tracking-tight">
-					Simple pricing, no commitment
+					Straightforward Pricing for Web Asset Monitoring
 				</h2>
 				<p class="mx-auto mt-4 max-w-2xl text-center text-lg leading-8">
-					Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit numquam eligendi quos odit
-					doloribus molestiae voluptatum quos odit doloribus.
+					Our specialized services ensure your web assets are meticulously monitored, providing you
+					with peace of mind and reliability without the hassle of long-term commitments.
 				</p>
 				<div class="mt-16 flex justify-center">
 					<fieldset
@@ -624,7 +625,95 @@
 											<div
 												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
 											>
-												<dt class="pr-4 text-gray-600">Mobile and web access</dt>
+												<dt class="pr-4 text-gray-600">Monitors</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<span class="text-gray-900">5</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Slack</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Google Chat</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Microsoft Teams</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Webhooks</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Single Sign-On</dt>
 												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
 													<svg
 														class="mx-auto h-5 w-5 text-gray-400"
@@ -737,12 +826,22 @@
 												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
 											>
 												<dt class="pr-4 text-gray-600">Users</dt>
-												<span class="text-gray-900">5</span>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<span class="text-gray-900">5</span>
+												</dd>
 											</div>
 											<div
 												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
 											>
-												<dt class="pr-4 text-gray-600">Mobile and web access</dt>
+												<dt class="pr-4 text-gray-600">Monitors</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<span class="text-gray-900">20</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Slack</dt>
 												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
 													<svg
 														class="mx-auto h-5 w-5 text-blue"
@@ -757,6 +856,84 @@
 														/>
 													</svg>
 													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Google Chat</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Microsoft Teams</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Webhooks</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Single Sign-On</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-gray-400"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+														/>
+													</svg>
+													<span class="sr-only">No</span>
 												</dd>
 											</div>
 										</dl>
@@ -774,9 +951,7 @@
 					<div class="border-t border-gray-900/10">
 						<div class="-mt-px w-72 border-t-2 pt-10 md:w-80 border-transparent">
 							<h3 class="text-sm font-semibold leading-6 text-gray-900">Pro</h3>
-							<p class="mt-1 text-sm leading-6 text-gray-600">
-								Best for enterprise companies
-							</p>
+							<p class="mt-1 text-sm leading-6 text-gray-600">Best for enterprise companies</p>
 						</div>
 
 						<div class="mt-10 space-y-10">
@@ -835,23 +1010,7 @@
 											<div
 												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
 											>
-												<dt class="pr-4 text-gray-600">Multi-accounts</dt>
-												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
-													<span class="text-gray-900">7 accounts</span>
-												</dd>
-											</div>
-											<div
-												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
-											>
-												<dt class="pr-4 text-gray-600">Invoicing</dt>
-												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
-													<span class="text-gray-900">10 invoices</span>
-												</dd>
-											</div>
-											<div
-												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
-											>
-												<dt class="pr-4 text-gray-600">1 minute check</dt>
+												<dt class="pr-4 text-gray-600">1 minute checks</dt>
 												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
 													<svg
 														class="mx-auto h-5 w-5 text-blue"
@@ -872,24 +1031,138 @@
 												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
 											>
 												<dt class="pr-4 text-gray-600">Users</dt>
-												<span class="text-gray-900">Unlimited</span>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<span class="text-gray-900">Unlimited</span>
+												</dd>
 											</div>
 											<div
 												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
 											>
-												<dt class="pr-4 text-gray-600">Mobile and web access</dt>
+												<dt class="pr-4 text-gray-600">Monitors</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<span class="text-gray-900">50</span>
+												</dd>
+											</div>
+
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">1 minute check</dt>
 												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
 													<svg
-														class="mx-auto h-5 w-5 text-gray-400"
+														class="mx-auto h-5 w-5 text-blue"
 														viewBox="0 0 20 20"
 														fill="currentColor"
 														aria-hidden="true"
 													>
 														<path
-															d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
 														/>
 													</svg>
-													<span class="sr-only">No</span>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Slack</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Google Chat</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Microsoft Teams</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Webhooks</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
+												</dd>
+											</div>
+											<div
+												class="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
+											>
+												<dt class="pr-4 text-gray-600">Single Sign-On</dt>
+												<dd class="flex items-center justify-end sm:justify-center sm:px-4">
+													<svg
+														class="mx-auto h-5 w-5 text-blue"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														aria-hidden="true"
+													>
+														<path
+															fill-rule="evenodd"
+															d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+															clip-rule="evenodd"
+														/>
+													</svg>
+													<span class="sr-only">Yes</span>
 												</dd>
 											</div>
 										</dl>
@@ -913,27 +1186,39 @@
 
 				<div class="grid grid-cols-4 gap-x-8 border-t border-gray-900/10 before:block">
 					<div aria-hidden="true" class="-mt-px">
-						<div class="border-t-2 pt-10 border-transparent">
-							<p class="text-sm font-semibold leading-6 text-gray-900">Free</p>
-							<p class="mt-1 text-sm leading-6 text-gray-600">
-								Basic monitoring free forever
+						<div
+							class={` border-t-2 pt-10 ${info === 'free' ? ' border-blue' : 'border-transparent'}`}
+						>
+							<p class={` text-sm font-semibold leading-6 ${info === 'free' ? 'text-blue' : ''}`}>
+								Free
 							</p>
+							<p class="mt-1 text-sm leading-6 text-gray-600">Basic monitoring free forever</p>
 						</div>
 					</div>
 					<div aria-hidden="true" class="-mt-px">
-						<div class="border-t-2 pt-10 border-blue">
-							<p class="text-sm font-semibold leading-6 text-blue">Starter</p>
+						<div
+							class={` border-t-2 pt-10 ${
+								info === 'starter' ? ' border-blue' : 'border-transparent'
+							}`}
+						>
+							<p
+								class={` text-sm font-semibold leading-6 ${info === 'starter' ? 'text-blue' : ''}`}
+							>
+								Starter
+							</p>
 							<p class="mt-1 text-sm leading-6 text-gray-600">
 								Best for professional teams that needs advanced monitoring
 							</p>
 						</div>
 					</div>
 					<div aria-hidden="true" class="-mt-px">
-						<div class="border-t-2 pt-10 border-transparent">
-							<p class="text-sm font-semibold leading-6 text-gray-900">Pro</p>
-							<p class="mt-1 text-sm leading-6 text-gray-600">
-								Best for enterprise companies
+						<div
+							class={` border-t-2 pt-10 ${info === 'pro' ? ' border-blue' : 'border-transparent'}`}
+						>
+							<p class={` text-sm font-semibold leading-6 ${info === 'pro' ? 'text-blue' : ''}`}>
+								Pro
 							</p>
+							<p class="mt-1 text-sm leading-6 text-gray-600">Best for enterprise companies</p>
 						</div>
 					</div>
 				</div>
@@ -1172,8 +1457,273 @@
 										<th
 											scope="row"
 											class="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
-											>Mobile and web access</th
 										>
+											Monitors
+											<div class="absolute inset-x-8 mt-3 h-px bg-gray-200" />
+										</th>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="text-gray-900">5 </span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="text-gray-900">20 </span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="text-gray-900">50 </span>
+										</td>
+									</tr>
+									<tr>
+										<th
+											scope="row"
+											class="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
+											>Webhooks</th
+										>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<th
+											scope="row"
+											class="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
+											>Slack Integration</th
+										>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<th
+											scope="row"
+											class="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
+											>Google Chat</th
+										>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<th
+											scope="row"
+											class="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
+											>Microsoft Teams</th
+										>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-blue"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														fill-rule="evenodd"
+														d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+														clip-rule="evenodd"
+													/>
+												</svg>
+												<span class="sr-only">Yes</span>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<th
+											scope="row"
+											class="w-1/4 py-3 pr-4 text-left text-sm font-normal leading-6 text-gray-900"
+											>Single Sign-On <Badge variant="outline">Beta</Badge></th
+										>
+										<td class="relative w-1/4 px-4 py-0 text-center">
+											<span class="relative h-full w-full py-3">
+												<svg
+													class="mx-auto h-5 w-5 text-gray-400"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													aria-hidden="true"
+												>
+													<path
+														d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+													/>
+												</svg>
+												<span class="sr-only">No</span>
+											</span>
+										</td>
 										<td class="relative w-1/4 px-4 py-0 text-center">
 											<span class="relative h-full w-full py-3">
 												<svg
@@ -1206,21 +1756,6 @@
 												<span class="sr-only">Yes</span>
 											</span>
 										</td>
-										<td class="relative w-1/4 px-4 py-0 text-center">
-											<span class="relative h-full w-full py-3">
-												<svg
-													class="mx-auto h-5 w-5 text-gray-400"
-													viewBox="0 0 20 20"
-													fill="currentColor"
-													aria-hidden="true"
-												>
-													<path
-														d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
-													/>
-												</svg>
-												<span class="sr-only">No</span>
-											</span>
-										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -1230,13 +1765,24 @@
 								class="pointer-events-none absolute inset-x-8 inset-y-0 grid grid-cols-4 gap-x-8 before:block"
 								aria-hidden="true"
 							>
-								<div class="rounded-lg ring-1 ring-gray-900/10" />
-								<div class="rounded-lg ring-2 ring-blue" />
-								<div class="rounded-lg ring-1 ring-gray-900/10" />
+								<div
+									class={` rounded-lg ${
+										info === 'free' ? 'ring-2 ring-blue' : 'ring-1 ring-gray-900/10'
+									}`}
+								/>
+								<div
+									class={` rounded-lg ${
+										info === 'starter' ? 'ring-2 ring-blue' : 'ring-1 ring-gray-900/10'
+									}`}
+								/>
+								<div
+									class={` rounded-lg ${
+										info === 'pro' ? 'ring-2 ring-blue' : 'ring-1 ring-gray-900/10'
+									}`}
+								/>
 							</div>
 						</div>
 					</div>
-					
 				</div>
 			</section>
 		</div>
