@@ -31,7 +31,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			fresh: false
 		};
 
-	
 		event.locals.user = session?.user.userId;
 		event.locals.session = session;
 		return await resolve(event);
@@ -40,7 +39,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.lucia = auth;
 		if (event.locals?.auth) {
 			const session = await event.locals.auth.validate();
-			console.log(session);
 			if (!session) {
 				if (
 					!event.url.pathname.startsWith('/login') &&
@@ -57,7 +55,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			event.locals.user = session?.user.userId;
 			event.locals.session = session;
 
-			if (session) {
+			if (session && !event.url.pathname.startsWith('/integration/slack')) {
 				if (!event.url.pathname.includes(session?.user.account_id)) {
 					return new Response(null, {
 						status: 307,
