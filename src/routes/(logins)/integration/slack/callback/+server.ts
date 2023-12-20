@@ -1,6 +1,5 @@
 import { API_URL, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET } from '$env/static/private';
 import { OAuthRequestError } from '@lucia-auth/oauth';
-import { redirect } from '@sveltejs/kit';
 
 export const GET = async ({ url }) => {
 	const state = url.searchParams.get('state');
@@ -53,6 +52,7 @@ export const GET = async ({ url }) => {
 			});
 		}
 	} catch (e) {
+		console.log(JSON.stringify(e));
 		if (e instanceof OAuthRequestError) {
 			// invalid code
 			return new Response(null, {
