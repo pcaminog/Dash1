@@ -76,7 +76,7 @@
 											info === 'free' ? '' : 'text-white'
 										}`}
 									>
-										0
+										$0
 									</p>
 								{:else}
 									<p

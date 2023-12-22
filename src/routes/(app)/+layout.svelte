@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import '../../app.postcss';
-	import { HomeIcon, Settings, Bell, Sliders, Loader2, Activity, Receipt } from 'lucide-svelte';
+	import { HomeIcon, Settings, Bell, Sliders, Loader2, Activity, Receipt, BellIcon } from 'lucide-svelte';
 
 	import UserNav from '$lib/components/UserNav.svelte';
 	import { Toaster } from 'svelte-french-toast';
@@ -88,7 +88,19 @@
 											Monitors
 										</a>
 									</li>
-
+									<li>
+										<a
+											href={`/${acc_id}/alerts`}
+											class={`${
+												$page.url.pathname === `${acc_id}/alerts`
+													? 'bg-gray-50 text-slate-600'
+													: 'text-gray-700 hover:text-slate-600'
+											} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold`}
+										>
+											<BellIcon class=" h-4 my-auto " />
+											Alerts
+										</a>
+									</li>
 									<li>
 										<a
 											href={`/${acc_id}/settings`}
@@ -171,7 +183,20 @@
 									Monitors
 								</a>
 							</li>
+							<li>
+								<a
+									href={`/${acc_id}/alerts`}
+									class={`${
+										$page.url.pathname === `${acc_id}/alerts`
+											? ' bg-gray-100 dark:bg-gray-700 '
+											: ''
+									} group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-gray-100`}
+								>
+									<BellIcon class=" h-4 my-auto  text-primary" />
 
+									Alerts
+								</a>
+							</li>
 							<li>
 								<a
 									href={`/${acc_id}/settings`}
