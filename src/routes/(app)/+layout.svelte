@@ -2,7 +2,16 @@
 	import { page } from '$app/stores';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import '../../app.postcss';
-	import { HomeIcon, Settings, Bell, Sliders, Loader2, Activity, Receipt, BellIcon } from 'lucide-svelte';
+	import {
+		HomeIcon,
+		Settings,
+		Bell,
+		Sliders,
+		Loader2,
+		Activity,
+		Receipt,
+		BellIcon
+	} from 'lucide-svelte';
 
 	import UserNav from '$lib/components/UserNav.svelte';
 	import { Toaster } from 'svelte-french-toast';
@@ -52,10 +61,9 @@
 					<div class="flex h-16 shrink-0 items-center">
 						<img
 							class="h-8 w-auto"
-							src="https://pub-0716db0a5bc24e53a5fda54c30e7e763.r2.dev/static/logo.svg"
+							src="https://static.mon1tor.com/logo+name_mon1tor.png"
 							alt="Your Company"
 						/>
-						<p class="">Mon1tor</p>
 					</div>
 					<nav class="flex flex-1 flex-col">
 						<ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -151,9 +159,11 @@
 		<!-- Sidebar component, swap this element with another sidebar if you like -->
 		<div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 px-6 pb-4">
 			<div class="flex h-16 shrink-0 items-center">
-				<p class=" ">
-					<span>Mon1tor</span>
-				</p>
+				<img
+					class="h-12"
+					src="https://static.mon1tor.com/logo+name_mon1tor.png"
+					alt="Your Company"
+				/>
 			</div>
 			<nav class="flex flex-1 flex-col">
 				<ul role="list" class="flex flex-1 flex-col gap-y-7">

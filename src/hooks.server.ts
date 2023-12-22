@@ -40,6 +40,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (event.locals?.auth) {
 			const session = await event.locals.auth.validate();
 			if (!session) {
+				if (!event.url.pathname.startsWith('/privacy')) {
+					return new Response(null, {
+						status: 301,
+						headers: { location: 'https://www.mon1tor.com/privacy' }
+					});
+				}
+
+				if (!event.url.pathname.startsWith('/terms')) {
+					return new Response(null, {
+						status: 301,
+						headers: { location: 'https://www.mon1tor.com/terms' }
+					});
+				}
 				if (
 					!event.url.pathname.startsWith('/login') &&
 					!event.url.pathname.startsWith('/members/validate') &&
@@ -47,8 +60,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 					!event.url.pathname.startsWith('/integration/slack')
 				) {
 					return new Response(null, {
-						status: 307,
-						headers: { location: '/login?hooks_no_session' }
+						status: 302,
+						headers: { location: '/login?nosession' }
 					});
 				}
 			}
@@ -58,7 +71,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			if (session && !event.url.pathname.startsWith('/integration/slack')) {
 				if (!event.url.pathname.includes(session?.user.account_id)) {
 					return new Response(null, {
-						status: 307,
+						status: 302,
 						headers: { location: `/${session?.user.account_id}/home` }
 					});
 				}
